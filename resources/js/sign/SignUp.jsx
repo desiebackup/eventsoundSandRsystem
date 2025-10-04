@@ -6,7 +6,8 @@ export default function SignUp({ onSwitchToSignIn }) {
     <div className="signup-container">
       <h2>Create Account</h2>
       <form className="signup-form">
-        <input type="text" placeholder="Full Name" required />
+        <input type="firstname" placeholder="First Name" required />
+        <input type="lastname" placeholder="Last Name" required />
         <input type="email" placeholder="Email" required />
         <input type="password" placeholder="Password" required />
         <button type="submit">Sign Up</button>

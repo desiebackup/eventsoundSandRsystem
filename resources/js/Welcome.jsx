@@ -3,7 +3,7 @@ import Background from "./Background";
 import SignUp from "./sign/SignUp";
 import SignIn from "./sign/SignIn";
 import "../css/Background.css";
-import "../css/components/Welcome.css";
+import "../css/Welcome.css";
 
 export default function Welcome() {
   const [showForm, setShowForm] = useState(false);
@@ -33,6 +33,7 @@ export default function Welcome() {
           <button className="primary-btn" onClick={handleGetStarted}>
             Get Started
           </button>
+          <br/>
 
           <p className="link-text" onClick={handleSwitchToSignIn}>
             Already have an account? Log in
