@@ -1,0 +1,66 @@
+.background-container {
+  position: relative;   /* parent for overlay */
+  width: 100%;
+  height: 100vh;       /* full screen */
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;  /* fill parent */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;          /* behind form */
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #4ade80, #facc15);
+  background-size: 800% 800%;
+  animation: gradientAnimation 12s ease infinite;
+}
+
+/* Full colorful animated gradient background */
+.background {
+  position: absolute;  /* make sure it stays behind form */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;          /* lower than form */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #4ade80, #facc15);
+  background-size: 800% 800%;
+  animation: gradientAnimation 12s ease infinite;
+}
+
+
+/* Floating music notes 🎵🎶 */
+.note {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: floatNotes 6s linear infinite;
+  opacity: 0.9;
+}
+
+/* Random positions for each note */
+.note:nth-child(1) { left: 10%; animation-delay: 0s; }
+.note:nth-child(2) { left: 25%; animation-delay: 1s; }
+.note:nth-child(3) { left: 40%; animation-delay: 2s; }
+.note:nth-child(4) { left: 60%; animation-delay: 3s; }
+.note:nth-child(5) { left: 75%; animation-delay: 4s; }
+.note:nth-child(6) { left: 90%; animation-delay: 5s; }
+
+/* Floating upwards */
+@keyframes floatNotes {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* Gradient background animation */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

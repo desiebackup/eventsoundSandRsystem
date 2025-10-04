@@ -1,0 +1,98 @@
+.welcome-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+.hero-section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  z-index: 5;
+}
+
+.hero-section h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons button {
+  background: #000;
+  color: #fff;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 25px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.hero-buttons button:hover {
+  background: #333;
+}
+
+.form-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #00b4db, #0083b0);
+  color: white;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #0083b0, #00b4db);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* --- LINK BELOW BUTTON --- */
+.link-text {
+  margin-top: 1.2rem;
+  color: #cce7ff;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.link-text:hover {
+  color: #00b4db;
+  transform: translateY(-2px);
+}
+
+/* --- FORM CONTAINER --- */
+.form-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 350px;
+  background: rgba(255, 255, 255, 0.9);
+}
