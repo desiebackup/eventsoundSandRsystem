@@ -56,7 +56,6 @@ const UserDashboard = () => {
         </ul>
       </aside>
 
-      {/* Main Content */}
       <main className="main-content">{renderPage()}</main>
     </div>
   );
