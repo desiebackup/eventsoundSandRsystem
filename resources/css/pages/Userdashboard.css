@@ -1,0 +1,51 @@
+.user-dashboard {
+  display: flex;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f6fa;
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 230px;
+  background-color: #1e3a5f;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.sidebar li:hover {
+  background-color: #2f527c;
+}
+
+.sidebar li.active {
+  background-color: #3b82f6;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
