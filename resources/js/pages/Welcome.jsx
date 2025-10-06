@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Background from "./Background";
-import SignUp from "./sign/SignUp";
-import SignIn from "./sign/SignIn";
-import "../css/Background.css";
-import "../css/Welcome.css";
+import Background from "../design/Background";
+import SignUp from "../sign/SignUp";
+import SignIn from "../sign/SignIn";
+import "../../css/pages/Welcome.css";
 
 export default function Welcome() {
   const [showForm, setShowForm] = useState(false);
@@ -35,9 +34,6 @@ export default function Welcome() {
           </button>
           <br/>
 
-          <p className="link-text" onClick={handleSwitchToSignIn}>
-            Already have an account? Log in
-          </p>
         </div>
       )}
 

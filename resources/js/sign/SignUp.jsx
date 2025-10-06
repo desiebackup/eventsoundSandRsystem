@@ -2,6 +2,7 @@ import React from "react";
 import "../../css/sign/SignUp.css";
 
 export default function SignUp({ onSwitchToSignIn }) {
+
   return (
     <div className="signup-container">
       <h2>Create Account</h2>

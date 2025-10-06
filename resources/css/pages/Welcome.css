@@ -1,5 +1,4 @@
 .welcome-container {
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,22 +52,6 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
-/* --- LINK BELOW BUTTON --- */
-.link-text {
-  margin-top: 1.2rem;
-  color:rgb(255, 255, 255);
-  cursor: pointer;
-  font-size: 18px;
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-
-.link-text:hover {
-  color: #d3dfe1;
-  transform: translateY(-2px);
-}
-
-/* --- FORM CONTAINER --- */
 .form-wrapper {
   position: absolute;
   top: 50%;
@@ -76,5 +59,4 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   width: 350px;
-  background: rgba(252, 252, 252, 0.9);
 }

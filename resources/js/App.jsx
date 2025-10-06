@@ -1,10 +1,9 @@
 import React from "react";
-import Welcome from "./Welcome"; // your Welcome.jsx
+import ReactDOM from "react-dom/client";
+import Welcome from "./pages/Welcome";
 
-export default function App() {
-    return(
-    <>
+ReactDOM.createRoot(document.getElementById("app")).render(
+  <React.StrictMode>
     <Welcome />
-    </>
-    )
-}
+  </React.StrictMode>
+);
