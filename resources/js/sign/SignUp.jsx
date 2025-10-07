@@ -21,26 +21,38 @@ export default function SignUp({ onSwitchToSignIn }) {
     e.preventDefault();
     setError("");
 
-    // Simple password confirmation check
     if (formData.password !== formData.password_confirmation) {
       setError("Passwords do not match.");
       return;
     }
 
     try {
-      // Create user with email & password
+      // Step 1: Create user in Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
-      // Update Firebase profile with firstname and lastname
+      // Step 2: Update Firebase profile
       await updateProfile(userCredential.user, {
         displayName: `${formData.firstname} ${formData.lastname}`,
       });
 
-      // User is now signed in → App.jsx listener shows UserDashboard
+      // Step 3: Send user to your backend (Laravel or PHP)
+      await fetch("http://localhost:8000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          email: formData.email,
+        }),
+      });
+
+      console.log("User saved to database!");
     } catch (err) {
       console.error(err.message);
       setError("Signup failed: " + err.message);

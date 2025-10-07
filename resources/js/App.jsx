@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import Welcome from "./Pages/Welcome";
-import UserDashboard from "./Pages/Userdashboard";
-import { auth } from "../firebase"; // make sure firebase.js exports `auth`
+import Welcome from "./pages/Welcome";
+import UserDashboard from "./pages/Userdashboard";
+import { auth } from "../firebase"; 
 import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
