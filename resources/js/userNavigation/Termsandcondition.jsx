@@ -4,7 +4,6 @@ import "../../css/usernav/Termsandcondition.css";
 const TermsAndCondition = () => {
   return (
     <div className="terms-container">
-      <h2 className="terms-title">Terms and Conditions</h2>
       <p className="terms-subtitle">
         Please read our terms and conditions carefully.
       </p>

@@ -1,10 +1,9 @@
 import React from "react";
-import "../../css/usernav/Dashboard.css";
+import "../../css/usernav/Home.css";
 
-const Dashboard = () => {
+const Home = () => {
   return (
     <div className="dashboard-container">
-      <h2 className="dashboard-title">Dashboard</h2>
       <p className="dashboard-subtitle">
         Welcome! Here's an overview of your event activities.
       </p>
@@ -29,4 +28,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Home;

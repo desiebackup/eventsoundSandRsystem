@@ -4,7 +4,6 @@ import "../../css/usernav/Paymenthistory.css";
 const PaymentHistory = () => {
   return (
     <div className="payment-history-container">
-      <h2 className="payment-history-title">Payment History</h2>
       <p className="payment-history-subtitle">Track your past payments.</p>
 
       <table className="payment-table">

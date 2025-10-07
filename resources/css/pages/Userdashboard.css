@@ -2,15 +2,15 @@
   display: flex;
   height: 100vh;
   font-family: "Poppins", sans-serif;
-  background-color: #f5f6fa;
+  background-color: #f8fafc;
 }
 
 /* Sidebar styling */
 .sidebar {
-  width: 230px;
+  width: 250px;
   background-color: #1e3a5f;
   color: #fff;
-  padding: 20px;
+  padding: 25px 20px;
   display: flex;
   flex-direction: column;
 }
@@ -18,29 +18,48 @@
 .sidebar-title {
   font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 30px;
   text-align: center;
+  margin-bottom: 35px;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
-  padding: 12px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
+  margin-bottom: 10px;
 }
 
-.sidebar li:hover {
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a:hover {
   background-color: #2f527c;
+  color: #fff;
 }
 
-.sidebar li.active {
+.sidebar a.active {
   background-color: #3b82f6;
+  color: #fff;
+}
+
+/* Icon styling */
+.icon {
+  font-size: 1.1rem;
 }
 
 /* Main content area */
@@ -48,4 +67,5 @@
   flex: 1;
   padding: 40px;
   overflow-y: auto;
+  background-color: #f8fafc;
 }

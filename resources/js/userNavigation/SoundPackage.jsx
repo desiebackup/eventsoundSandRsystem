@@ -4,7 +4,6 @@ import "../../css/usernav/SoundPackage.css";
 const SoundPackage = () => {
   return (
     <div className="sound-package-container">
-      <h2 className="sound-package-title">Sound Packages</h2>
       <p className="sound-package-subtitle">Choose from our available packages.</p>
 
       <div className="package-list">
