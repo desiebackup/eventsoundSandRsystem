@@ -7,7 +7,7 @@ import PaymentHistory from "../userNavigation/Paymenthistory";
 import TermsAndCondition from "../userNavigation/Termsandcondition";
 import "../../css/pages/UserDashboard.css";
 
-const UserDashboard = () => {
+const Userdashboard = () => {
   return (
     <Router>
       <div className="user-dashboard">
@@ -58,4 +58,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default Userdashboard;
