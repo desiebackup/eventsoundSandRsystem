@@ -1,16 +1,22 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('dashboard');
+    return view('app');
 });
 
+// ✅ React signup POST route
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
+
+// Dashboard
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('app');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Authenticated profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

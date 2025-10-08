@@ -4,49 +4,28 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Show the registration form.
-     */
-    public function create(): View
+    public function store(Request $request)
     {
-        return view('auth.register');
-    }
-
-    /**
-     * Handle a registration request for the application.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname'  => ['required', 'string', 'max:255'],
-            'email'     => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-            'password'  => ['required', 'confirmed', Rules\Password::defaults()],
+        $validated = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname'  => 'required|string|max:255',
+            'email'     => 'required|string|email|max:255|unique:users',
+            'password'  => 'required|string|min:8|confirmed',
         ]);
 
-        // Create the user
         $user = User::create([
-            'firstname' => $request->firstname,
-            'lastname'  => $request->lastname,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
+            'firstname' => $validated['firstname'],
+            'lastname'  => $validated['lastname'],
+            'email'     => $validated['email'],
+            'password'  => Hash::make($validated['password']),
         ]);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        // Redirect to Userdashboard page
-        return redirect('/Userdashboard');
+        return response()->json(['message' => 'User registered successfully!', 'user' => $user], 201);
     }
 }

@@ -1,98 +1,104 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
-import {
-  FaHome,
-  FaCalendarAlt,
-  FaBoxOpen,
-  FaCreditCard,
-  FaUserCog,
-  FaFileContract,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, NavLink, useNavigate } from "react-router-dom";
+import { FaHome, FaCalendarAlt, FaBoxOpen, FaCreditCard, FaSignOutAlt } from "react-icons/fa";
+import axios from "axios";
 import Home from "../userNavigation/Home";
-import SoundPackage from "../userNavigation/SoundPackage";
-import Paymenthistory from "../userNavigation/Paymenthistory";
-import Termsandcondition from "../userNavigation/Termsandcondition";
+import Reservation from "../userNavigation/Reservation";
+import ServicePackage from "../userNavigation/ServicePackage";
+import Profile from "../userNavigation/Profile";
+import Logout from "../userNavigation/Logout";
 import "../../css/pages/UserDashboard.css";
-import { auth } from "../../firebase";
-import { signOut } from "firebase/auth";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://localhost:8000";
 
 const Userdashboard = () => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      window.location.reload(); // Refresh to redirect back to login or welcome
+      await axios.post("/logout"); // Laravel Breeze logout endpoint
+      setShowLogoutConfirm(false);
+      navigate("/logout"); // Redirect to logout confirmation page
     } catch (error) {
       console.error("Logout failed:", error);
+      alert("An error occurred during logout. Please try again.");
     }
   };
 
   return (
-    <Router>
-      <div className="user-dashboard">
-        {/* ===== Sidebar ===== */}
-        <aside className="sidebar">
-          <h2 className="sidebar-title">Event Sound System</h2>
-          <ul className="nav-links">
-            <li>
-              <NavLink to="/home" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FaHome className="icon" /> Dashboard
-              </NavLink>
-            </li>
+    <div className="user-dashboard">
+      {/* ===== Sidebar ===== */}
+      <aside className="sidebar">
+        <h2 className="sidebar-title">Event Sound System</h2>
+        <ul className="nav-links">
+          <li>
+            <NavLink to="/home" className={({ isActive }) => (isActive ? "active" : "")}>
+              <FaHome className="icon" /> Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/reservations" className={({ isActive }) => (isActive ? "active" : "")}>
+              <FaCalendarAlt className="icon" /> Reservations
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/servicepackage" className={({ isActive }) => (isActive ? "active" : "")}>
+              <FaBoxOpen className="icon" /> Service Package
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
+              <FaCreditCard className="icon" /> Profile
+            </NavLink>
+          </li>
+          <li>
+            <button className="logout-btn" onClick={() => setShowLogoutConfirm(true)}>
+              <FaSignOutAlt className="icon" /> Logout
+            </button>
+          </li>
+        </ul>
+      </aside>
 
-            <li>
-              <NavLink to="/reservations" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FaCalendarAlt className="icon" /> My Reservations
-              </NavLink>
-            </li>
+      {/* ===== Main Content ===== */}
+      <main className="main-content">
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/reservations" element={<Reservation />} />
+          <Route path="/servicepackage" element={<ServicePackage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </main>
 
-            <li>
-              <NavLink to="/soundpackage" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FaBoxOpen className="icon" /> Service Package
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/payment" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FaCreditCard className="icon" /> Payment History
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FaUserCog className="icon" /> Profile Settings
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/termsandcondition" className={({ isActive }) => (isActive ? "active" : "")}>
-                <FaFileContract className="icon" /> Terms & Condition
-              </NavLink>
-            </li>
-
-            <li>
-              <button className="logout-btn" onClick={handleLogout}>
-                <FaSignOutAlt className="icon" /> Logout
+      {/* ===== Logout Confirmation Modal ===== */}
+      {showLogoutConfirm && (
+        <div className="logout-modal">
+          <div className="logout-dialog">
+            <div className="logout-icon">🔒</div>
+            <h3>Are you sure you want to log out?</h3>
+            <p>Your session will end and you’ll be redirected to the login page.</p>
+            <div className="logout-buttons">
+              <button className="cancel-btn" onClick={() => setShowLogoutConfirm(false)}>
+                Cancel
               </button>
-            </li>
-          </ul>
-        </aside>
-
-        {/* ===== Main Content ===== */}
-        <main className="main-content">
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/reservations" element={<Home />} /> {/* Replace with MyReservations component */}
-            <Route path="/soundpackage" element={<SoundPackage />} />
-            <Route path="/payment" element={<Paymenthistory />} />
-            <Route path="/profile" element={<Termsandcondition />} /> {/* Replace with Profile component */}
-            <Route path="/termsandcondition" element={<Termsandcondition />} />
-            <Route path="*" element={<Home />} /> {/* Default route */}
-          </Routes>
-        </main>
-      </div>
-    </Router>
+              <button className="confirm-btn" onClick={handleLogout}>
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Userdashboard;
+const UserDashboardWrapper = () => (
+  <Router>
+    <Userdashboard />
+  </Router>
+);
+
+export default UserDashboardWrapper;

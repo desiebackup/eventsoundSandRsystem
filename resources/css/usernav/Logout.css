@@ -1,0 +1,83 @@
+/* Background overlay */
+.logout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, rgba(23, 37, 84, 0.8), rgba(67, 56, 202, 0.8));
+  backdrop-filter: blur(6px);
+}
+
+/* Card container */
+.logout-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  text-align: center;
+  width: 400px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Icon styling */
+.logout-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.icon-blue {
+  color: #2563eb; /* Tailwind's blue-600 */
+}
+
+/* Text styles */
+.logout-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b; /* slate-800 */
+  margin-bottom: 8px;
+}
+
+.logout-text {
+  font-size: 0.95rem;
+  color: #475569; /* slate-600 */
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.logout-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}

@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
 import Welcome from "./pages/Welcome";
 import UserDashboard from "./pages/Userdashboard";
-import { auth } from "../firebase"; 
-import { onAuthStateChanged } from "firebase/auth";
+
+// Configure axios to send cookies with requests
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://localhost:8000";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Listen for authentication state
+  // Check if user is logged in
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-
-    return () => unsubscribe(); // cleanup
+    axios
+      .get("/api/user")
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch(() => {
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  return <>{user ? <UserDashboard /> : <Welcome />}</>;
+  if (loading) return <div>Loading...</div>;
+
+  return <>{user ? <UserDashboard user={user} /> : <Welcome />}</>;
 }
 
 ReactDOM.createRoot(document.getElementById("app")).render(
@@ -25,4 +35,3 @@ ReactDOM.createRoot(document.getElementById("app")).render(
     <App />
   </React.StrictMode>
 );
-
