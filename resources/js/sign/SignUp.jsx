@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../../css/sign/SignUp.css";
 
-const SignUp = () => {
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
+export default function SignUp({ onSwitchToSignIn }) {
+  const [form, setForm] = useState({
     firstname: "",
     lastname: "",
     email: "",
@@ -12,110 +11,92 @@ const SignUp = () => {
     password_confirmation: "",
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/register",
+        form
+      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      if (response.status === 201) {
+        setSuccess("Registration successful! You can now sign in.");
+        setTimeout(onSwitchToSignIn, 1500);
       }
-
-      const contentType = response.headers.get("content-type");
-      let data = {};
-
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-        console.log("Signup Success:", data);
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        setError(err.response.data.message);
       } else {
-        console.warn("Non-JSON response received");
+        setError("Registration failed. Please try again.");
       }
-
-      alert("Signup successful!");
-      navigate("/userdashboard"); // 👈 redirect to your dashboard page
-
-    } catch (error) {
-      console.error("Signup Error:", error);
-      alert("Signup failed. Please check the console for details.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Sign Up</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="firstname"
-            placeholder="First Name"
-            value={formData.firstname}
-            onChange={handleChange}
-            required
-            className="w-full mb-4 px-3 py-2 border rounded-lg"
-          />
-          <input
-            type="text"
-            name="lastname"
-            placeholder="Last Name"
-            value={formData.lastname}
-            onChange={handleChange}
-            required
-            className="w-full mb-4 px-3 py-2 border rounded-lg"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full mb-4 px-3 py-2 border rounded-lg"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full mb-4 px-3 py-2 border rounded-lg"
-          />
-          <input
-            type="password"
-            name="password_confirmation"
-            placeholder="Confirm Password"
-            value={formData.password_confirmation}
-            onChange={handleChange}
-            required
-            className="w-full mb-4 px-3 py-2 border rounded-lg"
-          />
+    <div className="signup-container">
+      <h2>Sign Up</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="firstname"
+          placeholder="First Name"
+          value={form.firstname}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="lastname"
+          placeholder="Last Name"
+          value={form.lastname}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password_confirmation"
+          placeholder="Confirm Password"
+          value={form.password_confirmation}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            Sign Up
-          </button>
-        </form>
-      </div>
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
+
+      <p>
+        Already have an account?{" "}
+        <span className="link-btn" onClick={onSwitchToSignIn}>
+    Sign In
+  </span>
+      </p>
     </div>
   );
-};
-
-export default SignUp;
+}

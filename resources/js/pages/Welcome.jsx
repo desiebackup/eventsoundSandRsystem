@@ -13,17 +13,10 @@ export default function Welcome() {
     setIsSignUp(true);
   };
 
-  const handleSwitchToSignIn = () => {
-    setShowForm(true);
-    setIsSignUp(false);
-  };
-
   return (
     <div className="welcome-container">
-      {/* Background */}
       <Background />
 
-      {/* --- HERO / LANDING PAGE --- */}
       {!showForm && (
         <div className="hero-section">
           <h1>Event Sound Scheduling and Reservation System</h1>
@@ -32,12 +25,9 @@ export default function Welcome() {
           <button className="primary-btn" onClick={handleGetStarted}>
             Get Started
           </button>
-          <br/>
-
         </div>
       )}
 
-      {/* --- AUTH FORMS --- */}
       {showForm && (
         <div className="form-wrapper">
           {isSignUp ? (

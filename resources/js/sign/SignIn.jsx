@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import axios from "axios";
 import "../../css/sign/SignIn.css";
 
 export default function SignIn({ onSwitchToSignUp }) {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -16,42 +15,60 @@ export default function SignIn({ onSwitchToSignUp }) {
     setError("");
 
     try {
-      // Sign in with Firebase
-      await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      // App.jsx listener automatically shows UserDashboard
+      // Step 1 — Send login request
+      const response = await axios.post("http://127.0.0.1:8000/api/login", form);
+
+      const { token, user } = response.data;
+
+      // Step 2 — Save token for future requests
+      localStorage.setItem("token", token);
+
+      // Step 3 — Redirect based on user role
+      if (user.role === "admin") {
+        window.location.href = "/admindashboard";
+      } else {
+        window.location.href = "/userdashboard/home";
+      }
     } catch (err) {
-      console.error(err.message);
-      setError("Login failed: " + err.message);
+      console.error("Login failed:", err);
+      setError("Invalid credentials. Please try again.");
     }
   };
 
   return (
     <div className="signin-container">
       <h2>Sign In</h2>
-      <form className="signin-form" onSubmit={handleSubmit}>
+
+      {error && <p className="error">{error}</p>}
+
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={form.email}
           onChange={handleChange}
           required
         />
+
         <input
           type="password"
           name="password"
           placeholder="Password"
-          value={formData.password}
+          value={form.password}
           onChange={handleChange}
           required
         />
+
         <button type="submit">Sign In</button>
       </form>
-      {error && <p className="error">{error}</p>}
-      <div className="signin-footer">
-        Don't have an account?{" "}
-        <span onClick={onSwitchToSignUp}>Sign Up</span>
-      </div>
+
+      <p>
+        Don’t have an account?{" "}
+        <span className="signup-link" onClick={onSwitchToSignUp}>
+            Sign Up
+          </span>
+      </p>
     </div>
   );
 }

@@ -1,17 +1,27 @@
+/* Make sure entire page has gradient background */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0; /* pink–purple gradient */
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Center container on screen */
 .welcome-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: -20px;
   height: 100vh;
   position: relative;
   text-align: center;
-  overflow: hidden;
   font-family: "Arial", sans-serif;
-  top: -50px;
+  overflow: hidden;
 }
 
+/* Hero section (if you use it) */
 .hero-section {
   position: absolute;
   top: 50%;
@@ -29,14 +39,15 @@
 }
 
 .hero-section p {
-  font-size: 25;
+  font-size: 25px;
   color: #444;
   margin-bottom: 100px;
 }
 
+/* Main button styling */
 .primary-btn {
   background: linear-gradient(135deg, #00b4db, #0083b0);
-  color: rgb(255, 255, 255);
+  color: white;
   padding: 12px 32px;
   border: none;
   border-radius: 30px;
@@ -52,6 +63,7 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
+/* Form wrapper positioning */
 .form-wrapper {
   position: absolute;
   top: 50%;

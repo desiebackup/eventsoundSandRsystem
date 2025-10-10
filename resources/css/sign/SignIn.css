@@ -2,40 +2,66 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
+  /* Keeping vertical margin for centering on screen */
+  margin: 3rem auto;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  z-index: 5; 
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* New, prominent shadow */
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+  z-index: 5;
 }
 
+/* Responsive adjustment for smaller screens */
+@media (max-width: 500px) {
+  .signin-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
+
+/* --- Header Styling (Adapted from .signin-container h2) --- */
 .signin-container h2 {
+  margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #1e3a8a;
+  color: #1e3a8a; /* Dark blue color */
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.input-label{
-margin-left: 0%;
+/* --- Form and Input Styling --- */
+.signin-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Inputs use margin for vertical spacing */
 }
 
-.signin-form input {
+/* --- Input Styling (Adapted from .signin-form input) --- */
+.signin-container input {
   align-items: center;
   width: 100%;
   padding: 10px;
-  margin: 8px 0;
+  margin: 8px 0; /* Margin for spacing between inputs */
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
+  box-sizing: border-box; /* Ensure padding/border are inside the width */
+  transition: border-color 0.3s;
 }
 
-.signin-form button {
+.signin-container input:focus {
+  border-color: #2563eb; /* Stronger focus blue */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* --- Primary Button Styling (Login) (Adapted from .signin-form button) --- */
+.signin-container button[type="submit"] {
   width: 100%;
   padding: 12px;
   margin-top: 12px;
-  background: #4f46e5;
+  background: #4f46e5; /* Indigo */
   color: white;
   font-weight: bold;
   border: none;
@@ -43,47 +69,28 @@ margin-left: 0%;
   cursor: pointer;
   transition: 0.3s ease;
   margin-bottom: 20px;
+  font-size: 1rem;
 }
 
-.signin-form button:hover {
-  background: #3730a3;
+.signin-container button[type="submit"]:hover {
+  background: #3730a3; /* Darker indigo/purple */
 }
 
-.google-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  color: #555;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-top: 15px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: 500;
-}
-
-.google-btn img {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-}
-
-.google-btn:hover {
-  background: #f5f5f5;
-  border-color: #999;
-  transform: scale(1.03);
-}
-
-.signin-footer {
+/* --- Secondary Text/Link Styling (Adapted to look like .signin-footer) --- */
+.signin-container p {
   margin-top: 1rem;
   font-size: 0.9rem;
-  color: #444;
+  color: #444; /* Dark gray text */
 }
 
-.signin-footer span {
-  color: #2563eb;
-  font-weight: bold;
+
+.signup-link {
+  color: #4f46e5;
+  font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
 }

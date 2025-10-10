@@ -24,6 +24,7 @@ class RegisteredUserController extends Controller
             'lastname'  => $validated['lastname'],
             'email'     => $validated['email'],
             'password'  => Hash::make($validated['password']),
+            'role' => 'user', // <-- new users automatically have this role
         ]);
 
         return response()->json(['message' => 'User registered successfully!', 'user' => $user], 201);

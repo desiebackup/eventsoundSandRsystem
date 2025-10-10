@@ -9,51 +9,62 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // ✅ Register new user
+    // Register
     public function register(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
-            'firstname' => $request->firstname,
-            'lastname'  => $request->lastname,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
+            'firstname' => $validated['firstname'],
+            'lastname' => $validated['lastname'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'user', // ✅ all sign-ups become users
         ]);
 
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user' => $user,
+            'token' => $token,
+        ], 201);
     }
 
-    // ✅ Login user
+    // Login
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Create token for API authentication
+        $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful',
-            'token' => $token,
             'user' => $user,
+            'token' => $token,
         ]);
     }
 
-    // ✅ Logout user
+    // Get authenticated user
+    public function user(Request $request)
+    {
+        return $request->user();
+    }
+
+    // Logout
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

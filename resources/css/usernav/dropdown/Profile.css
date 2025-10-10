@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap");
+
+/* main profile container */
+.profile-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px 40px; /* increased top padding to move card higher */
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+/* card */
+.profile-card {
+  width: 640px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 36px 42px;
+  box-shadow: 0 6px 20px rgba(18, 38, 63, 0.06);
+  position: relative;
+  box-sizing: border-box;
+  margin-top: -40px; /* pulls the card slightly upward */
+}
+
+/* title */
+.profile-title {
+  text-align: center;
+  font-family: "Happy Monkey", cursive;
+  font-size: 32px;
+  margin: 8px 0 22px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* avatar */
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.profile-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid #f2f8fb;
+  background: #fff;
+}
+
+/* change avatar button */
+.avatar-upload-btn {
+  margin-top: 12px;
+  background: #14a5c9;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* form rows */
+.profile-form {
+  margin-top: 6px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-row label {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row input[type="password"] {
+  padding: 18px 16px;
+  border-radius: 8px;
+  border: 1px solid #d6d9de;
+  font-size: 16px;
+  background: #fff;
+}
+
+/* show password checkbox row */
+.show-password-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #444;
+  font-size: 14px;
+}
+
+/* action buttons */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background: #0ea5d8;
+  border: none;
+  color: #fff;
+}
+
+.btn-save {
+  background: #ff7a18; /* orange save */
+  color: #fff;
+  border: none;
+  min-width: 160px;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: #ff7a18;
+  border: 2px solid #ff7a18;
+  min-width: 140px;
+}
+
+/* messages */
+.msg {
+  margin-top: 18px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.msg.success {
+  background: #ecfdf5;
+  color: #0f5132;
+  border: 1px solid #c7f2da;
+}
+
+.msg.error {
+  background: #fff5f5;
+  color: #7a1a1a;
+  border: 1px solid #f5c2c2;
+}
+
+/* responsive */
+@media (max-width: 780px) {
+  .profile-card {
+    width: 100%;
+    padding: 24px;
+  }
+}
