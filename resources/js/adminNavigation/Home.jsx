@@ -1,7 +1,7 @@
 import React from "react";
-import "../../css/adminnav/AdminHome.css";
+import "../../css/adminnav/Home.css";
 
-export default function AdminHome() {
+export default function Home() {
   return (
     <div className="admin-page">
       <h2>Dashboard Overview</h2>

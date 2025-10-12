@@ -25,7 +25,7 @@ export default function SignIn({ onSwitchToSignUp }) {
 
       // Step 3 — Redirect based on user role
       if (user.role === "admin") {
-        window.location.href = "/admindashboard";
+        window.location.href = "/admindashboard/home";
       } else {
         window.location.href = "/userdashboard/home";
       }

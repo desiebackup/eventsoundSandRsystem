@@ -11,7 +11,7 @@ import {
 import "../../css/pages/AdminDashboard.css";
 
 // Import your admin pages
-import AdminHome from "../adminNavigation/AdminHome";
+import Home from "../adminNavigation/Home";
 import ManageUsers from "../adminNavigation/ManageUsers";
 import ManageServices from "../adminNavigation/ManageServices";
 import ManageReservations from "../adminNavigation/ManageReservations";
@@ -111,7 +111,7 @@ export default function Admindashboard({ admin }) {
 
         <section className="content-area">
           <Routes>
-            <Route path="/home" element={<AdminHome />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/users" element={<ManageUsers />} />
             <Route path="/services" element={<ManageServices />} />
             <Route path="/reservations" element={<ManageReservations />} />
