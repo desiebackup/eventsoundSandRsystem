@@ -1,41 +1,86 @@
-import React from "react";
-import "../../css/adminnav/ManageUsers.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function ManageUsers() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("/api/admin/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteUser = async (id) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`/api/admin/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(users.filter((u) => u.id !== id));
+      alert("User deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user.");
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">Loading users...</div>;
+  }
+
   return (
-    <div className="admin-page">
-      <h2>Manage Users</h2>
-      <table className="admin-table">
+    <div className="manage-users-container">
+      <h2 className="page-title">Manage Users</h2>
+      <table className="user-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Email</th>
             <th>Role</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Alex Cruz</td>
-            <td>alex@example.com</td>
-            <td>User</td>
-            <td>
-              <button className="btn-edit">Edit</button>
-              <button className="btn-delete">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Mary Santos</td>
-            <td>mary@example.com</td>
-            <td>Admin</td>
-            <td>
-              <button className="btn-edit">Edit</button>
-              <button className="btn-delete">Delete</button>
-            </td>
-          </tr>
+          {users.length > 0 ? (
+            users.map((user, index) => (
+              <tr key={user.id}>
+                <td>{index + 1}</td>
+                <td>{user.firstname}</td>
+                <td>{user.lastname}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>
+                  <button
+                    onClick={() => deleteUser(user.id)}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6">No users found.</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

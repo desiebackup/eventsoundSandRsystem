@@ -50,7 +50,7 @@ function App() {
         {/* Public route */}
         <Route path="/" element={<Welcome />} />
 
-        {/* Protected route for users */}
+        {/* Protected route for user */}
         <Route
           path="/userdashboard/*"
           element={
@@ -74,7 +74,7 @@ function App() {
           }
         />
 
-        {/* Catch-all */}
+        {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
@@ -86,4 +86,3 @@ ReactDOM.createRoot(document.getElementById("app")).render(
     <App />
   </React.StrictMode>
 );
-

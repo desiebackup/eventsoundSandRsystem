@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Routes, Route } from "react-router-dom";
+import { NavLink, Routes, Route, Navigate } from "react-router-dom";
 import {
   FaHome,
   FaUsers,
@@ -10,14 +10,15 @@ import {
 } from "react-icons/fa";
 import "../../css/pages/AdminDashboard.css";
 
-// Import your admin pages
+// ✅ Import your admin pages (make sure these files exist)
 import Home from "../adminNavigation/Home";
 import ManageUsers from "../adminNavigation/ManageUsers";
 import ManageServices from "../adminNavigation/ManageServices";
 import ManageReservations from "../adminNavigation/ManageReservations";
 import Payments from "../adminNavigation/Payments";
+import Settings from "../adminNavigation/Settings"; // ✅ Added this
 
-export default function Admindashboard({ admin }) {
+export default function Admindashboard({ user }) {
   return (
     <div className="dashboard-wrap">
       {/* SIDEBAR */}
@@ -31,7 +32,7 @@ export default function Admindashboard({ admin }) {
 
         <nav className="sidebar-nav">
           <NavLink
-            to="/admin/home"
+            to="/admindashboard/home"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -40,7 +41,7 @@ export default function Admindashboard({ admin }) {
           </NavLink>
 
           <NavLink
-            to="/admin/users"
+            to="/admindashboard/users"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -49,7 +50,7 @@ export default function Admindashboard({ admin }) {
           </NavLink>
 
           <NavLink
-            to="/admin/services"
+            to="/admindashboard/services"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -58,7 +59,7 @@ export default function Admindashboard({ admin }) {
           </NavLink>
 
           <NavLink
-            to="/admin/reservations"
+            to="/admindashboard/reservations"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -67,7 +68,7 @@ export default function Admindashboard({ admin }) {
           </NavLink>
 
           <NavLink
-            to="/admin/payments"
+            to="/admindashboard/payments"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -76,7 +77,7 @@ export default function Admindashboard({ admin }) {
           </NavLink>
 
           <NavLink
-            to="/admin/settings"
+            to="/admindashboard/settings"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -104,19 +105,27 @@ export default function Admindashboard({ admin }) {
                 alt="Admin avatar"
                 className="user-avatar"
               />
-              <span className="user-name">{admin?.name || "Admin"}</span>
+              <span className="user-name">{user?.name || "Admin"}</span>
             </div>
           </div>
         </header>
 
         <section className="content-area">
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/users" element={<ManageUsers />} />
-            <Route path="/services" element={<ManageServices />} />
-            <Route path="/reservations" element={<ManageReservations />} />
-            <Route path="/payments" element={<Payments />} />
-          </Routes>
+         <Routes>
+  {/* Default route (index) – loads Home without redirecting */}
+  <Route index element={<Home />} />
+
+  <Route path="home" element={<Home />} />
+  <Route path="users" element={<ManageUsers />} />
+  <Route path="services" element={<ManageServices />} />
+  <Route path="reservations" element={<ManageReservations />} />
+  <Route path="payments" element={<Payments />} />
+  <Route path="settings" element={<Settings />} />
+
+  {/* Fallback for unknown paths */}
+  <Route path="*" element={<Navigate to="home" replace />} />
+</Routes>
+
         </section>
       </main>
     </div>

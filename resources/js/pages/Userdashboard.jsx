@@ -39,7 +39,7 @@ export default function Userdashboard() {
       }
     };
 
-    fetchUser();
+    fetchUser();``
   }, [navigate]);
 
   const handleLogout = async () => {

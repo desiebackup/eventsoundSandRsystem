@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\ProfileController; // ✅ Add this controller
+use App\Http\Controllers\ProfileController;
 
 // -----------------------------
 // 🔓 PUBLIC ROUTES
@@ -25,11 +25,16 @@ Route::middleware('auth:sanctum')->group(function () {
     // ✅ Profile routes
     Route::post('/profile/update', [ProfileController::class, 'update']);
 
-    // ✅ User management (admin or extended use)
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-
-    // ✅ Reservation management
+    // ✅ Reservation management (for logged-in users)
     Route::get('/reservations', [ReservationController::class, 'index']);
     Route::post('/reservations', [ReservationController::class, 'store']);
+
+    // ✅ Admin-only routes
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/users', [UserController::class, 'index']);   // list all users
+        Route::delete('/admin/users/{id}', [UserController::class, 'destroy']); // delete user
+    });
+
+    // ✅ User registration (still available)
+    Route::post('/users', [UserController::class, 'store']);
 });
