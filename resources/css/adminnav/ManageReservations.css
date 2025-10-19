@@ -34,6 +34,11 @@
   color: white;
 }
 
+.btn-decline {
+  background: #f59e0b; /* amber/orange */
+  color: white;
+}
+
 .btn-delete {
   background: #dc3545;
   color: white;

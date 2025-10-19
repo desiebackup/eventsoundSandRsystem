@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../../css/sign/SignIn.css";
 
 export default function SignIn({ onSwitchToSignUp }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
@@ -22,12 +24,25 @@ export default function SignIn({ onSwitchToSignUp }) {
 
       // Step 2 — Save token for future requests
       localStorage.setItem("token", token);
+      // set axios default Authorization so subsequent API calls have the header
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      // Step 3 — Redirect based on user role
+      // Notify the app about successful login so global user state can update without reload
+      try {
+        window.dispatchEvent(new CustomEvent('auth:login', { detail: user }));
+      } catch (e) {
+        // old browsers may fail to create CustomEvent with constructor
+        const ev = document.createEvent('Event');
+        ev.initEvent('auth:login', true, true);
+        ev.detail = user;
+        window.dispatchEvent(ev);
+      }
+
+      // Step 3 — SPA navigate based on user role (replace history to avoid stacking)
       if (user.role === "admin") {
-        window.location.href = "/admindashboard/home";
+        navigate('/admindashboard/home', { replace: true });
       } else {
-        window.location.href = "/userdashboard/home";
+        navigate('/userdashboard/home', { replace: true });
       }
     } catch (err) {
       console.error("Login failed:", err);

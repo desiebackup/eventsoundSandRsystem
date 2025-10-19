@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "../../css/adminnav/ManageUsers.css";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -45,11 +46,10 @@ export default function ManageUsers() {
 
   return (
     <div className="manage-users-container">
-      <h2 className="page-title">Manage Users</h2>
       <table className="user-table">
         <thead>
           <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>

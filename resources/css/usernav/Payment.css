@@ -1,0 +1,110 @@
+/* =============================
+   Payments Page Styles
+   ============================= */
+
+.page-card {
+  width: 100%;
+  min-height: 100vh;
+  background: #f7faff;
+  padding: 40px 30px;
+  font-family: "Poppins", sans-serif;
+}
+
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  overflow-x: auto;
+}
+
+/* =============================
+   Table Design
+   ============================= */
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.events-table th,
+.events-table td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.events-table thead {
+  background-color: #6c63ff;
+  color: #fff;
+}
+
+.events-table th {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.events-table tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+
+.events-table tbody tr:hover {
+  background: #f5f6ff;
+}
+
+.events-table td {
+  color: #333;
+}
+
+/* =============================
+   Status Tags
+   ============================= */
+
+.tag {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.tag.confirmed {
+  background-color: #d1ffe4;
+  color: #0e9a46;
+  border: 1px solid #8fe3b1;
+}
+
+.tag.pending {
+  background-color: #fff3cd;
+  color: #8a6d3b;
+  border: 1px solid #f7e1a3;
+}
+
+.tag.cancelled {
+  background-color: #fddede;
+  color: #a30000;
+  border: 1px solid #f2b2b2;
+}
+
+/* =============================
+   Responsive Design
+   ============================= */
+
+@media (max-width: 768px) {
+  .page-card {
+    padding: 20px;
+  }
+
+  .page-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .events-table th,
+  .events-table td {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}

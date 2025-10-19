@@ -136,10 +136,10 @@ export default function Profile() {
         formData.append("password_confirmation", confirmPassword);
       }
 
+      // Let the browser/axios set the multipart Content-Type (with boundary).
       const res = await axios.post(`${base}/api/profile/update`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -166,10 +166,21 @@ export default function Profile() {
       setMessage("Profile updated successfully.");
     } catch (err) {
       console.error("Error updating profile:", err);
-      const serverMsg =
-        err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        "Failed to update profile. Please try again.";
+
+      // Improve parsing of validation errors from Laravel
+      let serverMsg = "Failed to update profile. Please try again.";
+      if (err?.response?.data) {
+        const data = err.response.data;
+        if (data.message) serverMsg = data.message;
+        else if (data.error) serverMsg = data.error;
+        else if (data.errors) {
+          // Flatten validation error arrays into a single message
+          serverMsg = Object.values(data.errors)
+            .flat()
+            .join(" ");
+        }
+      }
+
       setError(serverMsg);
     } finally {
       setSaving(false);

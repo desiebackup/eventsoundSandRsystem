@@ -4,6 +4,7 @@ import axios from "axios";
 import Home from "../userNavigation/Home";
 import Reservation from "../userNavigation/Reservation";
 import ServicePackage from "../userNavigation/ServicePackage";
+import MakeReservation from "../userNavigation/MakeReservation";
 import Payments from "../userNavigation/Payments";
 import "../../css/pages/Userdashboard.css";
 import logo from "../../img/logo.png";
@@ -133,6 +134,7 @@ export default function Userdashboard() {
           <Route path="home" element={<Home />} />
           <Route path="reservations" element={<Reservation />} />
           <Route path="servicepackage" element={<ServicePackage />} />
+          <Route path="makereservation" element={<MakeReservation />} />
           <Route path="payments" element={<Payments />} />
           <Route path="profile" element={<Profile />} />
           <Route path="terms" element={<Terms />} />

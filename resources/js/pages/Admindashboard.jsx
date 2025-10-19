@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Routes, Route, Navigate } from "react-router-dom";
+import { NavLink, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaUsers,
@@ -16,9 +16,15 @@ import ManageUsers from "../adminNavigation/ManageUsers";
 import ManageServices from "../adminNavigation/ManageServices";
 import ManageReservations from "../adminNavigation/ManageReservations";
 import Payments from "../adminNavigation/Payments";
-import Settings from "../adminNavigation/Settings"; // ✅ Added this
+import AdminDropdown from "../adminNavigation/AdminDropdown";
+import Profile from "../userNavigation/dropdown/Profile";
 
 export default function Admindashboard({ user }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => navigate('/', { replace: true });
+  const handleProfile = () => navigate('/admindashboard/profile', { replace: true });
+
   return (
     <div className="dashboard-wrap">
       {/* SIDEBAR */}
@@ -76,14 +82,6 @@ export default function Admindashboard({ user }) {
             <FaCreditCard className="nav-icon" /> <span>Payments</span>
           </NavLink>
 
-          <NavLink
-            to="/admindashboard/settings"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            <FaCog className="nav-icon" /> <span>Settings</span>
-          </NavLink>
         </nav>
 
         <div className="sidebar-footer">
@@ -99,14 +97,7 @@ export default function Admindashboard({ user }) {
           </div>
 
           <div className="topbar-right">
-            <div className="user-chip">
-              <img
-                src="/images/admin-avatar.png"
-                alt="Admin avatar"
-                className="user-avatar"
-              />
-              <span className="user-name">{user?.name || "Admin"}</span>
-            </div>
+            <AdminDropdown user={user} onLogout={handleLogout} onProfileUpdate={handleProfile} />
           </div>
         </header>
 
@@ -116,11 +107,11 @@ export default function Admindashboard({ user }) {
   <Route index element={<Home />} />
 
   <Route path="home" element={<Home />} />
+  <Route path="profile" element={<Profile />} />
   <Route path="users" element={<ManageUsers />} />
   <Route path="services" element={<ManageServices />} />
   <Route path="reservations" element={<ManageReservations />} />
   <Route path="payments" element={<Payments />} />
-  <Route path="settings" element={<Settings />} />
 
   {/* Fallback for unknown paths */}
   <Route path="*" element={<Navigate to="home" replace />} />

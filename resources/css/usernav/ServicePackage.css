@@ -16,26 +16,34 @@
 
 /* Container for cards */
 .package-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center; /* centers grid when fewer items */
+  justify-items: center; /* centers cards in each cell */
   gap: 28px;
   max-width: 1100px;
   margin: 0 auto;
+  width: 100%;
 }
 
-/* Card */
+
+@media (max-width: 992px) {
+  .package-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 .package-card {
   background: #fff;
+  border: 1px solid #e0e0e0; /* ✅ adds subtle border */
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   width: 300px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-align: center; /* ✅ centers inner text nicely */
 }
 
 .package-card:hover {
@@ -116,10 +124,10 @@
   color: #fff;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .package-container {
-    flex-direction: column;
-    align-items: center;
-  }
+.package-note {
+  font-style: italic;
+  color: #555;
+  margin-top: 10px;
+  padding: 0 20px;
+  text-align: center;
 }

@@ -28,9 +28,23 @@ Route::middleware('auth:sanctum')->group(function () {
     // ✅ Reservation management (for logged-in users)
     Route::get('/reservations', [ReservationController::class, 'index']);
     Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
+
+    // Admin: approve reservation
+    Route::post('/admin/reservations/{id}/approve', [ReservationController::class, 'approve'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
+    // Admin: decline reservation
+    Route::post('/admin/reservations/{id}/decline', [ReservationController::class, 'decline'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
+
+    // Services CRUD (admin)
+    Route::get('/admin/services', [\App\Http\Controllers\ServiceController::class, 'index'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
+    Route::post('/admin/services', [\App\Http\Controllers\ServiceController::class, 'store'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
+    Route::put('/admin/services/{id}', [\App\Http\Controllers\ServiceController::class, 'update'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
+    Route::delete('/admin/services/{id}', [\App\Http\Controllers\ServiceController::class, 'destroy'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
 
     // ✅ Admin-only routes
-    Route::middleware('admin')->group(function () {
+    // Use the FQCN for middleware to avoid alias resolution issues during debug
+    Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
+            Route::get('/admin/stats', [\App\Http\Controllers\AdminStatsController::class, 'stats']);
         Route::get('/admin/users', [UserController::class, 'index']);   // list all users
         Route::delete('/admin/users/{id}', [UserController::class, 'destroy']); // delete user
     });
@@ -38,3 +52,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // ✅ User registration (still available)
     Route::post('/users', [UserController::class, 'store']);
 });
+
+// Temporary debug route (unauthenticated) — remove in production
+Route::get('/debug/users', function () {
+    return response()->json(App\Models\User::select('id','firstname','lastname','email','role','created_at')->get());
+});
+
+// Public services listing for customers
+Route::get('/services', [\App\Http\Controllers\ServiceController::class, 'index']);

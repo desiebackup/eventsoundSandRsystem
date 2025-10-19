@@ -13,6 +13,25 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Global axios interceptor to handle 401 Unauthorized centrally
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          // clear local token and axios header to prevent repeated 401s
+          localStorage.removeItem('token');
+          delete axios.defaults.headers.common['Authorization'];
+          // redirect to root (login) - full reload so server state is reset
+          window.location.href = '/';
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -20,11 +39,10 @@ function App() {
 
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await axios.get("/api/user", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          // set default Authorization header so all axios requests include the token
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+          const response = await axios.get("/api/user");
           setUser(response.data);
         } else {
           setUser(null);
@@ -38,6 +56,16 @@ function App() {
     };
 
     fetchUser();
+
+    // also listen for direct login events to update user immediately
+    const onAuthLogin = (e) => {
+      if (e?.detail) setUser(e.detail);
+    };
+    window.addEventListener('auth:login', onAuthLogin);
+
+    return () => {
+      window.removeEventListener('auth:login', onAuthLogin);
+    };
   }, []);
 
   if (loading) {

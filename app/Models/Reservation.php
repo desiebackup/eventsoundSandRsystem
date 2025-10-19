@@ -12,9 +12,29 @@ class Reservation extends Model
     protected $fillable = [
         'event_name',
         'service_package',
+        'service_id',
         'venue',
         'address',
         'call_time',
         'down_payment',
+        'user_id',
+        'status',
+        'approved_at',
+        'approved_by',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(\App\Models\Service::class, 'service_id');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
 }

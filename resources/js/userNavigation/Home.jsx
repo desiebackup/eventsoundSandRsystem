@@ -9,6 +9,7 @@ axios.defaults.baseURL = "http://localhost:8000";
 const Home = () => {
   const [reservations, setReservations] = useState([]);
   const [user, setUser] = useState({ name: "Guest" });
+  const [selectedDownPayment, setSelectedDownPayment] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,13 +41,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* ===== Welcome Section ===== */}
-      <div className="welcome-section">
-        <h3>
-          Hello, <span className="highlight-name">{user.name}!</span>
-        </h3>
-        <p>Here’s an overview of your upcoming events</p>
-      </div>
 
       {/* ===== Dashboard Content ===== */}
       <div className="dashboard-content">
@@ -60,7 +54,8 @@ const Home = () => {
                   <th>Service Package</th>
                   <th>Venue</th>
                   <th>Address</th>
-                  <th>Call Time</th>
+                  <th>Date</th>
+                  <th>Time</th>
                   <th>Down Payment</th>
                 </tr>
               </thead>
@@ -71,14 +66,29 @@ const Home = () => {
                     <td>{res.service_package}</td>
                     <td>{res.venue}</td>
                     <td>{res.address}</td>
-                    <td>{res.call_time}</td>
+                    {(() => {
+                      const dt = res.call_time ? new Date(res.call_time) : null;
+                      const dateStr = dt && !isNaN(dt) ? dt.toLocaleDateString() : '—';
+                      const timeStr = dt && !isNaN(dt) ? dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—';
+                      return (
+                        <>
+                          <td>{dateStr}</td>
+                          <td>{timeStr}</td>
+                        </>
+                      );
+                    })()}
                     <td>
                       {res.down_payment ? (
-                        <img
-                          src={`http://localhost:8000/storage/${res.down_payment}`}
-                          alt="Down Payment"
-                          className="downpayment-img"
-                        />
+                        // open an in-page modal to view the image; closing returns to Home
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedDownPayment(res.down_payment);
+                          }}
+                        >
+                          {res.down_payment}
+                        </a>
                       ) : (
                         "N/A"
                       )}
@@ -92,6 +102,25 @@ const Home = () => {
           )}
         </div>
       </div>
+      {/* Down payment modal */}
+      {selectedDownPayment && (
+        <div className="dp-modal-overlay">
+          <div className="dp-modal">
+            <div className="dp-modal-header">
+              <h4>Down Payment</h4>
+              <button className="dp-close-btn" onClick={() => setSelectedDownPayment(null)}>Close</button>
+            </div>
+            <div className="dp-modal-body">
+              <img
+                src={`http://localhost:8000/storage/${selectedDownPayment}`}
+                alt="Down Payment"
+                className="dp-modal-img"
+              />
+              <p className="dp-filename">{selectedDownPayment}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

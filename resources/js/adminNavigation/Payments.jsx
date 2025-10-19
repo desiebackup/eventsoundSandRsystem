@@ -1,28 +1,60 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../../css/adminnav/Payments.css";
 
 export default function Payments() {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
-    // Example static data (replace with axios.get('/api/payments'))
-    const mockData = [
-      { id: 1, user: "Desie Torrenueva", amount: 1200, method: "GCash", date: "2025-10-15" },
-      { id: 2, user: "Carl Dela Cruz", amount: 900, method: "PayPal", date: "2025-10-16" },
-      { id: 3, user: "Ella Santos", amount: 1500, method: "Bank Transfer", date: "2025-10-18" },
-    ];
-    setPayments(mockData);
+    // fetch services first so we can reliably look up prices by id or name
+    axios.get('/api/services')
+      .then(sres => {
+        const services = sres.data || [];
+        const byId = {};
+        const byName = {};
+        services.forEach(s => {
+          if (s?.id) byId[String(s.id)] = s;
+          if (s?.name) byName[(s.name || '').toLowerCase().trim()] = s;
+        });
+
+        return axios.get('/api/reservations')
+          .then(r => {
+            const rows = r.data
+              .filter(x => x.status === 'approved')
+              .map((res) => {
+                // prefer server-side relation if provided
+                let price = null;
+                if (res.service && typeof res.service.price !== 'undefined') price = res.service.price;
+                // fallback to service_id lookup
+                if (price === null && res.service_id && byId[String(res.service_id)]) price = byId[String(res.service_id)].price;
+                // fallback to service_package name lookup
+                if (price === null && res.service_package) {
+                  const rname = (res.service_package || '').toLowerCase().trim();
+                  if (byName[rname]) price = byName[rname].price;
+                }
+
+                return {
+                  id: res.id,
+                  user: `${res.user?.firstname} ${res.user?.lastname}`,
+                  amount: price,
+                  method: 'GCash',
+                  date: res.approved_at,
+                };
+              });
+            setPayments(rows);
+          });
+      })
+      .catch(() => setPayments([]));
   }, []);
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Payments</h1>
 
       <div className="bg-white rounded-2xl shadow-md overflow-hidden">
         <table className="min-w-full text-left border-collapse">
           <thead className="bg-blue-600 text-white">
             <tr>
-              <th className="px-6 py-3 text-sm font-semibold">#</th>
+              <th className="px-6 py-3 text-sm font-semibold">ID</th>
               <th className="px-6 py-3 text-sm font-semibold">User</th>
               <th className="px-6 py-3 text-sm font-semibold">Amount</th>
               <th className="px-6 py-3 text-sm font-semibold">Method</th>

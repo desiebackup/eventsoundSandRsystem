@@ -1,10 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../../css/adminnav/ManageReservations.css";
 
 export default function ManageReservations() {
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/reservations")
+      .then((res) => setReservations(res.data))
+      .catch(() => setReservations([]));
+  }, []);
+
+  const handleApprove = async (id) => {
+    if (!confirm("Approve this reservation?")) return;
+    try {
+      const res = await axios.post(`/api/admin/reservations/${id}/approve`);
+      setReservations((r) => r.map((rs) => (rs.id === id ? res.data : rs)));
+    } catch (e) {
+      console.error(e);
+      alert("Failed to approve");
+    }
+  };
+
+  const handleDecline = async (id) => {
+    if (!confirm("Decline this reservation?")) return;
+    try {
+      const res = await axios.post(`/api/admin/reservations/${id}/decline`);
+      setReservations((r) => r.map((rs) => (rs.id === id ? res.data : rs)));
+    } catch (e) {
+      console.error(e);
+      alert("Failed to decline");
+    }
+  };
+
   return (
     <div className="admin-page">
-      <h2>Manage Reservations</h2>
 
       <table className="admin-table">
         <thead>
@@ -13,24 +44,40 @@ export default function ManageReservations() {
             <th>Event Name</th>
             <th>Client</th>
             <th>Date</th>
+            <th>Time</th>
             <th>Venue</th>
+            <th>Down Payment</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>23</td>
-            <td>Wedding Ceremony</td>
-            <td>Jane Doe</td>
-            <td>2025-11-10</td>
-            <td>Manila Hotel</td>
-            <td><span className="status pending">Pending</span></td>
-            <td>
-              <button className="btn-approve">Approve</button>
-              <button className="btn-delete">Delete</button>
-            </td>
-          </tr>
+          {reservations.map((resv) => (
+            <tr key={resv.id}>
+              <td>{resv.id}</td>
+              <td>{resv.event_name}</td>
+              <td>{resv.user?.firstname} {resv.user?.lastname}</td>
+              <td>{resv.call_time ? new Date(resv.call_time).toLocaleDateString() : 'TBD'}</td>
+              <td>{resv.call_time ? new Date(resv.call_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD'}</td>
+              <td>{resv.venue}</td>
+              <td>
+                {resv.down_payment ? (
+                  <a href={`/storage/${resv.down_payment}`} target="_blank" rel="noreferrer">View</a>
+                ) : (
+                  <span>No payment</span>
+                )}
+              </td>
+              <td><span className={`status ${resv.status}`}>{resv.status}</span></td>
+              <td>
+                {resv.status !== 'approved' && (
+                  <>
+                    <button className="btn-approve" onClick={() => handleApprove(resv.id)}>Approve</button>
+                    <button className="btn-decline" onClick={() => handleDecline(resv.id)}>Decline</button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
