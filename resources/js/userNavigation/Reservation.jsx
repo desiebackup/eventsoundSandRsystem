@@ -19,7 +19,8 @@ const Reservation = () => {
     if (!confirm('Cancel reservation?')) return;
     try {
       await axios.delete(`/api/reservations/${id}`);
-      setReservations((s) => s.filter(r => r.id !== id));
+      // mark the reservation as cancelled in local state (server marks it cancelled for owner)
+      setReservations((s) => s.map(r => r.id === id ? { ...r, status: 'cancelled' } : r));
     } catch (e) {
       console.error(e);
       alert('Failed to cancel');
@@ -71,7 +72,9 @@ const Reservation = () => {
               </p>
             )}
             <p>Status: <strong>{res.status}</strong></p>
-            <button className="cancel-btn" onClick={() => handleCancel(res.id)}>Cancel Reservation</button>
+            {res.status !== 'cancelled' && (
+              <button className="cancel-btn" onClick={() => handleCancel(res.id)}>Cancel Reservation</button>
+            )}
           </div>
         ))}
       </div>

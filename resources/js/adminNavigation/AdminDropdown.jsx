@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import avatarDefault from '../../img/avatar.png';
+import "../../css/adminnav/AdminDropDown.css";
 
 export default function AdminDropdown({ user, onLogout, onProfileUpdate }) {
   const [open, setOpen] = useState(false);

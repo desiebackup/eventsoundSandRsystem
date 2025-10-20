@@ -19,8 +19,8 @@ class AdminStatsController extends Controller
 
         $recentActivities = [];
 
-        // recent reservations
-        $recentRes = Reservation::with('user')->orderBy('created_at', 'desc')->limit(5)->get();
+        // collect raw recent items from multiple sources (no per-source limit yet)
+        $recentRes = Reservation::with('user')->orderBy('created_at', 'desc')->limit(10)->get();
         foreach ($recentRes as $r) {
             $recentActivities[] = [
                 'type' => 'reservation',
@@ -29,8 +29,7 @@ class AdminStatsController extends Controller
             ];
         }
 
-        // recent approvals
-        $recentApprovals = Reservation::with('approver')->whereNotNull('approved_at')->orderBy('approved_at', 'desc')->limit(5)->get();
+        $recentApprovals = Reservation::with('approver')->whereNotNull('approved_at')->orderBy('approved_at', 'desc')->limit(10)->get();
         foreach ($recentApprovals as $a) {
             $recentActivities[] = [
                 'type' => 'approval',
@@ -39,8 +38,7 @@ class AdminStatsController extends Controller
             ];
         }
 
-        // recent declines (use updated_at since declined_at may not exist)
-        $recentDeclines = Reservation::with('approver')->where('status', 'declined')->orderBy('updated_at', 'desc')->limit(5)->get();
+        $recentDeclines = Reservation::where('status', 'declined')->orderBy('updated_at', 'desc')->limit(10)->get();
         foreach ($recentDeclines as $d) {
             $recentActivities[] = [
                 'type' => 'decline',
@@ -49,8 +47,7 @@ class AdminStatsController extends Controller
             ];
         }
 
-        // recent cancellations by users
-        $recentCancels = Reservation::with('user')->where('status', 'cancelled')->orderBy('updated_at', 'desc')->limit(5)->get();
+        $recentCancels = Reservation::with('user')->where('status', 'cancelled')->orderBy('updated_at', 'desc')->limit(10)->get();
         foreach ($recentCancels as $c) {
             $recentActivities[] = [
                 'type' => 'cancel',
@@ -59,8 +56,7 @@ class AdminStatsController extends Controller
             ];
         }
 
-        // recent service creations/updates
-        $recentServices = Service::orderBy('created_at', 'desc')->limit(5)->get();
+        $recentServices = Service::orderBy('created_at', 'desc')->limit(10)->get();
         foreach ($recentServices as $s) {
             $recentActivities[] = [
                 'type' => 'service',
@@ -69,8 +65,7 @@ class AdminStatsController extends Controller
             ];
         }
 
-        // recent user registrations (exclude admins)
-        $recentUsers = User::where('role', '!=', 'admin')->orderBy('created_at', 'desc')->limit(5)->get();
+        $recentUsers = User::where('role', '!=', 'admin')->orderBy('created_at', 'desc')->limit(10)->get();
         foreach ($recentUsers as $u) {
             $recentActivities[] = [
                 'type' => 'signup',
@@ -78,6 +73,16 @@ class AdminStatsController extends Controller
                 'time' => $u->created_at,
             ];
         }
+
+        // sort merged activities by timestamp (most recent first) and limit the combined list
+        usort($recentActivities, function ($a, $b) {
+            $ta = strtotime((string)$a['time']);
+            $tb = strtotime((string)$b['time']);
+            return $tb <=> $ta;
+        });
+
+        // limit to the most recent 8 activities
+        $recentActivities = array_slice($recentActivities, 0, 8);
 
         return response()->json([
             'totals' => [

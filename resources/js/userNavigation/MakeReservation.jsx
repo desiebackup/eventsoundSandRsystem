@@ -10,8 +10,8 @@ const MakeReservation = () => {
   const packageName = params.get("package") || "";
 
   const [form, setForm] = useState({
-    event_name: `${packageName} Booking`,
-    service_package: packageName,
+    event_name: "",
+    service_package: "",
     service_id: '',
     venue: "",
     address: "",
@@ -39,10 +39,17 @@ const MakeReservation = () => {
   React.useEffect(() => {
     axios.get('/api/services')
       .then(r => {
-        setServices(r.data || []);
-        // if no package selected but packageName from query exists, ensure consistency
-        if (packageName && (!form.service_package || form.service_package === '')) {
-          setForm(f => ({ ...f, service_package: packageName }));
+        const svcList = r.data || [];
+        setServices(svcList);
+        // if a packageName was passed via query param, try to preselect its service_id
+        if (packageName) {
+          const matched = svcList.find(s => String(s.name) === String(packageName) || (s.name || '').toLowerCase().trim() === (packageName || '').toLowerCase().trim());
+          if (matched) {
+            setForm(f => ({ ...f, service_id: String(matched.id), service_package: matched.name }));
+          } else {
+            // if no exact match, still set service_package as provided
+            setForm(f => ({ ...f, service_package: packageName }));
+          }
         }
       })
       .catch(() => setServices([]));

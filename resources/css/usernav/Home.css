@@ -1,76 +1,28 @@
 /* ===== General Layout ===== */
 .home-container {
   min-height: 100vh;
-  background: #f5f7fb; /* light background to separate sidebar */
   display: flex;
   flex-direction: column;
-  padding: 30px 40px;
+  padding: 40px 50px;
   color: #1c1c1c;
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
 
-/* ===== Header Section ===== */
-.dashboard-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  background: #ffffff;
-  padding: 15px 25px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-.user-profile-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #0078ff;
-}
-
-.user-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
-}
-
-/* ===== Welcome Section ===== */
-.welcome-section {
-  margin: 30px 0 20px 0;
-}
-
-.welcome-section h3 {
-  font-size: 1.6rem;
-  color: #0078ff;
-  margin-bottom: 8px;
-}
-
-.welcome-section p {
-  font-size: 1rem;
-  color: #555;
-}
-
 /* ===== Dashboard Content ===== */
 .dashboard-content {
   display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: space-between;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ===== Upcoming Events Table ===== */
 .upcoming-events {
-  flex: 1 1 60%;
+  width: 100%;
+  max-width: 1200px;
   background: #ffffff;
   border-radius: 12px;
-  padding: 20px;
+  padding: 25px 30px;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
@@ -80,24 +32,30 @@
 }
 
 .upcoming-events h4 {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: #0078ff;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   border-bottom: 2px solid #0078ff;
-  padding-bottom: 5px;
+  padding-bottom: 6px;
+  font-weight: 600;
 }
 
+/* ===== Table Styling ===== */
 .upcoming-events table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .upcoming-events th,
 .upcoming-events td {
   text-align: left;
-  padding: 10px;
+  padding: 12px 15px;
   border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
 }
 
 .upcoming-events th {
@@ -106,87 +64,156 @@
   font-weight: 600;
 }
 
+.upcoming-events tr:nth-child(even) {
+  background-color: #fafcff;
+}
+
 .upcoming-events tr:hover {
-  background: #f9fbff;
+  background: #f1f6ff;
+  transition: background 0.2s ease;
 }
 
-/* ===== Reservation Form ===== */
-.reservation-form {
-  flex: 1 1 35%;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
-
-.reservation-form:hover {
-  transform: translateY(-4px);
-}
-
-.reservation-form h4 {
-  font-size: 1.3rem;
+/* ===== Down Payment Link ===== */
+.upcoming-events a {
   color: #0078ff;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #0078ff;
-  padding-bottom: 5px;
+  font-weight: 500;
+  text-decoration: none;
 }
 
-.reservation-form label {
-  display: block;
-  font-size: 0.9rem;
-  color: #333;
-  margin-top: 10px;
+.upcoming-events a:hover {
+  text-decoration: underline;
 }
 
-.reservation-form input,
-.reservation-form select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  background: #f9f9f9;
-  color: #333;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-}
-
-.reservation-form input:focus,
-.reservation-form select:focus {
-  background: #fff;
-  border: 1px solid #0078ff;
-}
-
-.upload-box {
-  margin-top: 10px;
-  background: #f9f9f9;
-  padding: 10px;
-  border-radius: 8px;
+/* ===== Empty State ===== */
+.upcoming-events p {
   text-align: center;
-  border: 1px dashed #0078ff;
-}
-
-.upload-box p {
-  font-size: 0.85rem;
-  color: #777;
-}
-
-.reserve-btn {
-  margin-top: 15px;
-  width: 100%;
-  background: linear-gradient(90deg, #0078ff, #00c3ff);
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
   font-size: 1rem;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  color: #777;
+  font-style: italic;
+  margin: 25px 0;
 }
 
-.reserve-btn:hover {
-  background: linear-gradient(90deg, #00c3ff, #0078ff);
-  transform: scale(1.02);
+/* ===== Down Payment Modal ===== */
+.dp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dp-modal {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem 2rem;
+  width: 90%;
+  max-width: 500px;
+  animation: slideUp 0.25s ease-out;
+}
+
+.dp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dp-modal-header h4 {
+  margin: 0;
+  color: #0078ff;
+  font-weight: 600;
+}
+
+.dp-close-btn {
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dp-close-btn:hover {
+  color: #0078ff;
+}
+
+.dp-modal-body {
+  text-align: center;
+}
+
+.dp-modal-img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.dp-filename {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 25px;
+  }
+
+  .upcoming-events {
+    padding: 20px;
+  }
+
+  .upcoming-events table,
+  .upcoming-events thead,
+  .upcoming-events tbody,
+  .upcoming-events th,
+  .upcoming-events td,
+  .upcoming-events tr {
+    display: block;
+  }
+
+  .upcoming-events thead {
+    display: none;
+  }
+
+  .upcoming-events tr {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .upcoming-events td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .upcoming-events td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #0078ff;
+  }
+
+  .dp-modal {
+    padding: 1rem;
+  }
 }

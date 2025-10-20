@@ -46,7 +46,7 @@ const Home = () => {
       <div className="dashboard-content">
         <div className="upcoming-events">
           <h4>Upcoming Events</h4>
-          {reservations.length > 0 ? (
+          {reservations.filter(r => r.status === 'approved').length > 0 ? (
             <table>
               <thead>
                 <tr>
@@ -60,7 +60,7 @@ const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                {reservations.map((res) => (
+                {reservations.filter(r => r.status === 'approved').map((res) => (
                   <tr key={res.id}>
                     <td>{res.event_name}</td>
                     <td>{res.service_package}</td>

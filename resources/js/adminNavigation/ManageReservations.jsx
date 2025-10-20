@@ -69,11 +69,13 @@ export default function ManageReservations() {
               </td>
               <td><span className={`status ${resv.status}`}>{resv.status}</span></td>
               <td>
-                {resv.status !== 'approved' && (
+                {resv.status === 'pending' ? (
                   <>
                     <button className="btn-approve" onClick={() => handleApprove(resv.id)}>Approve</button>
                     <button className="btn-decline" onClick={() => handleDecline(resv.id)}>Decline</button>
                   </>
+                ) : (
+                  <span className="muted">No actions</span>
                 )}
               </td>
             </tr>

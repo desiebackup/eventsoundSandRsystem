@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import "../../css/usernav/ServicePackage.css";
 
 const ServicePackage = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [form, setForm] = useState({
     event_name: "",
@@ -40,14 +42,31 @@ const ServicePackage = () => {
       fd.append("call_time", form.call_time || "TBD");
       if (form.down_payment) fd.append("down_payment", form.down_payment);
 
+      // ensure we have a token; otherwise prompt login instead of silently redirecting
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('You must be logged in to book a package. Please sign in.');
+        navigate('/');
+        return;
+      }
+
       const res = await axios.post("/api/reservations", fd, {
-        // Let axios/browser set the Content-Type with the proper boundary
+        headers: {
+          // attach token explicitly for this request in case defaults were not set
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       alert("Reservation created: " + res.data.id);
     } catch (err) {
       console.error(err);
-      alert("Failed to create reservation");
+      const serverMsg = err?.response?.data?.message || err?.response?.data?.error || (err?.response?.data?.errors ? Object.values(err.response.data.errors).flat().join(' ') : null);
+      if (err?.response?.status === 401) {
+        alert('Not authenticated. Please login and try again.');
+        navigate('/');
+        return;
+      }
+      alert("Failed to create reservation: " + (serverMsg || 'Please try again.'));
     }
   };
 
@@ -94,8 +113,8 @@ const ServicePackage = () => {
                 </div>
               </div>
             ) : (
-              <div style={{ marginTop: 12 }}>
-                <button className="book-btn" onClick={() => window.location.href = `/userdashboard/makereservation?package=${encodeURIComponent(pkg.name)}`}>
+                <div style={{ marginTop: 12 }}>
+                <button className="book-btn" onClick={() => navigate(`/userdashboard/makereservation?package=${encodeURIComponent(pkg.name)}`)}>
                   Book Now
                 </button>
               </div>

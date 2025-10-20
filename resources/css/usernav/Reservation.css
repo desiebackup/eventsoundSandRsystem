@@ -1,104 +1,221 @@
+:root {
+  --primary-blue: #3b82f6;
+  --primary-indigo: #4338ca;
+  --text-dark: #1f2937;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* MAIN CONTAINER */
 .reservation-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding: 1rem 1.5rem; /* reduce top padding slightly */
-  background-color: #f9f9f9;
-  min-height: 100vh;
+  padding: 1.5rem 1rem;
+  background-color: var(--bg-light);
+  min-height: calc(100vh - 150px);
   width: 100%;
-  gap: 0.5rem; /* add this to manage spacing uniformly */
+  gap: 1rem;
 }
 
-
+/* --- "MAKE A RESERVATION" BUTTON --- */
 .reservation-form {
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border-radius: 8px;
-  padding: 20px 30px; /* smaller padding */
+  background: var(--white);
+  box-shadow: var(--shadow);
   display: flex;
   justify-content: center;
   align-items: center;
   width: fit-content;
   margin: 0 auto;
-  margin-bottom: 0.5rem; /* reduced space below the button */
-  height: auto; /* ensure it doesn’t stretch */
 }
 
 .reservation-form button {
-  padding: 0.8rem 1.6rem;
-  background-color: #4f46e5;
-  color: #fff;
-  border: none;
-  cursor: pointer;
+  background: linear-gradient(90deg, var(--primary-blue), var(--primary-indigo));
+  color: var(--white);
   font-weight: 600;
   font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
 }
 
 .reservation-form button:hover {
-  background-color: #4338ca;
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
 
-/* BOOKINGS GRID */
+/* --- RESERVATION LIST --- */
 .reservation-list {
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
-  align-items: start;
   gap: 1rem;
   width: 100%;
-  max-width: 900px;
-  margin-top: 1rem;
-  background: #fff;
-  border-radius: 12px;
+  max-width: 1000px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* subtle shadow */
-  transition: box-shadow 0.3s ease;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
 
-/* BOOKING CARD */
+.reservation-list p {
+  color: var(--text-dark);
+  margin: 0.25rem 0;
+}
+
+/* --- RESERVATION CARD --- */
 .reservation-card {
-  background-color: #fff;
-  padding: 1.25rem 1.5rem;
+  background-color: var(--white);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem 1.5rem;
   width: 100%;
-  max-width: 400px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 420px;
+  transition: all 0.25s ease;
+  border: 1px solid #f1f1f1;
 }
 
 .reservation-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* CANCEL BUTTON */
+.reservation-card h3 {
+  margin: 0 0 0.5rem;
+  color: var(--primary-indigo);
+}
+
+.reservation-card a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.reservation-card a:hover {
+  text-decoration: underline;
+}
+
+/* --- CANCEL BUTTON --- */
 .cancel-btn {
-  margin-top: 0.8rem;
+  margin-top: 1rem;
   padding: 0.6rem;
   background-color: #ef4444;
-  color: #fff;
+  color: var(--white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  transition: background 0.3s ease;
 }
 
 .cancel-btn:hover {
   background-color: #dc2626;
 }
 
-/* RESPONSIVE — CENTERED TWO-COLUMN GRID */
+/* --- DOWN PAYMENT MODAL --- */
+.dp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dp-modal {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1.5rem;
+  max-width: 480px;
+  width: 90%;
+  animation: slideUp 0.25s ease-out;
+}
+
+.dp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dp-modal-header h4 {
+  margin: 0;
+  color: var(--primary-indigo);
+}
+
+.dp-close-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.dp-close-btn:hover {
+  color: var(--primary-blue);
+}
+
+.dp-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dp-modal-img {
+  width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.dp-filename {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --- RESPONSIVE --- */
 @media (min-width: 768px) {
   .reservation-list {
-    grid-template-columns: repeat(2, minmax(300px, 1fr));
-    justify-content: center;
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .reservation-card {
+    padding: 1rem;
+  }
+
+  .reservation-form button {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
   }
 }

@@ -68,10 +68,6 @@ function App() {
     };
   }, []);
 
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
-
   return (
     <Router>
       <Routes>
