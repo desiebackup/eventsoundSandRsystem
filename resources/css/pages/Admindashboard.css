@@ -1,176 +1,250 @@
-/* ====== GLOBAL LAYOUT ====== */
+/* ===============================
+   General Layout
+=============================== */
 .dashboard-wrap {
   display: flex;
   height: 100vh;
-  background-color: #f5f6fa;
+  background: #f8f9fc;
   font-family: "Poppins", sans-serif;
-  color: #333;
+  color: #1e1e1e;
+  overflow: hidden;
 }
 
-/* ====== SIDEBAR ====== */
+/* ===============================
+   Sidebar
+=============================== */
 .dashboard-sidebar {
-  width: 250px;
-  background: #1e1e2f;
-  color: #fff;
+  width: 240px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+  align-items: center;
+  padding: 20px 0;
+  box-shadow: 1px 0 6px rgba(0, 0, 0, 0.03);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
 }
 
 .sidebar-top {
-  padding: 1.5rem 1rem;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 1.2rem;
+.logo-frame {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 6px;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-text {
   font-weight: 600;
-  color: #ffffff;
+  font-size: 15px;
+  color: #1f1f1f;
+  margin-bottom: 20px;
 }
 
-.brand-icon {
-  font-size: 1.5rem;
-}
-
-/* ====== NAVIGATION ====== */
+/* ===============================
+   Sidebar Navigation
+=============================== */
 .sidebar-nav {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  gap: 0.4rem;
+  gap: 5px;
+  padding: 0;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #b0b0c3;
+  padding: 10px 22px;
+  font-size: 14px;
+  color: #4b4f58;
   text-decoration: none;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
-  transition: background 0.3s, color 0.3s;
-  font-size: 0.95rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: #f3f0ff;
+  color: #7c3aed;
 }
 
 .nav-link.active {
-  background: #6c63ff;
-  color: #fff;
+  background: #ede9fe;
+  color: #7c3aed;
   font-weight: 600;
 }
 
 .nav-icon {
-  font-size: 1.2rem;
+  font-size: 17px;
 }
 
-/* ====== SIDEBAR FOOTER ====== */
-.sidebar-footer {
-  text-align: center;
-  font-size: 0.8rem;
-  padding: 1rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #aaa;
-}
-
-/* ====== MAIN CONTENT ====== */
+/* ===============================
+   Main Section
+=============================== */
 .dashboard-main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  background: #f9fafb;
+  margin-left: 240px; /* same as sidebar width */
+  height: 100vh;
 }
 
-/* ====== TOPBAR ====== */
+/* ===============================
+   Topbar
+=============================== */
 .topbar {
-  height: 60px;
-  background: #fff;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 25px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  height: 60px;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
 .topbar-left h2 {
-  font-size: 1.3rem;
+  font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #1e1e1e;
+  margin: 0;
 }
 
-.topbar-right {
+/* ===============================
+   Admin Dropdown
+=============================== */
+.admin-dropdown {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.user-chip {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f3f3f3;
-  padding: 6px 10px;
-  border-radius: 30px;
-}
-
-.user-avatar {
-  width: 35px;
-  height: 35px;
+.admin-avatar {
+  width: 28px;           /* smaller circular image */
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid #d1d5db;
+  margin-right: 4px;
+  display: block;
+  flex-shrink: 0;       /* prevents it from stretching */
 }
 
-.user-name {
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 25px 8px;      /* compact padding */
+  cursor: pointer;
+  height: 36px;
+  line-height: 1;
+}
+
+.dropdown-toggle:hover {
+  background: #f3f4f6;
+}
+
+.dropdown-toggle img {
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 50%;
+}
+
+/* Username and arrow alignment */
+.admin-name {
   font-weight: 500;
-  color: #333;
+  font-size: 13px;
+  color: #1f2937;
 }
 
-/* ====== CONTENT AREA ====== */
+.dropdown-arrow {
+  font-size: 13px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ===============================
+   Dropdown Menu
+=============================== */
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  padding: 6px 0;
+  width: 160px;
+  z-index: 99;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-menu li {
+  padding: 9px 16px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.dropdown-menu li:hover {
+  background: #f3f0ff;
+  color: #7c3aed;
+}
+
+.dropdown-menu .logout {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.dropdown-menu .logout:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ===============================
+   Content Area
+=============================== */
 .content-area {
   flex: 1;
-  padding: 2rem;
+  padding: 20px 30px;
+  background: #f9fafb;
   overflow-y: auto;
 }
 
-/* ====== SCROLLBAR STYLING ====== */
-.content-area::-webkit-scrollbar {
-  width: 8px;
-}
-.content-area::-webkit-scrollbar-thumb {
-  background-color: #bdbdbd;
-  border-radius: 10px;
-}
-.content-area::-webkit-scrollbar-track {
-  background-color: #f5f5f5;
-}
-
-/* ====== RESPONSIVE ====== */
-@media (max-width: 900px) {
-  .dashboard-sidebar {
-    width: 70px;
-    text-align: center;
+/* ===============================
+   Animations
+=============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
   }
-
-  .brand-text {
-    display: none;
-  }
-
-  .nav-link span {
-    display: none;
-  }
-
-  .topbar {
-    padding: 0 1rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

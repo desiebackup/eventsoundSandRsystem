@@ -1,38 +1,109 @@
-import React from "react";
-import { NavLink, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  NavLink,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import {
   FaHome,
   FaUsers,
   FaBoxOpen,
   FaCalendarAlt,
   FaCreditCard,
-  FaCog,
+  FaEnvelope,
+  FaChevronDown,
 } from "react-icons/fa";
 import "../../css/pages/AdminDashboard.css";
-
-// ✅ Import your admin pages (make sure these files exist)
+import logo from "../../img/logo.png";
+import avatarDefault from "../../img/avatar.png"; // ✅ Default avatar
 import Home from "../adminNavigation/Home";
 import ManageUsers from "../adminNavigation/ManageUsers";
 import ManageServices from "../adminNavigation/ManageServices";
 import ManageReservations from "../adminNavigation/ManageReservations";
 import Payments from "../adminNavigation/Payments";
-import AdminDropdown from "../adminNavigation/AdminDropdown";
-import Profile from "../userNavigation/dropdown/Profile";
+import ViewProfile from "../adminNavigation/dropdown/ViewProfile";
+import ViewAddAdmin from "../adminNavigation/dropdown/ViewAddAdmin";
+import Message from "../adminNavigation/Message"; // ✅ Added Messages Page
 
-export default function Admindashboard({ user }) {
+/* ==============================
+   ADMIN DROPDOWN COMPONENT
+============================== */
+function AdminDropdown({ user = {}, onLogout, onProfile, onAddAdmin }) {
+  const [open, setOpen] = useState(false);
+
+  const toggleDropdown = () => setOpen((prev) => !prev);
+  const closeDropdown = () => setOpen(false);
+
+  return (
+    <div className="admin-dropdown">
+      {/* Avatar and Name */}
+      <button className="dropdown-toggle" onClick={toggleDropdown}>
+        <img
+          src={user?.avatar || avatarDefault}
+          alt="Admin Avatar"
+          className="admin-avatar"
+        />
+        <span className="admin-name">{user?.username || "Admin"}</span>
+        <FaChevronDown className={`dropdown-arrow ${open ? "open" : ""}`} />
+      </button>
+
+      {/* Dropdown Menu */}
+      {open && (
+        <ul className="dropdown-menu" onMouseLeave={closeDropdown}>
+          <li
+            onClick={() => {
+              onProfile();
+              closeDropdown();
+            }}
+          >
+            View Profile
+          </li>
+          <li
+            onClick={() => {
+              onAddAdmin();
+              closeDropdown();
+            }}
+          >
+            View/Add Admin
+          </li>
+          <li
+            className="logout"
+            onClick={() => {
+              onLogout();
+              closeDropdown();
+            }}
+          >
+            Logout
+          </li>
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/* ==============================
+   MAIN ADMIN DASHBOARD
+============================== */
+export default function AdminDashboard({ user = {} }) {
   const navigate = useNavigate();
 
-  const handleLogout = () => navigate('/', { replace: true });
-  const handleProfile = () => navigate('/admindashboard/profile', { replace: true });
+  const handleLogout = () => navigate("/", { replace: true });
+  const handleProfile = () => navigate("/admindashboard/viewprofile");
+  const handleAddAdmin = () => navigate("/admindashboard/viewaddadmin");
 
   return (
     <div className="dashboard-wrap">
       {/* SIDEBAR */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-top">
+          <div className="logo-frame">
+            <img src={logo} alt="EventSound Logo" className="logo" />
+          </div>
           <div className="brand">
-            <span className="brand-icon">🎧</span>
-            <span className="brand-text">EventSound Admin</span>
+            <span className="brand-text">Event Sound Pro</span>
+            <hr />
           </div>
         </div>
 
@@ -43,7 +114,7 @@ export default function Admindashboard({ user }) {
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            <FaHome className="nav-icon" /> <span>Dashboard</span>
+            <FaHome className="nav-icon" /> <span>Home</span>
           </NavLink>
 
           <NavLink
@@ -82,11 +153,16 @@ export default function Admindashboard({ user }) {
             <FaCreditCard className="nav-icon" /> <span>Payments</span>
           </NavLink>
 
+          {/* ✅ Added Messages link */}
+          <NavLink
+            to="/admindashboard/messages"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            <FaEnvelope className="nav-icon" /> <span>Messages</span>
+          </NavLink>
         </nav>
-
-        <div className="sidebar-footer">
-          <small>© {new Date().getFullYear()} EventSound</small>
-        </div>
       </aside>
 
       {/* MAIN CONTENT */}
@@ -97,26 +173,28 @@ export default function Admindashboard({ user }) {
           </div>
 
           <div className="topbar-right">
-            <AdminDropdown user={user} onLogout={handleLogout} onProfileUpdate={handleProfile} />
+            <AdminDropdown
+              user={user}
+              onLogout={handleLogout}
+              onProfile={handleProfile}
+              onAddAdmin={handleAddAdmin}
+            />
           </div>
         </header>
 
         <section className="content-area">
-         <Routes>
-  {/* Default route (index) – loads Home without redirecting */}
-  <Route index element={<Home />} />
-
-  <Route path="home" element={<Home />} />
-  <Route path="profile" element={<Profile />} />
-  <Route path="users" element={<ManageUsers />} />
-  <Route path="services" element={<ManageServices />} />
-  <Route path="reservations" element={<ManageReservations />} />
-  <Route path="payments" element={<Payments />} />
-
-  {/* Fallback for unknown paths */}
-  <Route path="*" element={<Navigate to="home" replace />} />
-</Routes>
-
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="home" element={<Home />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="services" element={<ManageServices />} />
+            <Route path="reservations" element={<ManageReservations />} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="messages" element={<Message />} /> {/* ✅ Added */}
+            <Route path="viewprofile" element={<ViewProfile />} />
+            <Route path="viewaddadmin" element={<ViewAddAdmin />} />
+            <Route path="*" element={<Navigate to="home" replace />} />
+          </Routes>
         </section>
       </main>
     </div>

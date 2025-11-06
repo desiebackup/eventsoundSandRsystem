@@ -1,0 +1,80 @@
+/* Container box styling */
+.content-box {
+  background: var(--bg-card);
+  padding: 24px;
+  color: var(--text-main);
+}
+
+/* Title */
+.content-box h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Subtitle text */
+.content-box p {
+  font-size: 14px;
+  margin-bottom: 18px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.theme-box {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 8px;
+}
+
+/* Box title */
+.theme-box h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-main);
+}
+
+/* Button wrapper */
+.theme-options {
+  display: flex;
+  gap: 12px;
+}
+
+/* Theme switch buttons */
+.theme-options button {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 3px solid var(--border-color);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.theme-options button .icon {
+  font-size: 24px;
+  transition: color 0.2s ease;
+}
+
+/* Active Selection */
+.theme-options button.active {
+  background: var(--navbar-active-bg);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+/* Hover */
+.theme-options button:hover {
+  background: var(--navbar-hover-bg);
+}

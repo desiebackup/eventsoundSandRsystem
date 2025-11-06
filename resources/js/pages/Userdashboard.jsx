@@ -1,22 +1,25 @@
 import React, { useEffect, useState, useRef } from "react";
 import { NavLink, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaChevronDown } from "react-icons/fa";
 import Home from "../userNavigation/Home";
 import Reservation from "../userNavigation/Reservation";
 import ServicePackage from "../userNavigation/ServicePackage";
-import MakeReservation from "../userNavigation/MakeReservation";
 import Payments from "../userNavigation/Payments";
-import "../../css/pages/Userdashboard.css";
 import logo from "../../img/logo.png";
 import avatar from "../../img/avatar.png";
-import Profile from "../userNavigation/dropdown/Profile";
+import Settings from "../userNavigation/dropdown/Settings";
 import Terms from "../userNavigation/dropdown/Terms";
 import PaymentPolicy from "../userNavigation/dropdown/PaymentPolicy";
 import ContactUs from "../userNavigation/dropdown/ContactUs";
+import ChatUs from "../userNavigation/dropdown/ChatUs";
+import "../../css/design/Theme.css";
+import "../../css/pages/Userdashboard.css";
 
 export default function Userdashboard() {
   const [user, setUser] = useState({ firstname: "", lastname: "" });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedDropdownItem, setSelectedDropdownItem] = useState(null);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -40,7 +43,7 @@ export default function Userdashboard() {
       }
     };
 
-    fetchUser();``
+  fetchUser();
   }, [navigate]);
 
   const handleLogout = async () => {
@@ -76,9 +79,12 @@ export default function Userdashboard() {
     <div className="user-dashboard">
       {/* --- TOP NAVBAR --- */}
       <header className="top-navbar">
-        <div className="navbar-left">
-          <img src={logo} alt="user" className="logo" />
-        </div>
+        <div className="logo-section">
+        <div className="logo-frame">
+        <img src={logo} alt="EventSound Logo" className="logo" />
+     </div>
+       <span className="logo-text">Event Sound Pro</span>
+     </div>
 
         <nav className="navbar-links">
           <NavLink to="/userdashboard/home" className="nav-item">
@@ -97,26 +103,26 @@ export default function Userdashboard() {
 
         {/* --- USER DROPDOWN --- */}
         <div className="navbar-right" ref={dropdownRef}>
-          <div className="user-info" onClick={toggleDropdown}>
-            <img src={avatar} alt="EventSound Logo" className="user-avatar" />
+          <div className={`user-info ${isDropdownOpen ? 'active' : ''}`} onClick={toggleDropdown}>
+            <img src={avatar} alt="User" className="user-avatar" />
             <span className="user-name">
               {user.firstname} {user.lastname}
             </span>
-            <span className="dropdown-arrow">▾</span>
+            <FaChevronDown className="dropdown-arrow" />
           </div>
 
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <button onClick={() => navigate("/userdashboard/profile")}>
-                Profile
+              <button onClick={() => { setSelectedDropdownItem('settings'); navigate("/userdashboard/settings/profile"); }} className={selectedDropdownItem === 'settings' ? 'selected' : ''}>
+                Settings
               </button>
-              <button onClick={() => navigate("/userdashboard/terms")}>
+              <button onClick={() => { setSelectedDropdownItem('terms'); navigate("/userdashboard/terms"); }} className={selectedDropdownItem === 'terms' ? 'selected' : ''}>
                 Terms & Conditions
               </button>
-              <button onClick={() => navigate("/userdashboard/paymentpolicy")}>
+              <button onClick={() => { setSelectedDropdownItem('paymentpolicy'); navigate("/userdashboard/paymentpolicy"); }} className={selectedDropdownItem === 'paymentpolicy' ? 'selected' : ''}>
                 Payment Policy
               </button>
-              <button onClick={() => navigate("/userdashboard/contact")}>
+              <button onClick={() => { setSelectedDropdownItem('contact'); navigate("/userdashboard/contact"); }} className={selectedDropdownItem === 'contact' ? 'selected' : ''}>
                 Contact Us
               </button>
               <hr />
@@ -134,14 +140,16 @@ export default function Userdashboard() {
           <Route path="home" element={<Home />} />
           <Route path="reservations" element={<Reservation />} />
           <Route path="servicepackage" element={<ServicePackage />} />
-          <Route path="makereservation" element={<MakeReservation />} />
           <Route path="payments" element={<Payments />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="settings/*" element={<Settings />} />
+
           <Route path="terms" element={<Terms />} />
           <Route path="paymentpolicy" element={<PaymentPolicy />} />
           <Route path="contact" element={<ContactUs />} />
         </Routes>
+
       </main>
+      <ChatUs/>
     </div>
   );
 }

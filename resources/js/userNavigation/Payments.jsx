@@ -1,80 +1,175 @@
-// resources/js/userNavigation/Payments.jsx
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "../../css/usernav/Payment.css";  
+import React, { useState } from "react";
+import "../../css/usernav/Payment.css";
 
-export default function Payments() {
-  const [payments, setPayments] = useState([]);
+const Payments = () => {
+  const [bankDetails, setBankDetails] = useState({
+    bankName: "BPI Savings",
+    accountNumber: "7890",
+    accountName: "Imee Palmero",
+  });
 
-  useEffect(() => {
-    let serviceMap = {};
-    axios.get('/api/services')
-      .then(sres => {
-        // create multiple lookup keys for resilience: original, lowercased, trimmed
-        sres.data.forEach(s => {
-          if (!s || !s.name) return;
-          serviceMap[s.name] = s.price;
-          serviceMap[(s.name || '').toLowerCase().trim()] = s.price;
-        });
-        return axios.get('/api/reservations');
-      })
-      .then(r => {
-        const rows = r.data.map(res => {
-          // try exact match, then lowercase match
-          let amount = null;
-          if (res.service_package && serviceMap.hasOwnProperty(res.service_package)) {
-            amount = serviceMap[res.service_package];
-          } else if (res.service_package && serviceMap.hasOwnProperty((res.service_package || '').toLowerCase().trim())) {
-            amount = serviceMap[(res.service_package || '').toLowerCase().trim()];
-          } else {
-            // fallback: if service_package looks like an ID number, try to find service by id
-            const maybeId = Number(res.service_package);
-            if (!isNaN(maybeId) && maybeId > 0) {
-              // try to find service by id from the services list (from earlier response)
-              const found = sres.data.find(s => Number(s.id) === maybeId);
-              if (found) amount = found.price;
-            }
-          }
+  const [showModal, setShowModal] = useState(false);
 
-          return {
-            id: res.id,
-            event: res.event_name,
-            amount: amount,
-            date: res.created_at,
-            status: res.status,
-          };
-        });
-        setPayments(rows);
-      })
-      .catch(() => setPayments([]));
-  }, []);
+  const invoices = [
+    {
+      id: "ORD-001",
+      event: "Summit Conference",
+      total: 2000,
+      down: 150,
+      balance: 1850,
+      status: "Paid in Full",
+      action: "Download Invoice",
+    },
+    {
+      id: "ORD-002",
+      event: "Birthday Party",
+      total: 600,
+      down: 150,
+      balance: 450,
+      status: "Balance Due",
+      action: "Pay In Person",
+    },
+    {
+      id: "ORD-003",
+      event: "Wedding",
+      total: 1000,
+      down: 100,
+      balance: 0,
+      status: "Canceled",
+      action: "Refund Sent",
+    },
+  ];
+
+  const handleSave = () => {
+    setShowModal(false);
+  };
 
   return (
-    <div className="page-card"> 
-      <div className="card">
-        <table className="events-table">
+    <div className="pay-wrapper">
+      <h2 className="pay-title">Payment & Invoice Center</h2>
+
+      {/* Final Balance Due */}
+      <div className="balance-box">
+        <p className="balance-label">Final Balance Due (Upcoming)</p>
+        <h1 className="balance-amount">$450.00</h1>
+        <p className="balance-info">
+          Remaining balance for <b>Holiday Staff Party</b> (Due Dec 10, <b>In-Person</b>).
+        </p>
+        <button className="view-details-btn">View Details</button>
+      </div>
+
+      {/* Refund Method */}
+      <div className="refund-box">
+        <h3 className="section-title">Default Refund Method (For Manual Transfers)</h3>
+
+        <div className="refund-row">
+          <div>
+            <p className="refund-bank">
+              <b>{bankDetails.bankName}</b> (Account Ending: {bankDetails.accountNumber})
+            </p>
+            <p className="refund-name">Account Name: {bankDetails.accountName}</p>
+          </div>
+
+          <button className="update-btn" onClick={() => setShowModal(true)}>
+            Update Details
+          </button>
+        </div>
+
+        <p className="refund-note">
+          All manual refunds (e.g., cancellations) will be sent to this account.
+        </p>
+      </div>
+
+      {/* Invoice History */}
+      <h3 className="section-title">Invoice History</h3>
+
+      <div className="invoice-table">
+        <table>
           <thead>
-            <tr><th>Payment ID</th><th>Event</th><th>Amount</th><th>Date</th><th>Time</th><th>Status</th></tr>
+            <tr>
+              <th>Order ID</th>
+              <th>Event Name</th>
+              <th>Total Amount</th>
+              <th>Down Payment</th>
+              <th>Balance Due</th>
+              <th>Status</th>
+              <th>Action / Refund Status</th>
+            </tr>
           </thead>
           <tbody>
-            {payments.map(p => {
-              const dt = p.date ? new Date(p.date) : null;
-              const dateStr = dt && !isNaN(dt) ? dt.toLocaleDateString() : '—';
-              const timeStr = dt && !isNaN(dt) ? dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—';
-              return (
-                <tr key={p.id}>
-                  <td>#{p.id}</td>
-                  <td>{p.event}</td>
-                  <td>{p.amount ? `₱${p.amount}` : '—'}</td>
-                  <td>{dateStr}</td>
-                  <td>{timeStr}</td>
-                  <td><span className={`tag ${p.status === 'approved' ? 'confirmed' : 'pending'}`}>{p.status}</span></td>
-                </tr>
-              );
-            })}
+            {invoices.map((inv, i) => (
+              <tr key={i}>
+                <td>{inv.id}</td>
+                <td>{inv.event}</td>
+                <td>${inv.total.toFixed(2)}</td>
+                <td className="paid-text">${inv.down.toFixed(2)}</td>
+                <td className={inv.balance > 0 ? "due-text" : "zero-text"}>
+                  ${inv.balance.toFixed(2)}
+                </td>
+                <td>
+                  <span
+                    className={`status-badge ${
+                      inv.status === "Paid in Full"
+                        ? "paid"
+                        : inv.status === "Balance Due"
+                        ? "due"
+                        : "canceled"
+                    }`}
+                  >
+                    {inv.status}
+                  </span>
+                </td>
+                <td className="action-text">{inv.action}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+
+      {/* MODAL */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Update Refund Details</h3>
+
+            <input
+              type="text"
+              value={bankDetails.bankName}
+              onChange={(e) => setBankDetails({ ...bankDetails, bankName: e.target.value })}
+              placeholder="Bank Name"
+            />
+
+            <input
+              type="text"
+              value={bankDetails.accountNumber}
+              onChange={(e) =>
+                setBankDetails({ ...bankDetails, accountNumber: e.target.value })
+              }
+              placeholder="Account Number"
+            />
+
+            <input
+              type="text"
+              value={bankDetails.accountName}
+              onChange={(e) =>
+                setBankDetails({ ...bankDetails, accountName: e.target.value })
+              }
+              placeholder="Account Holder Name"
+            />
+
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
+              <button className="save-btn" onClick={handleSave}>
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Payments;

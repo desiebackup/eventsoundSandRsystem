@@ -1,93 +1,104 @@
-/* resources/css/userNavigation/PaymentPolicy.css */
-
 @import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap');
 
 .payment-policy-container {
-  max-width: 900px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1050px; /* same as settings-wrapper */
+  margin: 15px auto;
   padding: 40px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 2px 5px var(--shadow);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
   line-height: 1.7;
+  display: flex;
+  flex: 1 1 auto;
+  align-self: stretch;
+  flex-direction: column; 
+  box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  color: #333;
-  margin-top: 0;
-  padding-top: 30px;
 }
 
 .policy-title {
   font-family: "Happy Monkey", cursive;
   text-align: center;
-  font-size: 40px;
-  color: #333;
+  font-size: 38px;
+  color: var(--accent-text);
+  margin-top: 8px;
   margin-bottom: 10px;
-  margin-top: 0;
 }
 
 .policy-subtitle {
   text-align: center;
   font-weight: 500;
-  color: #444;
-  margin-bottom: 5px;
+  color: var(--text-color);
+  opacity: 0.9;
+  margin-bottom: 6px;
 }
 
 .last-updated {
   text-align: center;
-  color: #777;
+  color: var(--text-color);
+  opacity: 0.7;
   font-size: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-hr {
+.payment-policy-container hr {
   border: none;
-  border-top: 2px solid #e0e0e0;
-  margin-bottom: 30px;
+  border-top: 1.5px solid var(--border-color);
+  margin: 0 0 30px 0;
 }
 
-section {
-  margin-bottom: 35px;
-}
-
-/* ✅ Removed the border-left that created the “l” */
-section h2 {
-  color: #0083b0;
+/* 🔹 Section Titles */
+.payment-policy-container section h2 {
+  color: var(--accent);
   font-size: 20px;
   margin-bottom: 10px;
-  padding-left: 0;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
-section p {
+/* 🔹 Paragraphs */
+.payment-policy-container section p {
   font-size: 16px;
   margin-bottom: 10px;
 }
 
-ul,
-ol {
+/* 🔹 Lists */
+.payment-policy-container ul,
+.payment-policy-container ol {
   margin-left: 25px;
   margin-top: 10px;
 }
 
-li {
+.payment-policy-container li {
   margin-bottom: 8px;
 }
 
+/* 🔹 Section Spacing */
+.payment-policy-container section {
+  margin-bottom: 35px;
+}
+
+/* 🔹 Responsive */
 @media (max-width: 768px) {
   .payment-policy-container {
-    padding: 25px;
+    padding: 20px;
+    margin: 12px;
   }
 
   .policy-title {
     font-size: 30px;
   }
 
-  section h2 {
+  .payment-policy-container section h2 {
     font-size: 18px;
   }
 
-  section p,
-  li {
+  .payment-policy-container section p,
+  .payment-policy-container li {
     font-size: 15px;
   }
 }

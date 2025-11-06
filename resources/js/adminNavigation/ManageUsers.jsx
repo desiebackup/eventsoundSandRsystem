@@ -4,7 +4,6 @@ import "../../css/adminnav/ManageUsers.css";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchUsers();
@@ -19,9 +18,7 @@ export default function ManageUsers() {
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const deleteUser = async (id) => {
@@ -39,10 +36,6 @@ export default function ManageUsers() {
       alert("Failed to delete user.");
     }
   };
-
-  if (loading) {
-    return <div className="loading">Loading users...</div>;
-  }
 
   return (
     <div className="manage-users-container">

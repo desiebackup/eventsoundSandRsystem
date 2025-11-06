@@ -1,133 +1,188 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
-
-/* Full section wrapper */
+/* MAIN SECTION WRAPPER */
 .package-section {
   width: 100%;
-  min-height: calc(100vh - 120px);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* 👈 align to top instead of center */
-  background: #ffffff;
+  max-width: 1050px;
+  margin:0 auto; /* 15px top margin, center horizontally */
+  padding: 0;
+  color: var(--text-main, #333);
   font-family: "Poppins", sans-serif;
-  box-sizing: border-box;
-  padding: 60px 20px 40px; /* 👈 add top padding instead of centering */
 }
 
+/* MAIN TITLE (Explore Our Packages) */
+.package-main-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
 
-/* Container for cards */
+/* TOP HEADER BOX */
+.package-header-box {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-bottom: 35px;
+}
+
+/* Subtitle: Service Packages & Pricing */
+.package-sub-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+/* Description under subtitle */
+.package-description {
+  font-size: 0.95rem;
+  color: #374151;
+}
+
 .package-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-content: center; /* centers grid when fewer items */
-  justify-items: center; /* centers cards in each cell */
-  gap: 28px;
-  max-width: 1100px;
-  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
   width: 100%;
 }
 
-
-@media (max-width: 992px) {
-  .package-container {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* 🌟 INDIVIDUAL CARD */
 .package-card {
-  background: #fff;
-  border: 1px solid #e0e0e0; /* ✅ adds subtle border */
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  width: 300px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+  width: 320px;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  text-align: center; /* ✅ centers inner text nicely */
 }
 
 .package-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Header */
+/* 🌟 HEADER (Name + Price) */
 .package-header {
-  background: #5281b7;
-  color: #fff;
   text-align: center;
-  width: 100%;
-  padding: 22px 0 48px;
-  position: relative;
 }
 
 .package-header h3 {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.price-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 4px;
 }
 
 .package-price {
-  position: absolute;
-  bottom: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #0057b8;
-  color: #fff;
-  font-size: 26px;
+  font-size: 1.4rem;
   font-weight: 700;
-  padding: 16px 40px;
-  border-radius: 50px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  color: #4f46e5;
+  margin-bottom: 6px;
 }
 
-/* Features */
-.package-features {
-  list-style: none;
-  padding: 60px 20px 20px;
-  margin: 0;
+.package-price hr {
+  border: none;
+  border-top: 1px solid #e5e7eb; /* light gray line */
+  margin: 8px 0;
   width: 100%;
 }
 
+.price-caption {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.muted {
+  color: #5485d8;
+  font-style: bold;
+}
+
+/* 🌟 INCLUSIONS */
+.package-features {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  font-size: 0.95rem;
+  color: #374151;
+  text-align: left;
+}
+
 .package-features li {
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
-  background: #f8f8f8;
-  margin-bottom: 10px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-size: 15px;
-  color: #333;
 }
 
 .checkmark {
-  color: #39c16b;
-  font-weight: bold;
+  color: #22c55e;
   margin-right: 8px;
+  font-weight: bold;
 }
 
-/* Book button */
+/* 🌟 NOTES SECTION */
+.package-note {
+  background: #f3f4f6;
+  padding: 12px;
+  font-size: 0.9rem;
+  color: #374151;
+  border-radius: 10px;
+  margin-top: 12px;
+  text-align: center;
+  line-height: 1.4;
+  border: 1px solid #e5e7eb;
+}
+
+.package-note .muted {
+  display: block;
+  margin-top: 5px;
+  color: #e11111;
+  font-style: normal;
+  font-size: 0.85rem;
+}
+
+/* 🌟 BOOK BUTTON */
 .book-btn {
-  background: transparent;
-  border: 2px solid #0057b8;
-  color: #0057b8;
-  border-radius: 50px;
-  padding: 10px 30px;
-  font-size: 16px;
+  width: 100%;
+  background: #4f46e5;
+  color: white;
   font-weight: 600;
-  margin: 20px 0 30px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: 0.25s;
+  margin-top: 18px;
+  font-size: 1rem;
 }
 
 .book-btn:hover {
-  background: #0057b8;
-  color: #fff;
+  background: #4338ca;
+  transform: scale(1.03);
 }
 
-.package-note {
-  font-style: italic;
-  color: #555;
-  margin-top: 10px;
-  padding: 0 20px;
-  text-align: center;
+/* 🌟 RESPONSIVE */
+@media (max-width: 768px) {
+  .package-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .package-card {
+    width: 90%;
+  }
+
+  .package-main-title {
+    font-size: 1.6rem;
+  }
 }

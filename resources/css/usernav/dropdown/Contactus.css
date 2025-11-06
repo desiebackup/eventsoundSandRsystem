@@ -1,66 +1,80 @@
 @import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap');
 
-.contact-container {
-  width: 100%;
-  height: 100%;
-  min-height: calc(100vh - 120px); /* adjusts under navbar */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #ffffff; /* Changed: solid white, removed blue gradient */
-  font-family: "Poppins", sans-serif;
-  box-sizing: border-box;
-  padding: 40px 20px;
-}
-
+/* 🔹 Inner Card */
 .contact-card {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  text-align: center;
-  max-width: 400px;
   width: 100%;
-  border: 1px solid rgba(150, 100, 255, 0.1);
-  position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 1050px; /* same as settings-wrapper */
+  margin: 15px auto;
+  padding: 40px;
+  box-sizing: border-box;
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 2px 5px var(--shadow);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  line-height: 1.7;
+  display: flex;
+  text-align: center;
+  flex: 1 1 auto;
+  align-self: stretch;
+  flex-direction: column; 
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-.contact-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-}
-
+/* 🔹 Title */
 .contact-title {
   font-family: "Happy Monkey", cursive;
-  font-size: 2rem;
-  color: #333;
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 38px;
+  color: var(--accent-text);
+  margin-top: 8px;
+  margin-bottom: 30px;
 }
 
+/* 🔹 Image */
 .contact-image {
   width: 220px;
   height: auto;
-  margin-bottom: 20px;
+  margin: 0 auto 40px auto; 
+  display: block;           
+  border-radius: 8px;
 }
 
-.contact-info {
+/* 🔹 Details */
+.contact-details {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: var(--text-color);
 }
 
-.contact-info-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  color: #333;
-}
-
-.contact-info-item svg {
-  color: #0066ff;
+.icon {
+  color: var(--accent);
+  margin-right: 8px;
   font-size: 18px;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 24px;
+  }
+
+  .contact-card {
+    padding: 30px 20px;
+  }
+
+  .contact-title {
+    font-size: 30px;
+  }
+
+  .contact-image {
+    width: 220px;
+  }
+
+  .contact-details {
+    font-size: 20px;
+  }
 }

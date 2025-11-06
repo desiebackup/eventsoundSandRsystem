@@ -18,11 +18,19 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         try {
+            // normalize camelCase keys from frontend (downPayment) to snake_case DB columns
+            $request->merge([
+                'down_payment' => $request->input('downPayment', $request->input('down_payment', 0)),
+                'balance' => $request->input('balance', $request->input('balance', 0)),
+            ]);
+
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'price' => 'required|integer',
                 'inclusions' => 'nullable|string',
                 'note' => 'nullable|string',
+                'down_payment' => 'nullable|integer',
+                'balance' => 'nullable|integer',
             ]);
 
             $service = Service::create($validated);
@@ -40,11 +48,19 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         try {
+            // normalize incoming keys (frontend may send downPayment)
+            $request->merge([
+                'down_payment' => $request->input('downPayment', $request->input('down_payment', $service->down_payment ?? 0)),
+                'balance' => $request->input('balance', $request->input('balance', $service->balance ?? 0)),
+            ]);
+
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'price' => 'required|integer',
                 'inclusions' => 'nullable|string',
                 'note' => 'nullable|string',
+                'down_payment' => 'nullable|integer',
+                'balance' => 'nullable|integer',
             ]);
 
             $service->update($validated);

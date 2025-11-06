@@ -1,0 +1,104 @@
+/* Main container */
+.security-container {
+  background: var(--bg-card);
+  padding: 24px;
+  color: var(--text-main);
+}
+
+/* Page heading */
+.security-container h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text-main);
+}
+
+/* Page description */
+.security-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Inner card box */
+.security-box {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px 28px; /* increased right padding */
+  box-sizing: border-box;
+  width: 100%;
+  position: relative;
+}
+
+/* Box title */
+.security-box h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-main);
+}
+
+/* Form labels */
+.security-box label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+/* Inputs */
+.security-box input {
+  width: 97%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 14px;
+  margin-bottom: 16px; 
+  transition: border 0.2s ease;
+}
+
+/* Focus */
+.security-box input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+}
+/* Button */
+.security-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.security-btn:hover {
+  background: var(--accent-text);
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .security-box {
+    padding: 18px;
+  }
+
+  .security-box h3 {
+    font-size: 16px;
+  }
+
+  .security-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

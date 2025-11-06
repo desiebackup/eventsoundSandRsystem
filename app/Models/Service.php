@@ -14,5 +14,7 @@ class Service extends Model
         'price',
         'inclusions',
         'note',
+        'down_payment',
+        'balance',
     ];
 }

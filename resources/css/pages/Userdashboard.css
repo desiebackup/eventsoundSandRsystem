@@ -1,213 +1,209 @@
-:root {
-  --primary-blue: #3b82f6;
-  --primary-indigo: #4338ca;
-  --gradient: linear-gradient(90deg, var(--primary-blue), var(--primary-indigo));
-  --text-dark: #1f2937;
-  --bg-light: #f9fafb;
-  --white: #ffffff;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap");
 
-/* Reset + Global */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
-}
-
-/* USER DASHBOARD WRAPPER */
+/* Main Dashboard Wrapper */
 .user-dashboard {
+  background: var(--bg-page);
+  color: var(--text-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* --- NAVBAR --- */
+/* NAVBAR */
 .top-navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--gradient);
-  color: var(--white);
-  padding: 0.8rem 2rem;
-  box-shadow: var(--shadow);
-  border-radius: 0 0 16px 16px;
-  z-index: 100;
+  background: var(--bg-navbar);
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px var(--shadow);
+  /* Use fixed so the header stays visible on scroll across browsers */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1100; /* ensure header sits above dropdowns/content */
+  box-sizing: border-box;
+  height: 80px; /* fixed header height to reserve space */
 }
 
-/* LEFT SIDE LOGO */
-.navbar-left {
+/* LOGO FRAME */
+.logo-frame {
+  width: 55px;
+  height: 55px;
+  overflow: hidden;
   display: flex;
   align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
 }
 
-.logo {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
+.logo-frame .logo {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
-/* --- NAV LINKS CENTER --- */
-.navbar-links {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-item {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  position: relative;
-  transition: color 0.2s ease;
-}
-
-.nav-item:hover {
-  color: #dbeafe;
-}
-
-.nav-item.active::after {
-  content: "";
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--white);
-  border-radius: 4px;
-}
-
-/* --- RIGHT SIDE USER SECTION --- */
-.navbar-right {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.user-info {
+/* Logo + Text Container */
+.logo-section {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 6px 14px;
-  border-radius: 50px;
+}
+
+/* Text beside logo */
+.logo-text {
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+
+/* NAV LINKS */
+.navbar-links {
+  /* center nav visually between logo and user area without affecting flow */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 25px;
+  white-space: nowrap; /* prevent wrapping of nav items */
+  z-index: 1100; /* sit above other header elements if needed */
+}
+
+.nav-item {
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: var(--text-color);
+}
+
+/* ✅ Navbar hover & active colors */
+.nav-item:hover {
+  background: var(--navbar-hover-bg);
+  color: var(--accent-text);
+}
+
+.nav-item.active {
+  background: var(--navbar-active-bg);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+/* USER DROPDOWN */
+.user-dashboard .navbar-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+/* User info (clickable area) */
+.user-dashboard .user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
-  transition: background 0.25s ease;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
 }
 
-.user-info:hover {
-  background: rgba(255, 255, 255, 0.25);
+.user-dashboard .user-info:hover {
+  background: var(--navbar-hover-bg); /* theme-aware hover */
 }
 
-.user-avatar {
+/* Avatar inside user-info */
+.user-dashboard .user-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid white;
-  object-fit: cover;
+  object-fit: cover; /* accent from theme */
 }
 
-.user-name {
-  font-weight: 500;
-  font-size: 0.95rem;
+.user-dashboard .dropdown-arrow {
+  font-size: 12px;
+  margin-left: 8px;
+  color: var(--accent-text); /* make arrow stand out */
+  transition: transform 0.2s;
 }
 
-.dropdown-arrow {
-  font-size: 0.8rem;
+.user-dashboard .user-info.active .dropdown-arrow {
+  transform: rotate(180deg); /* rotate when dropdown is open */
 }
 
-/* --- DROPDOWN MENU --- */
-.dropdown-menu {
+/* Dropdown menu container */
+.user-dashboard .dropdown-menu {
   position: absolute;
-  top: 55px;
   right: 0;
-  background: var(--white);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  top: 55px; /* matches navbar height */
+  background: var(--bg-card); /* theme-aware background */
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 4px 8px var(--shadow);
   display: flex;
   flex-direction: column;
-  min-width: 190px;
-  overflow: hidden;
-  z-index: 999;
-  animation: fadeIn 0.25s ease-in-out;
+  z-index: 2000;
+  padding: 6px 0; /* spacing */
 }
 
-.dropdown-menu button {
+/* Dropdown buttons */
+.user-dashboard .dropdown-menu button {
   background: none;
   border: none;
   padding: 10px 16px;
   text-align: left;
-  font-size: 0.9rem;
-  color: var(--text-dark);
+  color: var(--text-color); /* theme-aware text */
   cursor: pointer;
-  transition: background 0.2s ease;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
-.dropdown-menu button:hover {
-  background: #f3f4f6;
+.user-dashboard .dropdown-menu button:hover {
+  background: var(--dropdown-hover-bg); /* theme-aware hover */
+  color: var(--accent-text); /* theme-aware hover text */
 }
 
-.logout-btn {
-  color: #dc2626;
+.user-dashboard .dropdown-menu button.active {
+  background: var(--dropdown-active-bg); /* theme-aware active */
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+/* selected/active state when user clicks a menu item */
+.user-dashboard .dropdown-menu button.selected,
+.user-dashboard .dropdown-menu button:active,
+.user-dashboard .dropdown-menu button:focus {
+  background: var(--dropdown-active-bg);
+  font-weight: 600;
+  color: var(--accent-text);
+  outline: none;
+}
+
+/* Logout button styling */
+.user-dashboard .logout-btn {
+  color: #d9534f !important; /* theme-aware color */
   font-weight: 600;
 }
 
-.dropdown-menu hr {
-  border: none;
-  border-top: 1px solid #e5e7eb;
+/* Optional separator between main buttons and logout */
+.user-dashboard .dropdown-menu hr {
   margin: 6px 0;
+  border: 0;
+  border-top: 1px solid var(--border-color);
 }
 
-/* --- MAIN CONTENT --- */
+/* CONTENT */
 .dashboard-content {
   flex: 1;
-  background: var(--white);
-  border-radius: 16px;
-  margin: 1.5rem;
-  padding: 2rem;
-  box-shadow: var(--shadow);
-  overflow-y: auto;
-  transition: all 0.3s ease;
-}
-
-/* Smooth fade animation for dropdown */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* --- RESPONSIVE STYLES --- */
-@media (max-width: 900px) {
-  .navbar-links {
-    display: none;
-  }
-
-  .top-navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    padding: 1rem;
-  }
-
-  .user-info {
-    align-self: flex-end;
-  }
-
-  .dashboard-content {
-    margin: 1rem;
-    padding: 1.25rem;
-  }
+  background: var(--bg-page);
+  padding: 85px 10px 10px 10px; 
 }

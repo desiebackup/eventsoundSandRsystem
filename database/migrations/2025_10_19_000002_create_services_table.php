@@ -12,6 +12,9 @@ return new class extends Migration {
             $table->string('name');
             $table->integer('price');
             $table->text('inclusions')->nullable();
+            $table->text('note')->nullable();
+            $table->integer('down_payment')->default(0);
+            $table->integer('balance')->default(0);
             $table->timestamps();
         });
     }

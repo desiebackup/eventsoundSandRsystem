@@ -1,219 +1,259 @@
-/* ===== General Layout ===== */
 .home-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 50px;
-  color: #1c1c1c;
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0;
   font-family: "Poppins", sans-serif;
-  box-sizing: border-box;
+  color: var(--text-color);
 }
 
-/* ===== Dashboard Content ===== */
-.dashboard-content {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+/* --- TITLE --- */
+.home-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
 }
 
-/* ===== Upcoming Events Table ===== */
-.upcoming-events {
-  width: 100%;
-  max-width: 1200px;
-  background: #ffffff;
+/* --- BANNER --- */
+.home-banner {
+  background: var(--accent);
+  color: white;
+  padding: 25px;
   border-radius: 12px;
-  padding: 25px 30px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
 }
 
-.upcoming-events:hover {
-  transform: translateY(-4px);
+.home-banner h2 {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
 }
 
-.upcoming-events h4 {
-  font-size: 1.5rem;
-  color: #0078ff;
+/* --- BUTTON INSIDE BANNER --- */
+.schedule-btn {
+background: white; 
+color: #4f46e5; 
+font-weight: 600; 
+padding: 12px 18px; 
+border: none; 
+border-radius: 8px; 
+cursor: pointer; 
+transition: 0.2s; 
+display: flex; 
+align-items: center; 
+gap: 8px;
+}
+
+.schedule-btn:hover {
+  background: var(--navbar-hover-bg);
+}
+
+.schedule-btn .icon {
+  font-size: 18px;
+}
+
+.stats-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 20px; 
+} 
+  
+.stat-card { 
+  background: white; 
+  border-radius: 12px; 
+  padding: 25px; 
+  box-shadow: 0 2px 6px var(--shadow); 
+  border: 1px solid var(--border-color); 
+} 
+
+.stat-card:hover {
+  background: white !important;
+  box-shadow: 0 2px 6px var(--shadow) !important;
+  border-color: var(--border-color) !important;
+  cursor: default !important;
+}
+
+.stat-card h3 { 
+  font-size: 1rem; 
+  color: #6b7280; 
+  margin-bottom: 10px; 
+} 
+  
+.stat-value { 
+  font-size: 2rem; 
+  font-weight: 700; 
+  color: #111827; 
+}
+   
+.money {
+  color: #111827;
+}
+
+.stat-note { 
+  font-size: 0.85rem; 
+  color: #16a34a; 
+} 
+.stat-note.yellow {
+  color: #ebe427; 
+}
+
+.stat-note.gold {
+  color: #eab308; 
+}
+
+
+/* --- RESPONSIVE BANNER FIX --- */
+@media (max-width: 600px) {
+  .home-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+}
+
+/* --- SECTION CARDS (Reservations + Activity) --- */
+.section-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 35px;
+  box-shadow: 0 2px 6px var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
-  border-bottom: 2px solid #0078ff;
-  padding-bottom: 6px;
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
   font-weight: 600;
 }
 
-/* ===== Table Styling ===== */
-.upcoming-events table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.upcoming-events th,
-.upcoming-events td {
-  text-align: left;
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-  font-size: 0.95rem;
-}
-
-.upcoming-events th {
-  background: #f2f6fc;
-  color: #0078ff;
-  font-weight: 600;
-}
-
-.upcoming-events tr:nth-child(even) {
-  background-color: #fafcff;
-}
-
-.upcoming-events tr:hover {
-  background: #f1f6ff;
-  transition: background 0.2s ease;
-}
-
-/* ===== Down Payment Link ===== */
-.upcoming-events a {
-  color: #0078ff;
+.view-all {
+  color: var(--accent);
   font-weight: 500;
   text-decoration: none;
 }
 
-.upcoming-events a:hover {
+.view-all:hover {
   text-decoration: underline;
 }
 
-/* ===== Empty State ===== */
-.upcoming-events p {
-  text-align: center;
-  font-size: 1rem;
-  color: #777;
-  font-style: italic;
-  margin: 25px 0;
-}
-
-/* ===== Down Payment Modal ===== */
-.dp-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+/* --- UPCOMING RESERVATIONS --- */
+.reservation-item {
+  background: var(--bg-page);
+  border-radius: 10px;
+  padding: 18px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 2000;
-  animation: fadeIn 0.2s ease-in-out;
+  margin-bottom: 12px;
+  transition: 0.2s;
+  border: 1px solid var(--border-color);
 }
 
-.dp-modal {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-  padding: 1.5rem 2rem;
-  width: 90%;
-  max-width: 500px;
-  animation: slideUp 0.25s ease-out;
+.reservation-item:hover {
+  background: var(--navbar-hover-bg);
 }
 
-.dp-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.dp-modal-header h4 {
-  margin: 0;
-  color: #0078ff;
-  font-weight: 600;
-}
-
-.dp-close-btn {
-  background: none;
-  border: none;
-  font-weight: 600;
-  color: #333;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.dp-close-btn:hover {
-  color: #0078ff;
-}
-
-.dp-modal-body {
-  text-align: center;
-}
-
-.dp-modal-img {
-  max-width: 100%;
-  max-height: 400px;
-  object-fit: contain;
+.reservation-date {
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  padding: 10px 14px;
   border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.dp-filename {
+  margin-right: 18px;
   font-size: 0.9rem;
-  color: #666;
+  min-width: 55px;
+  text-align: center;
 }
 
-/* ===== Animations ===== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.reservation-details h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  font-weight: 600;
 }
 
-@keyframes slideUp {
-  from { transform: translateY(15px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.reservation-details p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.7;
 }
 
-/* ===== Responsive Design ===== */
-@media (max-width: 768px) {
-  .home-container {
-    padding: 25px;
-  }
+.reservation-time {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.6;
+}
 
-  .upcoming-events {
-    padding: 20px;
-  }
+.arrow-icon {
+  margin-left: auto;
+  font-size: 1.4rem;
+  color: var(--text-color);
+  opacity: 0.5;
+}
 
-  .upcoming-events table,
-  .upcoming-events thead,
-  .upcoming-events tbody,
-  .upcoming-events th,
-  .upcoming-events td,
-  .upcoming-events tr {
-    display: block;
-  }
+.warn-icon {
+  margin-left: auto;
+  font-size: 1.3rem;
+  color: #eab308;
+}
 
-  .upcoming-events thead {
-    display: none;
-  }
+/* --- ACTIVITY SECTION --- */
+.activity-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
 
-  .upcoming-events tr {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  }
+.activity-row:last-child {
+  border-bottom: none;
+}
 
-  .upcoming-events td {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 12px;
-    border-bottom: 1px solid #f1f1f1;
-  }
+.activity-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
 
-  .upcoming-events td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: #0078ff;
-  }
+.activity-icon.confirmation {
+  background: #22c55e;
+}
 
-  .dp-modal {
-    padding: 1rem;
+.activity-icon.update {
+  background: #3b82f6;
+}
+
+.activity-icon.invoice {
+  background: #7c3aed;
+}
+
+.activity-row p {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.activity-time {
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+/* --- MOBILE FIX FOR RESERVATIONS --- */
+@media (max-width: 600px) {
+  .reservation-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  .arrow-icon, .warn-icon {
+    margin: 10px auto 0;
   }
 }

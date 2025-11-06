@@ -1,0 +1,34 @@
+* {
+  font-family: "Inter", "Poppins", "Roboto", sans-serif;
+}
+/* Light */
+:root {
+  --bg-page: #f4f4f6;
+  --bg-navbar: #ffffff;
+  --bg-card: #ffffff;
+  --navbar-hover-bg: #ededed;
+  --navbar-active-bg: #e5e1ff;
+  --dropdown-hover-bg: #f0f0f0;
+  --dropdown-active-bg: #e5e1ff;
+  --accent: #6b63ff;
+  --accent-text: #603990;
+  --text-color: #222;
+  --border-color: #dcdcdc;
+  --shadow: rgba(112, 78, 78, 0.07);
+}
+
+/* Dark */
+[data-theme="dark"] {
+  --bg-page: #131415;
+  --bg-navbar: #232833;
+  --bg-card: #232833;
+  --navbar-hover-bg: #3a3f4d;
+  --navbar-active-bg: #2f3651;
+  --dropdown-hover-bg: #3a3f4d;
+  --dropdown-active-bg: #2f3651;
+  --accent: #3732a1;
+  --accent-text: #485dbf;
+  --text-color: #e7e9ef;
+  --border-color: #5a53535b;
+  --shadow: rgba(0,0,0,0.45);
+}

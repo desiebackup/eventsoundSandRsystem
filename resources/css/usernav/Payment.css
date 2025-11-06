@@ -1,110 +1,236 @@
-/* =============================
-   Payments Page Styles
-   ============================= */
+/* ================================
+   PAYMENT PAGE STYLES (THEMED)
+================================ */
 
-.page-card {
+.pay-wrapper {
   width: 100%;
-  min-height: 100vh;
-  background: #f7faff;
-  padding: 40px 30px;
-  font-family: "Poppins", sans-serif;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0;
+  color: var(--text-color);
+  font-family: "Inter", "Poppins", "Roboto", sans-serif;
 }
 
-
-.card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-  overflow-x: auto;
+.pay-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
 }
 
-/* =============================
-   Table Design
-   ============================= */
-
-.events-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 700px;
-}
-
-.events-table th,
-.events-table td {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.95rem;
-}
-
-.events-table thead {
-  background-color: #6c63ff;
+/* ===== Final Balance Box ===== */
+.balance-box {
+  background: #EAB308; /* keeping highlight color (yellow) */
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 25px;
   color: #fff;
 }
 
-.events-table th {
+.balance-label {
   font-weight: 600;
-  letter-spacing: 0.3px;
+  opacity: .9;
 }
 
-.events-table tbody tr {
-  border-bottom: 1px solid #eee;
-  transition: background 0.2s ease;
+.balance-amount {
+  font-size: 2.4rem;
+  font-weight: 800;
 }
 
-.events-table tbody tr:hover {
-  background: #f5f6ff;
+.balance-info {
+  opacity: .95;
+  margin-bottom: 15px;
 }
 
-.events-table td {
-  color: #333;
-}
-
-/* =============================
-   Status Tags
-   ============================= */
-
-.tag {
-  padding: 5px 10px;
+.view-details-btn {
+  background: var(--bg-card);
+  color: var(--text-color);
+  padding: 10px 18px;
   border-radius: 8px;
-  font-size: 0.85rem;
+  border: 1px solid var(--border-color);
   font-weight: 600;
-  text-transform: capitalize;
+  cursor: pointer;
+  transition: .2s ease;
 }
 
-.tag.confirmed {
-  background-color: #d1ffe4;
-  color: #0e9a46;
-  border: 1px solid #8fe3b1;
+.view-details-btn:hover {
+  background: var(--navbar-hover-bg);
 }
 
-.tag.pending {
-  background-color: #fff3cd;
-  color: #8a6d3b;
-  border: 1px solid #f7e1a3;
+/* ===== Refund Method Box ===== */
+.refund-box {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 25px;
 }
 
-.tag.cancelled {
-  background-color: #fddede;
-  color: #a30000;
-  border: 1px solid #f2b2b2;
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-/* =============================
-   Responsive Design
-   ============================= */
+.refund-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--bg-page);
+}
 
-@media (max-width: 768px) {
-  .page-card {
-    padding: 20px;
-  }
+.update-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s ease;
+}
 
-  .page-card h2 {
-    font-size: 1.5rem;
-  }
+.update-btn:hover {
+  filter: brightness(1.1);
+}
 
-  .events-table th,
-  .events-table td {
-    padding: 10px;
-    font-size: 0.85rem;
-  }
+.refund-note {
+  font-size: .85rem;
+  color: var(--text-color);
+  opacity: .7;
+  margin-top: 10px;
+}
+
+/* Invoice Table - Themed Fix */
+.invoice-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card); /* ensures table follows theme */
+}
+
+.invoice-table th,
+.invoice-table td {
+  background: var(--bg-card); /* keeps theme for all cells */
+}
+
+.invoice-table th {
+  font-weight: 700;
+  padding: 10px;
+  text-align: left;
+  background: var(--navbar-hover-bg); /* themed header */
+  color: var(--text-color);
+}
+
+.invoice-table td {
+  padding: 10px;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.paid-text { color: #16a34a; }
+.due-text { color: #dc2626; }
+.zero-text { color: #9ca3af; }
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: .8rem;
+}
+
+.paid { background: #d1fae5; color: #15803d; }
+.due { background: #fef3c7; color: #b45309; }
+.canceled { background: #fde2e2; color: #dc2626; }
+
+.action-text {
+  font-weight: 600;
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+/* ===== MODAL STYLES ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* ensure it’s above other content */
+}
+
+.modal-box {
+  background: var(--bg-card);
+  padding: 25px 30px;
+  border-radius: 14px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-box h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.modal-box input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-box input:focus {
+  border-color: var(--accent);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #d1d5db;
+}
+
+.save-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.save-btn:hover {
+  filter: brightness(1.1);
 }
