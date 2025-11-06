@@ -1,30 +1,43 @@
 // src/components/adminNavigation/Message.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../../css/adminnav/Message.css";
 
 export default function Message() {
+  const [conversations, setConversations] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState({
-    "John Doe": [
-      { sender: "user", text: "Hi, I need help with my reservation." },
-      { sender: "admin", text: "Sure, I can assist you with that." },
-    ],
-    "Jane Smith": [
-      { sender: "user", text: "How do I pay for my booking?" },
-      { sender: "admin", text: "You can pay via credit card or GCash." },
-    ],
-  });
+  const [messages, setMessages] = useState([]);
 
-  const handleSend = () => {
+  useEffect(() => {
+    // load conversations
+    axios
+      .get('/api/admin/conversations')
+      .then((res) => setConversations(res.data))
+      .catch(() => setConversations([]));
+  }, []);
+
+  const handleSend = async () => {
     if (!selectedUser || message.trim() === "") return;
+    try {
+      const res = await axios.post('/api/admin/messages', { user_id: selectedUser.id, text: message });
+      setMessages((prev) => [...prev, res.data]);
+      setMessage('');
+    } catch (e) {
+      console.error(e);
+      alert('Failed to send');
+    }
+  };
 
-    const newMsg = { sender: "admin", text: message };
-    setMessages((prev) => ({
-      ...prev,
-      [selectedUser]: [...prev[selectedUser], newMsg],
-    }));
-    setMessage("");
+  const selectUser = async (u) => {
+    setSelectedUser(u);
+    try {
+      const res = await axios.get(`/api/admin/messages/${u.id}`);
+      setMessages(res.data || []);
+    } catch (e) {
+      console.error(e);
+      setMessages([]);
+    }
   };
 
   return (
@@ -32,13 +45,13 @@ export default function Message() {
       {/* User List Sidebar */}
       <aside className="user-list">
         <ul>
-          {Object.keys(messages).map((user) => (
+          {conversations.map((c) => (
             <li
-              key={user}
-              className={selectedUser === user ? "active" : ""}
-              onClick={() => setSelectedUser(user)}
+              key={c.user?.id}
+              className={selectedUser && selectedUser.id === c.user?.id ? "active" : ""}
+              onClick={() => selectUser(c.user)}
             >
-              {user}
+              {c.user ? `${c.user.firstname} ${c.user.lastname}` : 'Unknown'}
             </li>
           ))}
         </ul>
@@ -49,11 +62,11 @@ export default function Message() {
         {selectedUser ? (
           <>
             <div className="chat-header">
-              <h4>{selectedUser}</h4>
+              <h4>{selectedUser.firstname} {selectedUser.lastname}</h4>
             </div>
 
             <div className="chat-box">
-              {messages[selectedUser].map((msg, index) => (
+              {messages.map((msg, index) => (
                 <div
                   key={index}
                   className={`chat-message ${msg.sender === "admin" ? "sent" : "received"}`}

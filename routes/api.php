@@ -30,6 +30,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservations', [ReservationController::class, 'store']);
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
 
+    // Messaging: user sends and fetches their messages
+    Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index']);
+    Route::post('/messages', [\App\Http\Controllers\MessageController::class, 'store']);
+
     // Admin: approve reservation
     Route::post('/admin/reservations/{id}/approve', [ReservationController::class, 'approve'])->middleware(\App\Http\Middleware\AdminMiddleware::class);
     // Admin: decline reservation
@@ -47,6 +51,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/admin/stats', [\App\Http\Controllers\AdminStatsController::class, 'stats']);
         Route::get('/admin/users', [UserController::class, 'index']);   // list all users
         Route::delete('/admin/users/{id}', [UserController::class, 'destroy']); // delete user
+        // Admin messaging
+        Route::get('/admin/conversations', [\App\Http\Controllers\MessageController::class, 'adminConversations']);
+        Route::get('/admin/messages/{userId}', [\App\Http\Controllers\MessageController::class, 'adminMessagesForUser']);
+        Route::post('/admin/messages', [\App\Http\Controllers\MessageController::class, 'adminSend']);
     });
 
     // ✅ User registration (still available)

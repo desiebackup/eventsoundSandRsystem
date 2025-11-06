@@ -98,8 +98,8 @@ export default function AdminDashboard({ user = {} }) {
       {/* SIDEBAR */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-top">
-          <div className="logo-frame">
-            <img src={logo} alt="EventSound Logo" className="logo" />
+          <div className="logoo-frame">
+            <img src={logo} alt="EventSound Logo" className="logoo" />
           </div>
           <div className="brand">
             <span className="brand-text">Event Sound Pro</span>

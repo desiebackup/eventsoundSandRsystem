@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { FaPaperPlane, FaComments, FaTimes } from "react-icons/fa";
 import defaultAvatar from "../../../img/avatar.png";
 import "../../../css/usernav/dropdown/ChatUs.css";
@@ -23,7 +24,18 @@ const ChatUs = () => {
 
     const userMessage = { text: input, sender: "You", avatar: null, type: "user" };
     setMessages((prev) => [...prev, userMessage]);
+    const textToSend = input;
     setInput("");
+
+    // Persist to server
+    axios
+      .post("/api/messages", { text: textToSend })
+      .then((res) => {
+        // message saved; admin may reply later
+      })
+      .catch((e) => {
+        console.error("Failed to send message", e);
+      });
 
     if (!defaultReplied) {
       const instantReply = { text: "Welcome to Event Sound Pro! Thank you for visiting. If you have any questions, concerns, or need assistance, an admin will be with you shortly. We specialize in providing high-quality event sound services and support.", 
@@ -45,6 +57,36 @@ const ChatUs = () => {
     };
     setMessages((prev) => [...prev, adminMessage]);
   };
+
+  // Poll for admin replies periodically when chat is open
+  useEffect(() => {
+    let timer = null;
+    const fetchMessages = () => {
+      axios
+        .get("/api/messages")
+        .then((res) => {
+          // server returns array of messages for this user
+          const serverMsgs = res.data || [];
+          // Map to local message shape and replace local messages with server messages + keep instant reply
+          const mapped = serverMsgs.map((m) => ({ text: m.text, sender: m.sender === 'admin' ? (m.sender_name || 'Admin') : 'You', avatar: m.sender === 'admin' ? defaultAvatar : null, type: m.sender }));
+          // If default instant reply was set earlier, preserve earlier admin intro
+          setMessages((prev) => {
+            const intro = prev.find((p) => p.type === 'admin' && p.text && p.text.includes('Welcome to Event Sound Pro'));
+            const combined = mapped.length ? mapped : prev;
+            if (intro && !combined.find((c) => c.text === intro.text)) combined.unshift(intro);
+            return combined;
+          });
+        })
+        .catch(() => {});
+    };
+
+    if (isOpen) {
+      fetchMessages();
+      timer = setInterval(fetchMessages, 5000);
+    }
+
+    return () => clearInterval(timer);
+  }, [isOpen]);
 
   const lastAdmin = messages.filter((msg) => msg.type === "admin").slice(-1)[0] || { sender: "Admin", avatar: defaultAvatar };
 

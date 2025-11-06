@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
+            // role and avatar moved here so create_users creates full schema in one migration
+            $table->string('role')->default('user');
+            // store path relative to storage/app/public, e.g. 'avatars/abc.jpg'
+            $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

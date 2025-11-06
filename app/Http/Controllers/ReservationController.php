@@ -22,12 +22,22 @@ class ReservationController extends Controller
     {
         $validated = $request->validate([
             'event_name' => 'required|string|max:255',
+            'event_type' => 'nullable|string|max:255',
             'service_package' => 'nullable|string|max:255',
             'service_id' => 'nullable|integer|exists:services,id',
-            'venue' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'call_time' => 'required|string|max:255',
-            'down_payment' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'venue' => 'nullable|string|max:255',
+            'venue_type' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'call_date' => 'nullable|date',
+            'call_time' => 'nullable|string|max:255',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
+            'phone' => 'nullable|string|max:32',
+            'purok' => 'nullable|string|max:255',
+            'barangay' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'province' => 'nullable|string|max:255',
+            'down_payment' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
         if ($request->hasFile('down_payment')) {
@@ -45,6 +55,9 @@ class ReservationController extends Controller
         }
 
         $reservation = Reservation::create($validated + ['status' => 'pending']);
+
+        // return with relations so admin/client can immediately display relevant info
+        $reservation = Reservation::with(['user', 'service'])->find($reservation->id);
 
         return response()->json($reservation, 201);
     }

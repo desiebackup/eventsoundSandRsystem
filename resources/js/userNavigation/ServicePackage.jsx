@@ -50,7 +50,7 @@ useEffect(() => {
                 ₱ {pkg.price}
                 {pkg.downPayment ? (
                   <>
-                    <div className="price-caption">Required Down Payment</div>
+                    <div className="price-caption">Required Down Payment:</div>
                     <div className="muted">₱ {pkg.downPayment}</div>
                     <hr/>
                   </>
