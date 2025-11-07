@@ -9,8 +9,8 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 export default function Welcome() {
   const [showForm, setShowForm] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [scrolled, setScrolled] = useState(false);
 
   const handleGetStarted = () => {
     setShowForm(true);
@@ -31,21 +31,17 @@ export default function Welcome() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
 
       const sections = ["home", "about", "contact"];
-      const scrollPos = window.scrollY + window.innerHeight / 3;
-
-      sections.forEach((section) => {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop - 100;
-          const bottom = top + el.offsetHeight;
-          if (scrollPos >= top && scrollPos < bottom) {
-            setActiveSection(section);
-          }
+      let current = "home";
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 100) {
+          current = id;
         }
       });
+      setActiveSection(current);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -55,11 +51,7 @@ export default function Welcome() {
   return (
     <div className="welcome-container">
       {/* ===================== NAVIGATION BAR ===================== */}
-      <nav
-        className={`top-nav ${
-          scrolled ? "nav-scrolled" : "nav-transparent"
-        }`}
-      >
+      <nav className={`top-nav ${scrolled ? "nav-scrolled" : "nav-transparent"}`}>
         <div className="nav-left">
           <img src={logo} alt="Event Sound Pro" className="nav-logo" />
           <span className="logo-text">Event Sound Pro</span>
@@ -93,16 +85,30 @@ export default function Welcome() {
       <div className={`content ${showForm ? "blurred" : ""}`}>
         {/* HERO SECTION */}
         <section id="home" className="hero-section">
+          <div className="overlay-lights"></div>
+
           <h1>Schedule Your Perfect Sound Experience</h1>
           <p>
             Professional audio solutions for events of any size.
             <br />
-            From intimate gatherings to massive concerts, we make your sound
-            dreams reality.
+            From intimate gatherings to massive concerts, we make your sound dreams reality.
           </p>
           <button className="primary-btn" onClick={handleGetStarted}>
             Get Started Today
           </button>
+          <p className="hero-slogan">
+            Crystal-clear sound, anywhere your event takes you.
+          </p>
+
+          {/* Scroll Indicator */}
+          <div className="scroll-down">
+            <span></span>
+          </div>
+
+          {/* Optional visualizer */}
+          <div className="visualizer">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
         </section>
 
         {/* ABOUT SECTION */}
@@ -111,17 +117,15 @@ export default function Welcome() {
             <div className="about-text">
               <h2>About Event Sound Pro</h2>
               <p>
-                With over 15 years of experience in professional audio
-                production, we’ve powered thousands of successful events across
-                the globe. Our team of certified audio engineers and
-                state-of-the-art equipment ensures every note, every word, and
-                every moment is heard with crystal clarity.
+                With over 15 years of experience in professional audio production,
+                we’ve powered thousands of successful events across the globe.
+                Our team of certified audio engineers and state-of-the-art equipment
+                ensures every note, every word, and every moment is heard with crystal clarity.
               </p>
               <p>
-                From intimate weddings to massive festivals, corporate
-                presentations to live concerts — we bring the same level of
-                dedication and expertise to every project. Your sound is our
-                passion.
+                From intimate weddings to massive festivals, corporate presentations
+                to live concerts — we bring the same level of dedication and expertise
+                to every project. Your sound is our passion.
               </p>
               <button
                 className="about-btn"
@@ -152,16 +156,9 @@ export default function Welcome() {
             <div className="contact-info">
               <h3>Contact Information</h3>
               <ul>
-                <li>
-                  <FaPhone className="icon" /> +63 936 681 1261
-                </li>
-                <li>
-                  <FaEnvelope className="icon" /> grouptwo@gmail.com
-                </li>
-                <li>
-                  <FaMapMarkerAlt className="icon" /> Poblacion, Trinidad,
-                  Bohol
-                </li>
+                <li><FaPhone className="icon" /> +63 936 681 1261</li>
+                <li><FaEnvelope className="icon" /> grouptwo@gmail.com</li>
+                <li><FaMapMarkerAlt className="icon" /> Poblacion, Trinidad, Bohol</li>
               </ul>
             </div>
           </div>
@@ -180,15 +177,9 @@ export default function Welcome() {
             <div className="footer-col">
               <h4>Quick Links</h4>
               <ul>
-                <li>
-                  <a href="#home">Home</a>
-                </li>
-                <li>
-                  <a href="#about">About</a>
-                </li>
-                <li>
-                  <a href="#contact">Contact</a>
-                </li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
               </ul>
             </div>
 
@@ -219,7 +210,7 @@ export default function Welcome() {
         </footer>
       </div>
 
-      {/* ===================== SIGNUP / SIGNIN FORM OVERLAY ===================== */}
+      {/* ===================== SIGNUP / SIGNIN FORM ===================== */}
       {showForm && (
         <div className="form-overlay">
           <div className="form-wrapper">
@@ -241,3 +232,4 @@ export default function Welcome() {
     </div>
   );
 }
+    
