@@ -44,27 +44,24 @@ const Reservation = () => {
   };
 
   const handleSubmit = async () => {
-  // Check if user uploaded proof of down payment
-  if (!form.down_payment) {
-    alert("Please upload a proof of down payment before submitting.");
-    return;
-  }
-
-  try {
-    const fd = new FormData();
-    Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
-    if (selectedService) {
-      fd.append("service_id", selectedService.id);
+    if (!form.down_payment) {
+      alert("Please upload a proof of down payment before submitting.");
+      return;
     }
 
-    const res = await axios.post("/api/reservations", fd);
-    alert(`Reservation created: ${res.data.id}`);
-    navigate("/userdashboard/reservations");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to create reservation. Please try again.");
-  }
-};
+    try {
+      const fd = new FormData();
+      Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
+      if (selectedService) fd.append("service_id", selectedService.id);
+
+      const res = await axios.post("/api/reservations", fd);
+      alert(`Reservation created: ${res.data.id}`);
+      navigate("/userdashboard/reservations");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create reservation. Please try again.");
+    }
+  };
 
   return (
     <div className="reservation-wrapper">
@@ -86,18 +83,22 @@ const Reservation = () => {
               {step > s.num ? "✓" : s.num}
             </div>
             <span className="step-title">{s.title}</span>
-            {i < 2 && <div className={`step-line ${step > s.num ? "filled" : ""}`}></div>}
+            {i < 2 && (
+              <div
+                className={`step-line ${step > s.num ? "filled" : ""}`}
+              ></div>
+            )}
           </div>
         ))}
       </div>
-      <hr/>
+      <hr />
 
-      {/* Step 1 */}
+      {/* STEP 1 */}
       {step === 1 && (
         <div className="step-content">
           <div className="form-card">
-          <h3>1. Tell Us About Your Event</h3>
-            <label>Event Name </label>
+            <h3>1. Tell Us About Your Event</h3>
+            <label>Event Name</label>
             <input
               type="text"
               name="event_name"
@@ -106,7 +107,7 @@ const Reservation = () => {
               placeholder="e.g., Shane’s Birthday"
             />
 
-            <label>Event Type </label>
+            <label>Event Type</label>
             <select
               name="event_type"
               value={form.event_type}
@@ -120,7 +121,7 @@ const Reservation = () => {
               <option value="Other">Other</option>
             </select>
 
-            <label>Venue Type </label>
+            <label>Venue Type</label>
             <select
               name="venue_type"
               value={form.venue_type}
@@ -145,7 +146,7 @@ const Reservation = () => {
                 />
               </div>
               <div>
-                <label>Call Time </label>
+                <label>Call Time</label>
                 <input
                   type="time"
                   name="call_time"
@@ -157,7 +158,7 @@ const Reservation = () => {
 
             <div className="time-grid">
               <div>
-                <label>Start Time </label>
+                <label>Start Time</label>
                 <input
                   type="time"
                   name="start_time"
@@ -166,7 +167,7 @@ const Reservation = () => {
                 />
               </div>
               <div>
-                <label>End Time </label>
+                <label>End Time</label>
                 <input
                   type="time"
                   name="end_time"
@@ -187,219 +188,257 @@ const Reservation = () => {
 
             <label>Location</label>
             <div className="location-grid">
-            <input
-             type="text"
-             name="purok"
-             value={form.purok}
-             onChange={handleChange}
-             placeholder="Purok"
-            />
-            <input
-            type="text"
-            name="barangay"
-            value={form.barangay}
-            onChange={handleChange}
-            placeholder="Barangay"
-           />
-           <input
-            type="text"
-            name="city"
-            value={form.city}
-            onChange={handleChange}
-            placeholder="Municipal/City"
-           />
-           <input
-            type="text"
-            name="province"
-            value={form.province}
-            onChange={handleChange}
-            placeholder="Province"
-           />
-           </div>
-
+              <input
+                type="text"
+                name="purok"
+                value={form.purok}
+                onChange={handleChange}
+                placeholder="Purok"
+              />
+              <input
+                type="text"
+                name="barangay"
+                value={form.barangay}
+                onChange={handleChange}
+                placeholder="Barangay"
+              />
+              <input
+                type="text"
+                name="city"
+                value={form.city}
+                onChange={handleChange}
+                placeholder="Municipal/City"
+              />
+              <input
+                type="text"
+                name="province"
+                value={form.province}
+                onChange={handleChange}
+                placeholder="Province"
+              />
+            </div>
           </div>
 
           <div className="step-buttons">
-           <button
-      className="next-btn"
-      onClick={() => {
-      const requiredFields = [
-      "event_name",
-      "event_type",
-      "venue_type",
-      "call_date",
-      "call_time",
-      "start_time",
-      "end_time",
-      "phone",
-      "purok",
-      "barangay",
-      "city",
-      "province",
-    ];
+            <button
+              className="next-btn"
+              onClick={() => {
+                const requiredFields = [
+                  "event_name",
+                  "event_type",
+                  "venue_type",
+                  "call_date",
+                  "call_time",
+                  "start_time",
+                  "end_time",
+                  "phone",
+                  "purok",
+                  "barangay",
+                  "city",
+                  "province",
+                ];
 
-    const emptyFields = requiredFields.filter((field) => !form[field]?.trim());
+                const emptyFields = requiredFields.filter(
+                  (field) => !form[field]?.trim()
+                );
 
-    if (emptyFields.length > 0) {
-      alert("Please fill out all required fields before proceeding.");
-      return;
-    }
+                if (emptyFields.length > 0) {
+                  alert(
+                    "Please fill out all required fields before proceeding."
+                  );
+                  return;
+                }
 
-    setStep(2);
-  }}
->
-  Next <FaArrowRight />
-</button>
+                setStep(2);
+              }}
+            >
+              Next <FaArrowRight />
+            </button>
           </div>
         </div>
       )}
-      {/* Step 2 */}
-{step === 2 && (
-  <div className="step-content">
-    <h3>2. Choose a Service Package</h3>
 
-    <div className="package-list">
-      {services.map((pkg) => (
-        <label
-          key={pkg.id}
-          className={`package-option ${
-            selectedService?.id === pkg.id ? "selected" : ""
-          }`}
-        >
-          <input
-            type="radio"
-            name="service"
-            value={pkg.id}
-            checked={selectedService?.id === pkg.id}
-            onChange={() => handleServiceSelect(pkg)}
-          />
-          <div className="package-details">
-            <div className="package-header">
-              <span className="package-name">{pkg.name}</span>
-              <span className="package-price">Total Price: ₱ {pkg.price}</span>
-            </div>
+      {/* STEP 2 */}
+      {step === 2 && (
+        <div className="reservation-step-content">
+          <h3>2. Choose a Service Package</h3>
 
-            <div className="package-inclusions">Includes: {(pkg.inclusions || "")
-                .split("\n")
-                .filter(Boolean)
-                .join(", ")}
-            </div>
+          <div className="reservation-package-list">
+            {services.map((pkg) => (
+              <label
+                key={pkg.id}
+                className={`reservation-option ${
+                  selectedService?.id === pkg.id ? "selected" : ""
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="service"
+                  value={pkg.id}
+                  checked={selectedService?.id === pkg.id}
+                  onChange={() => handleServiceSelect(pkg)}
+                />
+                <div className="reservation-details">
+                  <div className="reservation-header">
+                    <span className="reservation-name">{pkg.name}</span>
+                    <span className="reservation-price">
+                      Total Price: ₱ {pkg.price}
+                    </span>
+                  </div>
 
-            <div className="package-downpayment">
-              <strong>Down Payment:</strong>{" "}
-              ₱ {pkg.down_payment ?? pkg.downPayment ?? 0}
-            </div>
+                  <div className="reservation-inclusions">
+                    Includes:{" "}
+                    {(pkg.inclusions || "")
+                      .split("\n")
+                      .filter(Boolean)
+                      .join(", ")}
+                  </div>
+
+                  <div className="reservation-downpayment">
+                    <strong>Down Payment:</strong> ₱{" "}
+                    {pkg.down_payment ?? pkg.downPayment ?? 0}
+                  </div>
+                </div>
+              </label>
+            ))}
           </div>
-        </label>
-      ))}
-    </div>
 
-    <div className="step-buttons">
-      <button className="back-btn" onClick={() => setStep(1)}>
-        <FaArrowLeft /> Back
-      </button>
-      <button
-        className="next-btn"
-        onClick={() => setStep(3)}
-        disabled={!selectedService}
-      >
-        Next <FaArrowRight />
-      </button>
-    </div>
-  </div>
-)}
-
-{step === 3 && (
-  <div className="step-content">
-    <h3>3. Review & Book</h3>
-
-    {selectedService && (
-      <>
-        <div className="downpayment-box">
-          <label className="downpayment">
-            Required Down Payment: ₱ {selectedService.down_payment ?? 0}
-          </label>
-          <p className="downpayment-reminder">
-            The remaining balance will be paid <strong>in person</strong> on the day of the event.
-          </p>
-          <p className="downpayment-detail">
-            This down payment is required to secure your date. Please complete the payment via
-            bank transfer or deposit <strong>before</strong> submitting this form.
-          </p>
-
-          <div className="payment-card">
-            <h4 className="payment-title">Payment Details</h4>
-            <ul>
-           <li>Bank: Gcash</li>
-           <li>Account Name: Desie Torrenueva</li>
-           <li>Account Number: 09380769988</li>
-           </ul>
+          <div className="step-buttons">
+            <button className="back-btn" onClick={() => setStep(1)}>
+              <FaArrowLeft /> Back
+            </button>
+            <button
+              className="next-btn"
+              onClick={() => setStep(3)}
+              disabled={!selectedService}
+            >
+              Next <FaArrowRight />
+            </button>
           </div>
-          <div className="upload-section">
-          <label className="upload-label">Upload Proof of Down Payment</label>
-          <p className="mandatory">
-            <strong>Mandatory:</strong> Attach a clear image (JPG or PNG) of your deposit slip or transfer confirmation for the down payment.
-          </p>
-          <input
-            type="file"
-            name="down_payment"
-            accept="image/*"
-            onChange={handleChange}
-            required
-          />
         </div>
+      )}
+
+      {/* STEP 3 */}
+      {step === 3 && (
+        <div className="step-content">
+          <h3>3. Review & Book</h3>
+
+          {selectedService && (
+            <>
+              <div className="downpayment-box">
+                <label className="downpayment">
+                  Required Down Payment: ₱ {selectedService.down_payment ?? 0}
+                </label>
+                <p className="downpayment-reminder">
+                  The remaining balance will be paid{" "}
+                  <strong>in person</strong> on the day of the event.
+                </p>
+                <p className="downpayment-detail">
+                  This down payment is required to secure your date. Please
+                  complete the payment via bank transfer or deposit{" "}
+                  <strong>before</strong> submitting this form.
+                </p>
+
+                <div className="payment-card">
+                  <h4 className="payment-title">Payment Details</h4>
+                  <ul>
+                    <li>Bank: Gcash</li>
+                    <li>Account Name: Desie Torrenueva</li>
+                    <li>Account Number: 09380769988</li>
+                  </ul>
+                </div>
+
+                <div className="upload-section">
+                  <label className="upload-label">
+                    Upload Proof of Down Payment
+                  </label>
+                  <p className="mandatory">
+                    <strong>Mandatory:</strong> Attach a clear image (JPG or
+                    PNG) of your deposit slip or transfer confirmation for the
+                    down payment.
+                  </p>
+                  <input
+                    type="file"
+                    name="down_payment"
+                    accept="image/*"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-card review-card">
+                <h4 className="review-title">Event and Services Summary</h4>
+                <p>
+                  <strong>Event Name:</strong> {form.event_name}
+                </p>
+                <p>
+                  <strong>Type:</strong> {form.event_type}
+                </p>
+                <p>
+                  <strong>Venue Type:</strong> {form.venue_type}
+                </p>
+                <p>
+                  <strong>Date:</strong> {form.call_date}
+                </p>
+                <p>
+                  <strong>Call Time:</strong> {form.call_time}
+                </p>
+                <p>
+                  <strong>Start Time:</strong> {form.start_time}
+                </p>
+                <p>
+                  <strong>End Time:</strong> {form.end_time}
+                </p>
+                <p>
+                  <strong>Location:</strong>{" "}
+                  {`${form.purok}, ${form.barangay}, ${form.city}, ${form.province}`}
+                </p>
+
+                <hr />
+                <h4 className="review-title">Service Selected</h4>
+                <p>
+                  <strong>Package:</strong> {selectedService.name}
+                </p>
+                <p>
+                  <strong>Inclusions:</strong>{" "}
+                  {(selectedService.inclusions || "")
+                    .split("\n")
+                    .filter(Boolean)
+                    .join(", ")}
+                </p>
+
+                <hr />
+                <h4 className="review-title">Payment Breakdown</h4>
+                <p>
+                  <strong>Total Price:</strong> ₱{selectedService.price}
+                </p>
+                <p>
+                  <strong>Down Payment:</strong> ₱
+                  {selectedService.down_payment ?? 0}
+                </p>
+                <p>
+                  <strong>Balance Due (in person):</strong> ₱
+                  {selectedService.price -
+                    (selectedService.down_payment ?? 0)}
+                </p>
+                <p className="note">
+                  The balance due will be collected on the event day.
+                </p>
+              </div>
+            </>
+          )}
+
+          <div className="step-buttons">
+            <button className="back-btn" onClick={() => setStep(2)}>
+              <FaArrowLeft /> Back
+            </button>
+            <button className="submit-btn" onClick={handleSubmit}>
+              <FaPaperPlane /> Submit Reservation
+            </button>
+          </div>
         </div>
-
-        
-
-        <div className="form-card review-card">
-          <h4 className="review-title">Event and Services Summary</h4>
-          <p><strong>Event Name:</strong> {form.event_name}</p>
-          <p><strong>Type:</strong> {form.event_type}</p>
-          <p><strong>Venue Type:</strong> {form.venue_type}</p>
-          <p><strong>Date:</strong> {form.call_date}</p>
-          <p><strong>Call Time:</strong> {form.call_time}</p>
-          <p><strong>Start Time:</strong> {form.start_time}</p>
-          <p><strong>End Time:</strong> {form.end_time}</p>
-          <p>
-            <strong>Location:</strong>{" "}
-            {`${form.purok}, ${form.barangay}, ${form.city}, ${form.province}`}
-          </p>
-
-          <hr />
-          <h4 className="review-title">Service Selected</h4>
-          <p><strong>Package:</strong> {selectedService.name}</p>
-          <p><strong>Inclusions:</strong> {(selectedService.inclusions || "")
-            .split("\n")
-            .filter(Boolean)
-            .join(", ")}</p>
-
-          <hr />
-          <h4 className="review-title">Payment Breakdown</h4>
-          <p><strong>Total Price:</strong> ₱{selectedService.price}</p>
-          <p><strong>Down Payment:</strong> ₱{selectedService.down_payment ?? 0}</p>
-          <p>
-            <strong>Balance Due (in person):</strong>{" "}
-            ₱{selectedService.price - (selectedService.down_payment ?? 0)}
-          </p>
-          <p className="note">
-            The balance due will be collected on the event day.
-          </p>
-        </div>
-      </>
-    )}
-
-    <div className="step-buttons">
-      <button className="back-btn" onClick={() => setStep(2)}>
-        <FaArrowLeft /> Back
-      </button>
-      <button className="submit-btn" onClick={handleSubmit}>
-        <FaPaperPlane /> Submit Reservation
-      </button>
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 };

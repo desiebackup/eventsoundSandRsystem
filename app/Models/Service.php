@@ -13,8 +13,11 @@ class Service extends Model
         'name',
         'price',
         'inclusions',
+        'description',
         'note',
         'down_payment',
         'balance',
+        'type',
+        'image',
     ];
 }

@@ -123,7 +123,7 @@ export default function AdminDashboard({ user = {} }) {
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            <FaUsers className="nav-icon" /> <span>Manage Users</span>
+            <FaUsers className="nav-icon" /> <span>Users</span>
           </NavLink>
 
           <NavLink

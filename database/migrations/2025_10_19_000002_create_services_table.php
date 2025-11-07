@@ -12,9 +12,12 @@ return new class extends Migration {
             $table->string('name');
             $table->integer('price');
             $table->text('inclusions')->nullable();
+            $table->text('description')->nullable(); 
             $table->text('note')->nullable();
             $table->integer('down_payment')->default(0);
             $table->integer('balance')->default(0);
+            $table->enum('type', ['package', 'custom'])->default('package');
+            $table->string('image')->nullable(); 
             $table->timestamps();
         });
     }

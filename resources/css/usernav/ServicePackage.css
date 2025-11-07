@@ -2,24 +2,25 @@
 .package-section {
   font-family: "Poppins", sans-serif;
   width: 100%;
-  max-width: 1050px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0;
+  padding: 20px;
   background: var(--bg-page);
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
 }
 
-/* MAIN TITLE (Explore Our Packages) */
+/* 🌟 PAGE TITLE */
 .package-main-title {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 700;
   margin-bottom: 25px;
+  text-align: left;
   color: var(--text-color);
 }
 
-/* TOP HEADER BOX */
-.package-header-box {
+/* 🌟 CATEGORY BOX (Package / Custom Section) */
+.package-category {
   background: var(--bg-card);
   padding: 25px 30px;
   border-radius: 12px;
@@ -28,176 +29,257 @@
   border: 1px solid var(--border-color);
 }
 
-/* Subtitle: Service Packages & Pricing */
-.package-sub-title {
-  font-size: 1.35rem;
+.package-sub-title,
+.category-title {
+  font-size: 1.4rem;
   font-weight: 600;
   color: var(--text-color);
-  margin-bottom: 5px;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
-/* Description under subtitle */
-.package-description {
-  font-size: 0.95rem;
-  color: var(--text-color);
-  opacity: 0.9;
-}
-
-/* Center the package cards on the page */
+/* 🌟 PACKAGE GRID */
 .package-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* centers the cards horizontally */
-  gap: 21px;
-  margin: 20px auto; /* adds top/bottom spacing and centers the container */
-  max-width: 1200px; /* optional: keeps layout clean on wide screens */
+  justify-content: center;
+  gap: 22px;
+  margin-top: 20px;
 }
 
-/* Optional: make the card itself neatly spaced */
+/* 🌟 PACKAGE CARD */
 .package-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 16px;
   box-shadow: 0 2px 6px var(--shadow);
   color: var(--text-color);
-  padding: 24px;
-  width: 320px;
-  text-align: center; /* centers inner text elements */
+  padding: 18px;
+  width: 260px;
+  text-align: center;
+  cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .package-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px var(--shadow);
+  transform: translateY(-6px);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
-/* Optional: to center header texts neatly */
-.package-header {
+/* 🌟 IMAGE */
+.package-img-box {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.package-header h3 {
-  font-size: 1.9rem;
-  font-weight: 800;
-  color: rgb(114, 106, 120);
-  margin: 0;
-  line-height: 1.9;
-}
-
-.price-label {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-top: 0;
-  margin-bottom: 6px;
-}
-
-.package-price {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-color);
-  text-align: center;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
-.package-price hr {
-  border: none;
-  border-top: 2px solid var(--border-color);
-  margin: 0 auto;
+.package-img {
   width: 100%;
+  max-width: 220px;
+  height: 160px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.price-caption {
-  font-size: 1rem;
-  font-weight: 600;
+/* 🌟 PACKAGE NAME */
+.package-name {
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--text-color);
-  margin-top: 5px;
+  margin: 10px 0 6px;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-.package-price .muted {
-  color: var(--text-color); /* ✅ Black in light mode, light in dark mode */
-  font-size: 0.99rem;
-  font-weight: 600;
+.package-name:hover {
+  color: var(--accent, #4f46e5);
 }
 
-/* 🌟 INCLUSIONS */
-.package-features {
-  list-style: none;
-  padding: 0;
-  margin: 16px 0;
-  font-size: 0.95rem;
-  color: var(--text-color);
-  text-align: left;
+/* 🌟 PRICE */
+.package-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #00b67a;
 }
 
-.package-features li {
-  margin-bottom: 6px;
+/* === MODAL OVERLAY === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.25s ease;
+}
+
+/* === MODAL CARD === */
+.modal-card {
+  position: relative; /* ensures the close button is anchored here */
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 30px 32px;
+  width: 90%;
+  max-width: 480px;
+  color: #222;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: zoomIn 0.25s ease;
+  overflow: hidden;
+}
+
+/* === CLOSE BUTTON === */
+.service-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f3f4f6;
+  border: none;
+  color: #111;
+  font-size: 22px;
+  font-weight: bold;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  line-height: 1;
 }
 
-.checkmark {
-  color: #22c55e;
-  margin-right: 8px;
-  font-weight: bold;
+/* === IMAGE PREVIEW MODAL (Improved) === */
+.image-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.25s ease;
 }
 
-/* 🌟 NOTE BOX */
-.package-note {
-  background: var(--bg-navbar);
-  padding: 12px;
-  font-size: 0.9rem;
-  color: var(--text-color);
-  border-radius: 10px;
-  margin-top: 12px;
-  text-align: center;
-  line-height: 1.4;
-  border: 1px solid var(--border-color);
+.image-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 10px;
+  animation: zoomIn 0.25s ease;
+  max-width: 90%;
+  max-height: 90%;
+  box-sizing: border-box;
 }
 
-.package-note .muted {
-  display: block;
-  margin-top: 5px;
-  color: #e11111;
-  font-style: normal;
-  font-size: 0.85rem;
+.image-preview {
+  width: auto;
+  height: auto;
+  max-width: 90vw; /* keeps it from overflowing horizontally */
+  max-height: 80vh; /* keeps it from overflowing vertically */
+  border-radius: 12px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-/* 🌟 BOOK BUTTON */
-.book-btn {
-  width: 100%;
-  background: var(--accent);
-  color: white;
-  font-weight: 600;
-  padding: 12px;
+/* === CLOSE BUTTON FOR IMAGE MODAL === */
+.image-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
-  border-radius: 10px;
+  color: #111;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  transition: 0.25s;
-  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+/* === TEXT & STRUCTURE === */
+.modal-card h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 18px;
+  color: #111;
+}
+
+.modal-card p {
+  margin: 6px 0;
+  line-height: 1.5;
   font-size: 1rem;
+  color: #333;
 }
 
-.book-btn:hover {
-  background: var(--accent-text);
-  transform: scale(1.03);
+.modal-card strong {
+  color: #000;
 }
 
-/* 🌟 RESPONSIVE */
-@media (max-width: 768px) {
-  .package-container {
-    flex-direction: column;
-    align-items: center;
+/* === INCLUSIONS === */
+.modal-card ul {
+  margin: 10px 0 15px 22px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.modal-card li {
+  margin-bottom: 5px;
+  list-style: disc;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .modal-card {
+    padding: 22px;
+    width: 92%;
   }
 
-  .package-card {
-    width: 90%;
+  .service-close {
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
   }
+}
 
-  .package-main-title {
-    font-size: 1.6rem;
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
