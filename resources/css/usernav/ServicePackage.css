@@ -1,6 +1,13 @@
 /* 🌟 MAIN SECTION WRAPPER */
 .package-section {
   font-family: "Poppins", sans-serif;
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--bg-page);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
 }
 
 /* MAIN TITLE (Explore Our Packages) */
