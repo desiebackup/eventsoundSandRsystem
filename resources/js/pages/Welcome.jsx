@@ -12,51 +12,36 @@ export default function Welcome() {
     setIsSignUp(true);
   };
 
-  // Scroll helper: shows the sections (hides any form) and scrolls to the element,
-  // compensating for the fixed navbar height so the section isn't hidden under the bar.
   const scrollToSection = (e, id) => {
     e.preventDefault();
-
-    // If a form is open, close it to reveal sections
     setShowForm(false);
-
-    // Small delay ensures the DOM layout updates after hiding form (helps on fast toggles)
     setTimeout(() => {
       const el = document.getElementById(id);
-      if (!el) return;
-
-      const NAV_HEIGHT = 90; // match your CSS .top-nav height + extra spacing (adjust if needed)
-      const top = el.getBoundingClientRect().top + window.pageYOffset - NAV_HEIGHT;
-
-      window.scrollTo({
-        top,
-        behavior: "smooth",
-      });
+      if (el) {
+        const navHeight = 80; // adjust for navbar height
+        const y = el.getBoundingClientRect().top + window.scrollY - navHeight;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
     }, 50);
   };
 
   return (
     <div className="welcome-container">
-      {/* ---------- NAVIGATION ---------- */}
+      {/* NAVIGATION BAR */}
       <nav className="top-nav">
         <div className="nav-left">
-          <span className="logo">🎵 SoundEventPro</span>
+          <span className="logo">🎵 SoundEvent Pro</span>
         </div>
-
-        <div className="nav-center">
-          {/* use onClick to run scroll helper and prevent default anchor behavior */}
-          <a href="#home" className="nav-link" onClick={(e) => scrollToSection(e, "home")}>
+        <div className="nav-right">
+          <a href="#home" onClick={(e) => scrollToSection(e, "home")}>
             Home
           </a>
-          <a href="#about" className="nav-link" onClick={(e) => scrollToSection(e, "about")}>
+          <a href="#about" onClick={(e) => scrollToSection(e, "about")}>
             About
           </a>
-          <a href="#contact" className="nav-link" onClick={(e) => scrollToSection(e, "contact")}>
+          <a href="#contact" onClick={(e) => scrollToSection(e, "contact")}>
             Contact
           </a>
-        </div>
-
-        <div className="nav-right">
           <button
             className="nav-btn"
             onClick={() => {
@@ -64,7 +49,7 @@ export default function Welcome() {
               setIsSignUp(false);
             }}
           >
-            Log In
+            Sign In
           </button>
           <button
             className="nav-btn primary"
@@ -78,15 +63,14 @@ export default function Welcome() {
         </div>
       </nav>
 
-      {/* ---------- CONTENT ---------- */}
+      {/* MAIN CONTENT */}
       <div className="content">
         {!showForm && (
           <>
-            {/* HOME SECTION */}
             <section id="home" className="hero-section">
               <h1>Schedule Your Perfect Sound Experience</h1>
               <p>
-                Professional audio solutions for events of any size.{" "}
+                Professional audio solutions for events of any size.
                 <br />
                 From intimate gatherings to massive concerts, we make your sound dreams reality.
               </p>
@@ -95,21 +79,19 @@ export default function Welcome() {
               </button>
             </section>
 
-            {/* ABOUT SECTION */}
             <section id="about" className="info-section">
               <h2>About</h2>
               <p>
-                Our system simplifies the process of scheduling and reserving sound equipment.
-                Manage your events, equipment, and sound team with ease — all in one platform.
+                Our platform helps you manage event sound setups with ease. Book, track, and organize
+                your events effortlessly.
               </p>
             </section>
 
-            {/* CONTACT SECTION */}
             <section id="contact" className="info-section">
               <h2>Contact</h2>
               <p>
-                Have questions or need help? Reach out to our support team at{" "}
-                <strong>support@soundeventpro.com</strong>.
+                Need help? Reach us at <strong>support@soundeventpro.com</strong> or call
+                <strong> +63 912 345 6789</strong>.
               </p>
             </section>
           </>
