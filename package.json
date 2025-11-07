@@ -12,6 +12,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "axios": "^1.12.2",
     "firebase": "^12.3.0",
     "lucide-react": "^0.545.0",
