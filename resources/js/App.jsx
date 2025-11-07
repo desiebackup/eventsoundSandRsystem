@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
-import Welcome from "./Pages/Welcome";
-import Userdashboard from "./Pages/Userdashboard";
-import Admindashboard from "./Pages/Admindashboard"; // ✅ Import admin dashboard
-
+import Welcome from "./pages/Welcome";
+import Userdashboard from "./pages/Userdashboard";
+import Admindashboard from "./pages/Admindashboard"; // ✅ Import admin dashboard
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://localhost:8000";
 
