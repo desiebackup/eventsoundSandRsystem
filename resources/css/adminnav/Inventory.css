@@ -1,0 +1,150 @@
+.inventory-page {
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+  color: #111827;
+}
+
+.inventory-page h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+/* === FORM === */
+.inventory-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.inventory-form input,
+.inventory-form select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+  outline: none;
+  flex: 1;
+}
+
+.inventory-form button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.inventory-form button:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.03);
+}
+
+.cancel-btn {
+  background-color: #9ca3af !important;
+}
+
+.clear-btn {
+  background-color: #ef4444 !important;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* === TABLE === */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.inventory-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+.inventory-table tr:hover {
+  background-color: #f9fafb;
+}
+
+/* === STATUS BADGES === */
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status.good {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.needs-repair {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.status.out-of-order {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* === ACTION BUTTONS === */
+.action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.edit-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #059669;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* === EMPTY STATE === */
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+  font-style: italic;
+}

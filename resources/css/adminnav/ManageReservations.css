@@ -3,6 +3,7 @@
   width: 100%;
   min-height: 100vh;
   font-family: "Poppins", "Inter", sans-serif;
+  overflow-x: auto; /* Enables horizontal scroll on smaller screens */
 }
 
 /* ========== TABLE STYLING ========== */
@@ -21,6 +22,7 @@
   text-align: left;
   font-size: 0.95rem;
   border-bottom: 1px solid #e6e6e6;
+  vertical-align: middle;
 }
 
 .admin-table th {
@@ -75,11 +77,10 @@
 }
 
 /* ========== BUTTON STYLES ========== */
-.btn-view,
-.btn-approve,
-.btn-decline,
-.btn-delete {
-  margin: 2px 4px;
+.view,
+.approve,
+.decline,
+.delete {
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
@@ -88,34 +89,44 @@
   font-weight: 600;
   transition: all 0.2s ease;
   color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-view {
+/* ========== ACTION COLUMN LAYOUT FIX ========== */
+.admin-table td:last-child {
+  white-space: nowrap; /* Prevent wrapping */
+  width: 1%; /* Let table auto-adjust width */
+  text-align: center; /* Center align buttons */
+}
+
+.admin-table td:last-child button {
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.admin-table td:last-child button:last-child {
+  margin-right: 0;
+}
+
+/* Button Colors */
+.view {
   background: #6b63ff;
 }
-.btn-view:hover {
-  background: #5a52e8;
-}
-
-.btn-approve {
+.approve {
   background: #28a745;
 }
-.btn-approve:hover {
-  background: #218838;
-}
 
-.btn-decline {
+.decline {
   background: #dc3545;
 }
-.btn-decline:hover {
-  background: #c82333;
-}
 
-.btn-delete {
-  background: #6c757d;
-}
-.btn-delete:hover {
-  background: #5a6268;
+.delete {
+  background: #6c757d !important;
 }
 
 /* ========== MODAL BACKDROP ========== */
@@ -152,7 +163,7 @@
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #6b63ff;
+  color: #000000;
 }
 
 /* ========== CLOSE BUTTON ========== */
@@ -220,7 +231,7 @@
 }
 
 /* ========== RESPONSIVE ========== */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .admin-page {
     padding: 15px;
   }
@@ -232,5 +243,19 @@
 
   .modal-card h3 {
     font-size: 1.2rem;
+  }
+
+  .admin-table td:last-child {
+    white-space: normal;
+  }
+
+  .admin-table td:last-child button {
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .admin-table td:last-child button:last-child {
+    margin-bottom: 0;
   }
 }

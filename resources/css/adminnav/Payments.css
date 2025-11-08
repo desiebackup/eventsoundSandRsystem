@@ -1,13 +1,16 @@
 /* === Payments Page Styling === */
 .payments-page {
   font-family: "Inter", sans-serif;
+  padding: 20px;
+  background-color: #f9fafb;
+  color: #111827;
 }
 
 /* === Table Container === */
 .payments-container {
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -17,34 +20,38 @@
   border-collapse: collapse;
   text-align: left;
   font-size: 0.95rem;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .payments-table thead {
-  background-color: #e5e7eb; /* Gray header */
+  background-color: #e5e7eb;
   color: #111827;
 }
 
 .payments-table th {
-  padding: 14px 20px;
+  padding: 14px 18px;
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   letter-spacing: 0.03em;
+  border-bottom: 2px solid #d1d5db;
 }
 
 .payments-table tbody tr {
-  background-color: #ffffff; /* White rows */
-  transition: background 0.2s ease;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
 }
 
 .payments-table tbody tr:nth-child(even) {
-  background-color: #f9fafb; /* subtle alternating shade */
+  background-color: #f9fafb;
 }
 
 .payments-table td {
-  padding: 14px 20px;
+  padding: 14px 18px;
   color: #374151;
   border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
 }
 
 .payments-table tr:hover {
@@ -59,13 +66,60 @@
   font-style: italic;
 }
 
+/* === Proof Links Styling (for Downpayment & Refund) === */
+.proof-link {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  text-decoration: none !important;
+  transition: background 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* --- Downpayment Proof --- */
+.proof-link.downpayment {
+  background-color: #dbeafe; /* light blue */
+  color: #1e40af; /* navy blue text */
+}
+
+.proof-link.downpayment:hover {
+  background-color: #bfdbfe; /* brighter blue hover */
+  transform: scale(1.04);
+}
+
+/* --- Refund Proof --- */
+.proof-link.refund {
+  background-color: #4fdfe6; /* soft yellow */
+  color: #0e6a92; /* warm brown */
+}
+
+.proof-link.refund:hover {
+  background-color: #6fdbdf;
+  transform: scale(1.04);
+}
+
+/* --- No Proof --- */
+.payments-table td em {
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+
 /* === Status Badges === */
 .status-badge {
+  display: inline-block;
   padding: 6px 12px;
   border-radius: 20px;
   font-weight: 500;
   text-transform: capitalize;
   font-size: 0.85rem;
+  min-width: 80px;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .status-badge.unpaid {
@@ -83,24 +137,37 @@
   color: #92400e;
 }
 
-/* === Buttons === */
+/* === Action Buttons === */
 .action-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  align-items: center;
 }
 
-.action-buttons button {
+.action-buttons button,
+.action-buttons a {
+  display: inline-block;
   border: none;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 7px 14px;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.1s ease, opacity 0.15s ease;
+  font-weight: 500;
+  text-align: center;
 }
 
+/* === Individual Button Colors === */
 .btn-paid {
   background-color: #22c55e;
-  color: white;
+  color: #ffffff;
+}
+
+.btn-paid:hover:not(:disabled) {
+  background-color: #16a34a;
+  transform: scale(1.04);
 }
 
 .btn-refund {
@@ -108,17 +175,140 @@
   color: #78350f;
 }
 
-.btn-paid:hover {
-  background-color: #16a34a;
-}
-
-.btn-refund:hover {
+.btn-refund:hover:not(:disabled) {
   background-color: #eab308;
+  transform: scale(1.04);
 }
 
+.btn-view-refund {
+  background-color: #60a5fa;
+  color: #ffffff;
+}
+
+.btn-view-refund:hover {
+  background-color: #3b82f6;
+  transform: scale(1.04);
+}
+
+/* === Disabled Buttons === */
 .action-buttons button:disabled {
   background-color: #d1d5db;
   color: #6b7280;
   cursor: not-allowed;
+  opacity: 0.75;
   transform: none;
+}
+
+.action-buttons button:disabled:hover {
+  background-color: #d1d5db;
+  transform: none;
+}
+
+/* === Modal Overlay === */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  backdrop-filter: blur(3px);
+}
+
+/* === Modal Card === */
+.modal-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-card h3 {
+  margin-bottom: 12px;
+  color: #111827;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.modal-card p {
+  margin: 6px 0;
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #111827;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #dc2626;
+}
+
+/* === Modal Buttons === */
+.modal-card .button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-confirm-refund,
+.btn-refund-cancel {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-confirm-refund {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+.btn-confirm-refund:hover {
+  background-color: #d97706;
+  transform: scale(1.03);
+}
+
+.btn-refund-cancel {
+  background-color: #9ca3af;
+  color: #ffffff;
+}
+
+.btn-refund-cancel:hover {
+  background-color: #6b7280;
+  transform: scale(1.03);
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

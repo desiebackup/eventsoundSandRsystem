@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "../../css/adminnav/ManageServices.css";
 
@@ -165,7 +165,7 @@ export default function ManageServices() {
 
         {/* === COMMON FIELDS === */}
         <input
-          placeholder="Custom Name"
+          placeholder="Name"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />

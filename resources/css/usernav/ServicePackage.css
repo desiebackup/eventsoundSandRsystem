@@ -1,10 +1,9 @@
 /* 🌟 MAIN SECTION WRAPPER */
 .package-section {
-  font-family: "Poppins", sans-serif;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
   background: var(--bg-page);
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
@@ -12,14 +11,13 @@
 
 /* 🌟 PAGE TITLE */
 .package-main-title {
-  font-size: 1.9rem;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 25px;
-  text-align: left;
+  margin-bottom: 24px;
   color: var(--text-color);
 }
 
-/* 🌟 CATEGORY BOX (Package / Custom Section) */
+/* 🌟 CATEGORY BOX */
 .package-category {
   background: var(--bg-card);
   padding: 25px 30px;
@@ -27,6 +25,7 @@
   box-shadow: 0 2px 6px var(--shadow);
   margin-bottom: 35px;
   border: 1px solid var(--border-color);
+  transition: background 0.3s, border 0.3s, color 0.3s;
 }
 
 .package-sub-title,
@@ -34,7 +33,6 @@
   font-size: 1.4rem;
   font-weight: 600;
   color: var(--text-color);
-  text-align: left;
   margin-bottom: 10px;
 }
 
@@ -58,7 +56,7 @@
   width: 260px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
 }
 
 .package-card:hover {
@@ -94,41 +92,74 @@
 }
 
 .package-name:hover {
-  color: var(--accent, #4f46e5);
+  color: var(--accent-text);
+  text-decoration: underline;
 }
 
 /* 🌟 PRICE */
 .package-price {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #00b67a;
+  color: var(--accent-text);
 }
 
 /* === MODAL OVERLAY === */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  backdrop-filter: blur(2px);
-  animation: fadeIn 0.25s ease;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 99999 !important;
+  backdrop-filter: blur(4px);
 }
 
 /* === MODAL CARD === */
 .modal-card {
-  position: relative; /* ensures the close button is anchored here */
-  background: #fff;
+  position: relative;
+  background: var(--bg-card);
   border-radius: 14px;
   padding: 28px 30px 32px;
   width: 90%;
   max-width: 480px;
-  color: #222;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  color: var(--text-color);
+  box-shadow: 0 8px 25px var(--shadow);
   animation: zoomIn 0.25s ease;
   overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+/* ✅ CUSTOM LIST STYLE WITH CHECK ICON */
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 15px;
+}
+
+.service-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.check-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.service-list li:hover .check-icon {
+  transform: scale(1.1);
+  color: var(--accent-text);
 }
 
 /* === CLOSE BUTTON === */
@@ -136,11 +167,10 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #f3f4f6;
-  border: none;
-  color: #111;
+  background: var(--bg-navbar);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
   font-size: 22px;
-  font-weight: bold;
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -149,48 +179,59 @@
   align-items: center;
   justify-content: center;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 5px var(--shadow);
   z-index: 10;
-  line-height: 1;
 }
 
-/* === IMAGE PREVIEW MODAL (Improved) === */
+.service-close:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* === IMAGE OVERLAY === */
 .image-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(2px);
-  animation: fadeIn 0.25s ease;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: rgba(0, 0, 0, 0.75) !important;
+  z-index: 99999 !important;
+  backdrop-filter: blur(4px) !important;
+  overflow: hidden !important;
 }
 
+/* === IMAGE MODAL === */
 .image-modal {
-  position: relative;
-  background: #fff;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: var(--bg-card);
   border-radius: 16px;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 35px var(--shadow);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   padding: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
   animation: zoomIn 0.25s ease;
-  max-width: 90%;
-  max-height: 90%;
-  box-sizing: border-box;
+  border: 1px solid var(--border-color);
 }
 
+/* === IMAGE PREVIEW === */
 .image-preview {
+  max-width: 88vw;
+  max-height: 82vh;
   width: auto;
   height: auto;
-  max-width: 90vw; /* keeps it from overflowing horizontally */
-  max-height: 80vh; /* keeps it from overflowing vertically */
-  border-radius: 12px;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  border-radius: 12px;
 }
 
 /* === CLOSE BUTTON FOR IMAGE MODAL === */
@@ -198,9 +239,9 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  color: #111;
+  background: var(--bg-navbar);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
   font-size: 24px;
   border-radius: 50%;
   width: 40px;
@@ -210,8 +251,12 @@
   align-items: center;
   justify-content: center;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  z-index: 10;
+  box-shadow: 0 2px 6px var(--shadow);
+}
+
+.image-close:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
 /* === TEXT & STRUCTURE === */
@@ -219,32 +264,13 @@
   font-size: 1.6rem;
   font-weight: 800;
   text-align: center;
-  margin-top: auto;
   margin-bottom: 18px;
-  color: #111;
+  color: var(--text-color);
 }
 
-.modal-card p {
-  margin: 6px 0;
-  line-height: 1.5;
-  font-size: 1rem;
-  color: #333;
-}
-
-.modal-card strong {
-  color: #000;
-}
-
-/* === INCLUSIONS === */
-.modal-card ul {
-  margin: 10px 0 15px 22px;
-  font-size: 0.95rem;
-  color: #333;
-}
-
+.modal-card p,
 .modal-card li {
-  margin-bottom: 5px;
-  list-style: disc;
+  color: var(--text-color);
 }
 
 /* === RESPONSIVE === */
@@ -255,8 +281,6 @@
   }
 
   .service-close {
-    top: 8px;
-    right: 8px;
     width: 30px;
     height: 30px;
     font-size: 20px;
@@ -265,21 +289,11 @@
 
 /* === ANIMATIONS === */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes zoomIn {
-  from {
-    transform: scale(0.92);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

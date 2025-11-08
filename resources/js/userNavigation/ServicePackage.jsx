@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoCheckmarkCircle } from "react-icons/io5";
 import "../../css/usernav/ServicePackage.css";
 
 const ServicePackage = () => {
@@ -93,20 +93,37 @@ const ServicePackage = () => {
 
             {selected.type === "package" ? (
               <>
-                <p><strong>Inclusions:</strong></p>
-                <ul>
+                <p>
+                  <strong>Inclusions:</strong>
+                </p>
+                <ul className="service-list">
                   {(selected.inclusions || "")
                     .split("\n")
                     .filter(Boolean)
                     .map((i, idx) => (
-                      <li key={idx}>{i}</li>
+                      <li key={idx}>
+                        <IoCheckmarkCircle className="check-icon" />
+                        <span>{i}</span>
+                      </li>
                     ))}
                 </ul>
               </>
             ) : (
               <>
-                <p><strong>Description:</strong></p>
-                <p>{selected.description || "No description provided."}</p>
+                <p>
+                  <strong>Description:</strong>
+                </p>
+                <ul className="service-list">
+                  {(selected.description || "")
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((i, idx) => (
+                      <li key={idx}>
+                        <IoCheckmarkCircle className="check-icon" />
+                        <span>{i}</span>
+                      </li>
+                    ))}
+                </ul>
               </>
             )}
 

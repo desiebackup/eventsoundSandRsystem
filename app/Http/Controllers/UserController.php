@@ -11,7 +11,6 @@ class UserController extends Controller
     // ✅ Get all users with role = 'user' (for admin)
     public function index()
     {
-        // Return only non-admin users for the Manage Users UI
         $users = User::where('role', '!=', 'admin')
             ->select('id', 'firstname', 'lastname', 'email', 'role', 'created_at')
             ->get();
@@ -19,7 +18,7 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    // ✅ Create new user (optional for admin/manual registration)
+    // ✅ Create new user (for admin or manual registration)
     public function store(Request $request)
     {
         try {
@@ -31,7 +30,7 @@ class UserController extends Controller
                 'role' => 'nullable|string|in:user,admin',
             ]);
 
-            // Default role to 'user'. If the current user is admin and provided role is 'admin', allow creating an admin.
+            // Default to 'user', allow admin to create another admin
             $role = 'user';
             $current = auth()->user();
             if (!empty($validated['role']) && $validated['role'] === 'admin' && $current && $current->role === 'admin') {
@@ -66,7 +65,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Cannot delete admin accounts'], 403);
         }
 
-        // Prevent a user from deleting themselves (avoid accidental lockout)
+        // Prevent a user from deleting themselves
         $current = auth()->user();
         if ($current && $current->id === $user->id) {
             return response()->json(['message' => 'You cannot delete your own account'], 403);
@@ -78,5 +77,45 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to delete user', 'details' => $e->getMessage()], 500);
         }
+    }
+
+    // ✅ Update Refund Details (for clients updating their refund method)
+    public function updateRefundDetails(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $validated = $request->validate([
+            'refund_bank_name' => 'nullable|string|max:255',
+            'refund_account_name' => 'nullable|string|max:255',
+            'refund_account_number' => 'nullable|string|max:255',
+        ]);
+
+        $user->update($validated);
+
+        return response()->json([
+            'message' => 'Refund details updated successfully.',
+            'user' => $user,
+        ]);
+    }
+
+    // ✅ Get Refund Details for the authenticated user
+    public function getRefundDetails(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Return only the refund-related fields
+        return response()->json([
+            'refund_bank_name' => $user->refund_bank_name,
+            'refund_account_name' => $user->refund_account_name,
+            'refund_account_number' => $user->refund_account_number,
+        ]);
     }
 }

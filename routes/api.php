@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PaymentController;
 
 // -----------------------------
 // 🔓 PUBLIC ROUTES
@@ -17,6 +18,9 @@ Route::post('/login', [AuthController::class, 'login']);
 // 🔐 PROTECTED ROUTES (requires Sanctum token)
 // -----------------------------
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user/payments', [PaymentController::class, 'userPayments']);
+    Route::get('/user/refund-details', [UserController::class, 'getRefundDetails']);
+    Route::post('/user/refund-details', [UserController::class, 'updateRefundDetails']);
 
     // ✅ Authenticated user info & logout
     Route::get('/user', [AuthController::class, 'user']);
@@ -51,6 +55,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/admin/stats', [\App\Http\Controllers\AdminStatsController::class, 'stats']);
         Route::get('/admin/users', [UserController::class, 'index']);   // list all users
         Route::delete('/admin/users/{id}', [UserController::class, 'destroy']); // delete user
+            // Admin payments
+            Route::get('/admin/payments', [\App\Http\Controllers\PaymentController::class, 'index']);
+            Route::post('/admin/payments', [\App\Http\Controllers\PaymentController::class, 'store']);
+            Route::post('/admin/payments/{id}/paid', [\App\Http\Controllers\PaymentController::class, 'markPaid']);
+            Route::post('/admin/payments/{id}/refund', [\App\Http\Controllers\PaymentController::class, 'refund']);
         // Admin messaging
         Route::get('/admin/conversations', [\App\Http\Controllers\MessageController::class, 'adminConversations']);
         Route::get('/admin/messages/{userId}', [\App\Http\Controllers\MessageController::class, 'adminMessagesForUser']);

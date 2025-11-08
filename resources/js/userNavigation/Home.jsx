@@ -116,7 +116,7 @@ const Home = () => {
       {/* Upcoming Reservations */}
       <div className="section-card">
         <div className="section-header">
-          <h2>Your Upcoming Reservations</h2>
+          <h2>Your Reservations</h2>
           <a href="#" className="view-all">View All →</a>
         </div>
 

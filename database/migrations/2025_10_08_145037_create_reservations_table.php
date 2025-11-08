@@ -10,36 +10,40 @@ return new class extends Migration {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
 
-            // primary event/reservation details
+            // === Primary Event / Reservation Details ===
             $table->string('event_name');
             $table->string('event_type')->nullable();
             $table->string('service_package')->nullable();
-            // define service_id as unsignedBigInteger nullable without adding the FK here
-            // (services table is created by a later-dated migration; adding the FK here fails during fresh migrate)
+
+            // === Linked Service ===
             $table->unsignedBigInteger('service_id')->nullable();
 
-            // venue / location
-            $table->string('venue')->nullable();
-            $table->string('venue_type')->nullable();
-            $table->string('address')->nullable();
+            // === Custom Services JSON ===
+            $table->json('custom_services')->nullable();
 
-            // scheduling
+            // === Venue Type only (no venue/address) ===
+            $table->string('venue_type')->nullable();
+
+            // === Schedule ===
             $table->date('call_date')->nullable();
             $table->string('call_time')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
 
-            // contact / location details
+            // === Contact & Location ===
             $table->string('phone')->nullable();
             $table->string('purok')->nullable();
             $table->string('barangay')->nullable();
             $table->string('city')->nullable();
             $table->string('province')->nullable();
 
-            // payment / metadata
+            // === Payment ===
             $table->string('down_payment')->nullable(); // image path
+            $table->decimal('total_price', 10, 2)->default(0);
+            $table->decimal('total_downpayment', 10, 2)->default(0);
+            $table->decimal('total_balance', 10, 2)->default(0);
 
-            // ownership and workflow
+            // === Ownership & Workflow ===
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('status')->default('pending');
             $table->timestamp('approved_at')->nullable();

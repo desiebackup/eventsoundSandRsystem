@@ -12,23 +12,25 @@
 }
 
 .pay-title {
-  font-size: 1.8rem;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin: 25px 0;
+  color: var(--text-color);
 }
 
 /* ===== Final Balance Box ===== */
 .balance-box {
-  background: #EAB308; /* keeping highlight color (yellow) */
+  background: #eab308;
   padding: 25px;
   border-radius: 14px;
   margin-bottom: 25px;
   color: #fff;
+  transition: 0.2s ease;
 }
 
 .balance-label {
   font-weight: 600;
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .balance-amount {
@@ -37,23 +39,13 @@
 }
 
 .balance-info {
-  opacity: .95;
+  opacity: 0.95;
   margin-bottom: 15px;
 }
 
-.view-details-btn {
-  background: var(--bg-card);
-  color: var(--text-color);
-  padding: 10px 18px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  font-weight: 600;
-  cursor: pointer;
-  transition: .2s ease;
-}
-
-.view-details-btn:hover {
-  background: var(--navbar-hover-bg);
+.balance-box.paid {
+  background: #16a34a;
+  color: #fff;
 }
 
 /* ===== Refund Method Box ===== */
@@ -89,7 +81,7 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: .2s ease;
+  transition: 0.2s ease;
 }
 
 .update-btn:hover {
@@ -97,72 +89,135 @@
 }
 
 .refund-note {
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: var(--text-color);
-  opacity: .7;
+  opacity: 0.7;
   margin-top: 10px;
 }
 
-/* Invoice Table - Themed Fix */
+/* ===== Invoice Table ===== */
 .invoice-table table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--bg-card); /* ensures table follows theme */
+  background: var(--bg-card);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .invoice-table th,
 .invoice-table td {
-  background: var(--bg-card); /* keeps theme for all cells */
+  background: var(--bg-card);
 }
 
 .invoice-table th {
   font-weight: 700;
-  padding: 10px;
+  padding: 12px;
   text-align: left;
-  background: var(--navbar-hover-bg); /* themed header */
+  background: var(--navbar-hover-bg);
   color: var(--text-color);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
 }
 
 .invoice-table td {
-  padding: 10px;
+  padding: 12px;
   font-size: 0.95rem;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-color);
+  vertical-align: middle;
 }
 
-.paid-text { color: #16a34a; }
-.due-text { color: #dc2626; }
-.zero-text { color: #9ca3af; }
+/* === Table Row Hover === */
+.invoice-table tr:hover {
+  background: rgba(234, 179, 8, 0.05);
+}
 
+/* ===== Status Badges ===== */
 .status-badge {
-  padding: 4px 10px;
+  display: inline-block;
+  padding: 6px 12px;
   border-radius: 8px;
   font-weight: 600;
-  font-size: .8rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  text-align: center;
 }
 
-.paid { background: #d1fae5; color: #15803d; }
-.due { background: #fef3c7; color: #b45309; }
-.canceled { background: #fde2e2; color: #dc2626; }
+.status-badge.paid {
+  background: #d1fae5;
+  color: #15803d;
+}
 
-.action-text {
+.status-badge.unpaid {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-badge.refunded,
+.status-badge.canceled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ===== Action / Refund Status ===== */
+.action-link {
+  font-weight: 700;
+  display: inline-block;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.action-link.paid-full {
+  color: #16a34a; /* green */
+}
+
+.action-link.pay-in-person {
+  color: #dc2626; /* red */
+}
+
+.action-link.refund-sent {
+  color: #047857; /* emerald */
+}
+
+/* ===== View Receipt Button ===== */
+.view-receipt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #d1fae5;
+  color: #065f46;
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent-text);
-  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-/* ===== MODAL STYLES ===== */
+.view-receipt:hover {
+  background: #a7f3d0;
+  transform: scale(1.03);
+}
+
+.refund-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== Modal Styles ===== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent dark overlay */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* ensure it’s above other content */
+  z-index: 1000;
 }
 
 .modal-box {

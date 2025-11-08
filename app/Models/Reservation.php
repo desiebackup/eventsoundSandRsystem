@@ -14,9 +14,8 @@ class Reservation extends Model
         'event_type',
         'service_package',
         'service_id',
-        'venue',
+        'custom_services',
         'venue_type',
-        'address',
         'call_date',
         'call_time',
         'start_time',
@@ -33,6 +32,18 @@ class Reservation extends Model
         'approved_by',
     ];
 
+    /**
+     * Auto-cast JSON and date columns
+     */
+    protected $casts = [
+        'custom_services' => 'array',
+        'call_date' => 'date',
+        'approved_at' => 'datetime',
+    ];
+
+    /**
+     * Relationships
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -40,11 +51,16 @@ class Reservation extends Model
 
     public function service()
     {
-        return $this->belongsTo(\App\Models\Service::class, 'service_id');
+        return $this->belongsTo(Service::class, 'service_id');
     }
 
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'reservation_id');
     }
 }

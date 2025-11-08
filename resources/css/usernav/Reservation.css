@@ -1,8 +1,9 @@
+/* ========== MAIN WRAPPER ========== */
 .reservation-wrapper {
   width: 100%;
   max-width: 1050px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 20px;
   background: var(--bg-page);
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
@@ -12,11 +13,11 @@
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin: 25px 0;
   color: var(--text-color);
 }
 
-/* Step Progress Indicator */
+/* ========== STEP INDICATOR ========== */
 .steps-header {
   display: flex;
   justify-content: space-between;
@@ -51,7 +52,7 @@
 }
 
 .step-circle.completed {
-  background: #4CAF50;
+  background: #4caf50;
   color: #fff;
 }
 
@@ -73,30 +74,30 @@
   background: var(--accent);
 }
 
-/* Step Content */
+/* ========== STEP CONTENT ========== */
 .step-content {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
-/* Form Card */
+/* ========== FORM CARD ========== */
 .form-card,
 .review-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 5px var(--shadow);
+  box-shadow: 0 2px 6px var(--shadow);
   border-radius: 12px;
-  padding: 30px 40px;
+  padding: 28px 35px;
   margin-bottom: 20px;
   transition: background 0.3s, color 0.3s;
 }
 
 .form-card h3 {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   font-size: 20px;
-  color: var(--text-color);
+  font-weight: 700;
 }
 
-/* Inputs */
+/* ========== INPUT STYLING ========== */
 .form-card input,
 .form-card select {
   width: 100%;
@@ -115,10 +116,57 @@
 .form-card input:focus,
 .form-card select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 3px var(--accent);
+  box-shadow: 0 0 4px var(--accent);
 }
 
-/* Grid Layouts */
+/* ===== PLACEHOLDER COLOR FIX ===== */
+::placeholder {
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+/* ===== DATE & TIME PICKER VISIBILITY (LIGHT + DARK MODE) ===== */
+input[type="date"],
+input[type="time"] {
+  background-color: var(--bg-card);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* Light mode icons */
+:root input[type="date"]::-webkit-calendar-picker-indicator,
+:root input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+  opacity: 0.8;
+  cursor: pointer;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+/* Dark mode icons */
+[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="dark"] input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.8;
+  cursor: pointer;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+input[type="date"]:focus,
+input[type="time"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 5px var(--accent);
+}
+
+/* ========== GRID LAYOUTS ========== */
 .date-time-grid,
 .time-grid {
   display: flex;
@@ -133,9 +181,10 @@
 
 .location-grid input {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
-/* ====== Step 2: Service Selection ====== */
+
+/* ========== STEP 2: SERVICE SELECTION ========== */
 .reservation-package-list {
   display: flex;
   flex-direction: column;
@@ -150,28 +199,26 @@
   background: var(--bg-card);
   border: 2px solid var(--border-color);
   border-radius: 10px;
-  padding: 5px 20px;
+  padding: 10px 18px;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 .reservation-option.selected {
   border-color: var(--accent);
-  background: var(--bg-card);
+  box-shadow: 0 0 5px var(--accent);
 }
 
-.reservation-option input[type="radio"] {
-  margin-top: 20px;
+.reservation-option input[type="checkbox"] {
+  margin-top: 10px;
   accent-color: var(--accent);
-  cursor: pointer;
 }
 
 .reservation-details {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 2px !important;
+  gap: 4px;
 }
 
 .reservation-header {
@@ -179,13 +226,11 @@
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  color: var(--text-color);
 }
 
 .reservation-name {
-  font-size: 25px;
-  margin-bottom: 0 !important;
-  line-height: 1.2 !important;
+  font-size: 20px;
+  margin: 0;
 }
 
 .reservation-price {
@@ -197,27 +242,55 @@
 .reservation-inclusions {
   font-size: 14px;
   color: var(--text-color);
-  opacity: 0.8;
-  margin-top: 0 !important;
-  line-height: 1.3 !important;
+  opacity: 0.85;
+  line-height: 1.3;
 }
 
 .reservation-downpayment {
-  margin-top: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-color);
 }
 
-/* === STEP 3 - REVIEW & BOOK === */
+/* ========== QUANTITY CONTROL ========== */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.quantity-control button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.quantity-control button:hover {
+  opacity: 0.85;
+}
+
+.quantity-control span {
+  font-weight: 600;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ========== STEP 3: REVIEW & BOOK ========== */
 .step-content h3 {
   font-size: 22px;
   font-weight: 700;
-  color: var(--text-color);
   margin-bottom: 20px;
 }
 
-/* Downpayment Section */
+/* Downpayment Box */
 .downpayment-box {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -227,25 +300,22 @@
   margin-bottom: 25px;
 }
 
-.downpayment,
-.downpayment-amount {
+.downpayment {
   font-size: 18px;
   font-weight: 700;
-  color: var(--text-color);
   margin-bottom: 6px;
 }
 
 .downpayment-reminder {
   font-size: 15px;
-  color: #ff5555;
+  color: #e53935;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 .downpayment-detail {
   font-size: 14px;
-  color: var(--text-color);
-  opacity: 0.85;
+  opacity: 0.9;
   line-height: 1.6;
 }
 
@@ -258,57 +328,49 @@
   margin-top: 12px;
 }
 
-.payment-card h4,
-.payment-title {
+.payment-card h4 {
   margin: 0 0 8px 0;
   font-weight: 600;
-  color: var(--text-color);
 }
 
 .payment-card ul {
-  list-style-type: disc;
-  padding-left: 20px;
+  list-style-type: none;
+  padding-left: 0;
   margin: 0;
 }
 
 .payment-card li {
   font-size: 14px;
-  color: var(--text-color);
   opacity: 0.9;
   margin: 3px 0;
 }
 
-/* Upload Proof */
+/* Upload Section */
 .upload-section {
   margin-top: 20px;
 }
 
-.upload-section label {
-  display: block;
+.upload-label {
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .mandatory {
   font-size: 14px;
   color: #ff4c4c;
-  font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 input[type="file"] {
-  display: block;
   padding: 6px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  width: 100%;
-  max-width: 725px;
+  width: 98%;
   background: var(--bg-card);
   color: var(--text-color);
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s;
 }
 
 input[type="file"]:hover {
@@ -317,8 +379,6 @@ input[type="file"]:hover {
 
 /* Review Card */
 .review-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 20px 25px;
   box-shadow: 0 1px 4px var(--shadow);
@@ -328,51 +388,88 @@ input[type="file"]:hover {
 .review-title {
   font-size: 20px;
   font-weight: 600;
-  color: var(--text-color);
   margin-bottom: 8px;
+}
+
+.review-subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 6px;
 }
 
 .review-card p {
   font-size: 14px;
-  color: var(--text-color);
   opacity: 0.9;
   margin: 4px 0;
 }
 
 .review-card .note {
-  color: #ff5a5a;
+  color: #e53935;
   font-weight: 600;
   margin-top: 8px;
 }
 
-.review-card hr {
-  border: none;
-  border-top: 1px solid var(--border-color);
-  margin: 15px 0;
+/* Custom Services List */
+.custom-service-list {
+  list-style: none;
+  padding-left: 0;
 }
 
-/* Buttons */
+.custom-service-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.check-icon {
+  color: #4caf50;
+  font-size: 0.95rem;
+}
+
+/* ========== BUTTONS ========== */
 .step-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 25px;
+  gap: 10px;
 }
 
-.next-btn {
+/* Fix alignment of Next button (Step 1 only) */
+.step-content .next-btn {
+  margin-left: auto;
+}
+
+.back-btn,
+.next-btn,
+.submit-btn {
   padding: 10px 18px;
   font-size: 14px;
-  font-weight: 600;
-  border-radius: 8px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
-  margin-left: auto;
   align-items: center;
   gap: 6px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.back-btn {
+  background: var(--border-color);
+  color: var(--text-color);
+}
+
+.back-btn:hover {
+  opacity: 0.85;
+}
+
+.next-btn,
+.submit-btn {
   background: var(--accent);
   color: #fff;
-  transition: opacity 0.2s ease;
 }
 
 .next-btn:hover,
@@ -385,35 +482,22 @@ input[type="file"]:hover {
   cursor: not-allowed;
 }
 
-.back-btn,
-.submit-btn {
-  padding: 10px 18px;
-  font-size: 14px;
-  border: none;
+/* Totals Summary */
+.totals-summary {
+  margin-top: 15px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  padding: 12px 16px;
 }
 
-.back-btn {
-  background: var(--border-color);
-  color: var(--text-color);
+.totals-summary p {
+  margin: 6px 0;
+  font-weight: 500;
 }
 
-.back-btn:hover {
-  opacity: 0.85;
-}
-
-.submit-btn {
-  background: var(--accent);
-  color: #fff;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
   .date-time-grid,
   .time-grid {
     flex-direction: column;
@@ -425,5 +509,17 @@ input[type="file"]:hover {
 
   .step-buttons button {
     width: 100%;
+  }
+
+  .step-content .next-btn {
+    margin-left: 0;
+  }
+
+  .reservation-option {
+    flex-direction: column;
+  }
+
+  .reservation-name {
+    font-size: 18px;
   }
 }

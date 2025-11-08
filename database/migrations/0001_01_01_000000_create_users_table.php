@@ -16,10 +16,16 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
-            // role and avatar moved here so create_users creates full schema in one migration
+
+            // Role and avatar
             $table->string('role')->default('user');
-            // store path relative to storage/app/public, e.g. 'avatars/abc.jpg'
-            $table->string('avatar')->nullable();
+            $table->string('avatar')->nullable(); // stored path in storage/app/public
+
+            // Refund details (for manual transfers)
+            $table->string('refund_bank_name')->nullable();       // e.g. BPI, GCash
+            $table->string('refund_account_name')->nullable();    // account holder name
+            $table->string('refund_account_number')->nullable();  // last digits only if needed
+
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
