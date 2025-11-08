@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SignUp from "../sign/SignUp";
 import SignIn from "../sign/SignIn";
 import "../../css/pages/Welcome.css";
-import logo from "../../img/logo.png";
+import logo from "../../img/eventsoundpro-logo.png";
 import aboutImage from "../../img/about.jpg";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
@@ -53,9 +53,11 @@ export default function Welcome() {
       {/* ===================== NAVIGATION BAR ===================== */}
       <nav className={`top-nav ${scrolled ? "nav-scrolled" : "nav-transparent"}`}>
         <div className="nav-left">
-          <img src={logo} alt="Event Sound Pro" className="nav-logo" />
-          <span className="logo-text">Event Sound Pro</span>
+          <a href="/" onClick={() => window.location.reload()} className="logo-link">
+            <img src={logo} alt="Event Sound Pro Logo" className="nav-logo" />
+          </a>
         </div>
+
         <div className="nav-right">
           <a
             href="#home"
@@ -96,19 +98,6 @@ export default function Welcome() {
           <button className="primary-btn" onClick={handleGetStarted}>
             Get Started Today
           </button>
-          <p className="hero-slogan">
-            Crystal-clear sound, anywhere your event takes you.
-          </p>
-
-          {/* Scroll Indicator */}
-          <div className="scroll-down">
-            <span></span>
-          </div>
-
-          {/* Optional visualizer */}
-          <div className="visualizer">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
         </section>
 
         {/* ABOUT SECTION */}
@@ -232,4 +221,3 @@ export default function Welcome() {
     </div>
   );
 }
-    
