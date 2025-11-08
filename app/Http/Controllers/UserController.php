@@ -118,4 +118,62 @@ class UserController extends Controller
             'refund_account_number' => $user->refund_account_number,
         ]);
     }
+    
+    // ✅ Delete the authenticated user's own account (self-delete)
+    public function destroySelf(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // require password confirmation for safety
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Password is incorrect.'], 422);
+        }
+
+        // Prevent deletion of admin accounts via this endpoint
+        if ($user->role === 'admin') {
+            return response()->json(['message' => 'Admin accounts cannot be deleted via this endpoint'], 403);
+        }
+
+        try {
+            // Revoke all personal tokens so client can't reuse them
+            if (method_exists($user, 'tokens')) {
+                $user->tokens()->delete();
+            }
+
+            $user->delete();
+
+            return response()->json(['message' => 'Account deleted successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete account', 'details' => $e->getMessage()], 500);
+        }
+    }
+    // ✅ Change Password (for logged-in users)
+public function changePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:8',
+    ]);
+
+    $user = $request->user();
+
+    // Check if old password matches
+    if (!Hash::check($request->current_password, $user->password)) {
+        return response()->json(['error' => 'Current password is incorrect.'], 422);
+    }
+
+    // Update to new password
+    $user->password = Hash::make($request->new_password);
+    $user->save();
+
+    return response()->json(['message' => 'Password updated successfully.']);
+}
 }

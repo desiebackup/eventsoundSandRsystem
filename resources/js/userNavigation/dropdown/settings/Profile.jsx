@@ -128,6 +128,16 @@ export default function Profile() {
       setSelectedImage(null);
       setIsEditing(false);
       setMessage("Profile updated successfully.");
+      // Notify the app that the authenticated user data changed so global UI can update
+      try {
+        window.dispatchEvent(new CustomEvent('auth:login', { detail: updatedUser }));
+      } catch (e) {
+        // fallback for older browsers
+        const ev = document.createEvent('Event');
+        ev.initEvent('auth:login', true, true);
+        ev.detail = updatedUser;
+        window.dispatchEvent(ev);
+      }
     } catch (err) {
       console.error(err);
       let serverMsg = "Failed to update profile.";

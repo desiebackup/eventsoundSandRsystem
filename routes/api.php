@@ -19,12 +19,15 @@ Route::post('/login', [AuthController::class, 'login']);
 // -----------------------------
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/payments', [PaymentController::class, 'userPayments']);
+    Route::post('/user/change-password', [UserController::class, 'changePassword']);
     Route::get('/user/refund-details', [UserController::class, 'getRefundDetails']);
     Route::post('/user/refund-details', [UserController::class, 'updateRefundDetails']);
 
     // ✅ Authenticated user info & logout
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    // Delete own account
+    Route::delete('/user', [UserController::class, 'destroySelf']);
 
     // ✅ Profile routes
     Route::post('/profile/update', [ProfileController::class, 'update']);
