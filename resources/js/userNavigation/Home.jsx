@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FiCalendar } from "react-icons/fi";
@@ -10,67 +10,56 @@ axios.defaults.baseURL = "http://localhost:8000";
 const Home = () => {
   const [reservations, setReservations] = useState([]);
   const [payments, setPayments] = useState([]);
-  const [filteredReservations, setFilteredReservations] = useState([]);
-  const [filterType, setFilterType] = useState("");
   const [userName, setUserName] = useState("");
   const [recentActivity, setRecentActivity] = useState([]);
+  const [showAllActivities, setShowAllActivities] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalData, setModalData] = useState([]);
+
   const navigate = useNavigate();
 
+  // --- FETCH DATA ---
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/welcome");
       return;
     }
+
     const headers = { Authorization: `Bearer ${token}` };
 
     const fetchAll = async () => {
       try {
         const [userRes, reservationsRes, paymentsRes] = await Promise.all([
-          axios.get("/api/user", { headers }), // your user endpoint
-          axios.get("/api/reservations", { headers }), // reservations
-          axios.get("/api/user/payments", { headers }), // payments
+          axios.get("/api/user", { headers }),
+          axios.get("/api/reservations", { headers }),
+          axios.get("/api/user/payments", { headers }),
         ]);
 
-        // USER NAME (defensive)
         const user = userRes?.data || {};
         setUserName(
-          user.firstname ? `${user.firstname} ${user.lastname}` : user.name || "User"
+          user.firstname
+            ? `${user.firstname} ${user.lastname}`
+            : user.name || "User"
         );
 
-        // RESERVATIONS (defensive)
-        const resData =
-          Array.isArray(reservationsRes.data)
-            ? reservationsRes.data
-            : Array.isArray(reservationsRes.data.data)
-            ? reservationsRes.data.data
-            : Array.isArray(reservationsRes.data.reservations)
-            ? reservationsRes.data.reservations
-            : [];
+        const resData = Array.isArray(reservationsRes.data)
+          ? reservationsRes.data
+          : reservationsRes.data.data ||
+            reservationsRes.data.reservations ||
+            [];
         setReservations(resData);
 
-        // PAYMENTS (defensive)
-        const payData =
-          Array.isArray(paymentsRes.data)
-            ? paymentsRes.data
-            : Array.isArray(paymentsRes.data.data)
-            ? paymentsRes.data.data
-            : Array.isArray(paymentsRes.data.payments)
-            ? paymentsRes.data.payments
-            : [];
+        const payData = Array.isArray(paymentsRes.data)
+          ? paymentsRes.data
+          : paymentsRes.data.data || paymentsRes.data.payments || [];
         setPayments(payData);
 
-        // Load local activity if any
-        const activity = JSON.parse(localStorage.getItem("user_activity")) || [];
-        setRecentActivity(activity);
-
-        // debug logs so you can inspect response
-        // open browser console and check the shapes
-        // eslint-disable-next-line no-console
-        console.log("user:", userRes.data, "reservations:", resData, "payments:", payData);
+        setRecentActivity(buildNotifications(resData, payData));
       } catch (err) {
-        console.error("Error fetching user/reservations/payments:", err);
-        if (err.response?.status === 401) {
+        console.error("Error loading dashboard data:", err);
+        if (err?.response?.status === 401) {
           localStorage.removeItem("token");
           navigate("/welcome");
         }
@@ -80,82 +69,222 @@ const Home = () => {
     fetchAll();
   }, [navigate]);
 
-  // filters
-  const approvedEvents = Array.isArray(reservations)
-    ? reservations.filter((r) => String(r.status).toLowerCase() === "approved")
-    : [];
-  const pendingEvents = Array.isArray(reservations)
-    ? reservations.filter((r) => String(r.status).toLowerCase() === "pending")
-    : [];
+  // --- BUILD RECENT ACTIVITY LOGS ---
+  const buildNotifications = (reservationsArr = [], paymentsArr = []) => {
+    const logs = [];
 
-  // ===== TOTAL PAYMENT calculation (from payments array) =====
-  // Rules:
-  // - sum every payment.down_payment
-  // - if payment.status is 'paid' (fully paid) add payment.balance as well
-  // - ignore refunded/canceled payments
-  const totalPayment = Array.isArray(payments)
-    ? payments.reduce((acc, p) => {
-        // ensure numeric values
-        const status = String(p.status || "").toLowerCase();
-        const down = Number(p.down_payment ?? p.down ?? 0) || 0;
-        // balance field might be stored or could be total_price - down
-        let balance = 0;
-        if (p.balance !== undefined && p.balance !== null) {
-          balance = Number(p.balance) || 0;
-        } else if (p.total_price !== undefined && p.total_price !== null) {
-          balance = (Number(p.total_price) || 0) - down;
-        }
+    (reservationsArr || []).forEach((r) => {
+      const title = r.event_name || "Event";
+      const status = String(r.status || "").toLowerCase();
 
-        // always add downpayment (actual paid amount)
-        let add = down;
+      if (status === "pending") {
+        logs.push({
+          type: "booking",
+          message: `You booked a reservation for <b>${title}</b>. Awaiting admin approval.`,
+          time: new Date(r.created_at || Date.now()).toLocaleString(),
+        });
+      } else if (status === "approved") {
+        logs.push({
+          type: "confirmation",
+          message: `Your event <b>${title}</b> was <b>approved</b> by admin.`,
+          time: new Date(r.updated_at || Date.now()).toLocaleString(),
+        });
+      } else if (status === "cancelled" || status === "canceled") {
+        logs.push({
+          type: "cancel",
+          message: `Your event <b>${title}</b> was <b>cancelled</b>.`,
+          time: new Date(r.updated_at || Date.now()).toLocaleString(),
+        });
+      }
+    });
 
-        // if fully-paid, add remaining balance
-        if (status === "paid" || status === "paid in full") {
-          add += balance;
-        }
+    (paymentsArr || []).forEach((p) => {
+      const eventName = p.reservation?.event_name || "Event";
+      const status = String(p.status || "").toLowerCase();
+      const actionStatus = String(p.action_status || "").toLowerCase();
+      const remarks = String(p.remarks || "").toLowerCase();
 
-        // skip refunded / canceled
-        if (status === "refunded" || status === "canceled") {
-          return acc;
-        }
+      if (
+        status === "paid" ||
+        status === "paid in full" ||
+        status === "fully paid"
+      ) {
+        logs.push({
+          type: "payment",
+          message: `Your event <b>${eventName}</b> is now <b>fully paid</b>.`,
+          time: new Date(p.updated_at || Date.now()).toLocaleString(),
+        });
+      } else if (
+        status === "partial" ||
+        status === "downpaid" ||
+        (p.down_payment && Number(p.balance ?? 0) > 0)
+      ) {
+        logs.push({
+          type: "payment",
+          message: `You made a <b>downpayment</b> for <b>${eventName}</b>.`,
+          time: new Date(p.updated_at || Date.now()).toLocaleString(),
+        });
+      }
 
-        return acc + add;
-      }, 0)
-    : 0;
+      if (
+        status.includes("refund") ||
+        actionStatus.includes("refund") ||
+        remarks.includes("refund")
+      ) {
+        logs.push({
+          type: "refund",
+          message: `You received a <b>refund</b> for <b>${eventName}</b>.`,
+          time: new Date(p.updated_at || Date.now()).toLocaleString(),
+        });
+      }
+    });
 
+    return logs.sort((a, b) => new Date(b.time) - new Date(a.time));
+  };
+
+  // --- FILTERS ---
+  const pendingEvents = reservations.filter(
+    (r) => String(r.status).toLowerCase() === "pending"
+  );
+
+  const upcomingEvents = reservations.filter((r) => {
+    const status = String(r.status || "").toLowerCase();
+    if (status !== "approved") return false;
+
+    const payment = payments.find(
+      (p) => p.reservation_id === r.id || p.reservation?.id === r.id
+    );
+
+    if (!payment) return true;
+
+    const payStatus = String(payment.status || "").toLowerCase();
+    const isExcluded = [
+      "paid",
+      "paid in full",
+      "fully paid",
+      "refunded",
+      "cancelled",
+      "canceled",
+    ].includes(payStatus);
+
+    return !isExcluded;
+  });
+
+  // --- TOTAL PAYMENT ---
+  const computeTotalPayment = useCallback(() => {
+    if (!Array.isArray(payments)) return 0;
+    let total = 0;
+    payments.forEach((p) => {
+      const status = String(p.status || "").toLowerCase();
+      if (["refunded", "canceled", "cancelled"].includes(status)) return;
+
+      const down = Number(p.down_payment ?? 0);
+      const totalPrice = Number(p.total_price ?? 0);
+      const balance = Number(p.balance ?? 0);
+
+      if (["paid", "paid in full", "fully paid"].includes(status)) {
+        total += totalPrice || down + balance;
+      } else if (down > 0) {
+        total += down;
+      }
+    });
+    return total;
+  }, [payments]);
+
+  const totalPayment = computeTotalPayment();
   const totalPaymentFormatted = totalPayment.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
-  // navigation helpers
-  const goToReservationPage = () => {
-    navigate("/user/reservation");
-  };
+  // --- CANCEL RESERVATION ---
+  const handleCancelReservation = async (id, eventName) => {
+    if (!window.confirm(`Cancel reservation for ${eventName}?`)) return;
 
-  const handleCardClick = (type) => {
-    if (type === "approved") {
-      setFilteredReservations(approvedEvents);
-      setFilterType("Approved");
-    } else if (type === "pending") {
-      setFilteredReservations(pendingEvents);
-      setFilterType("Pending");
+    try {
+      await axios.put(`/api/reservations/${id}/cancel`);
+      setReservations((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status: "cancelled" } : r))
+      );
+
+      setRecentActivity((prev) => [
+        {
+          type: "cancel",
+          message: `Your event <b>${eventName}</b> was <b>cancelled</b>.`,
+          time: new Date().toLocaleString(),
+        },
+        ...prev,
+      ]);
+
+      alert("Reservation cancelled successfully.");
+    } catch (err) {
+      console.error("Cancel reservation failed:", err);
+      alert("Failed to cancel reservation. Try again.");
     }
   };
 
-  const resetFilter = () => {
-    setFilteredReservations([]);
-    setFilterType("");
+  // --- MODAL HELPERS ---
+  const openModal = (title, type) => {
+    let data = [];
+
+    if (type === "upcoming") {
+      data = upcomingEvents.map((r) => {
+        const pay = payments.find(
+          (p) => p.reservation_id === r.id || p.reservation?.id === r.id
+        );
+        return { ...r, payment: pay || null };
+      });
+    } else if (type === "pending") {
+      data = pendingEvents.map((r) => {
+        const pay = payments.find(
+          (p) => p.reservation_id === r.id || p.reservation?.id === r.id
+        );
+        return { ...r, payment: pay || null };
+      });
+    } else if (type === "payments") {
+      data = payments.filter(
+        (p) =>
+          !["refunded", "canceled", "cancelled"].includes(
+            String(p.status || "").toLowerCase()
+          )
+      );
+    }
+
+    setModalTitle(title);
+    setModalData(data);
+    setModalVisible(true);
   };
 
+  const closeModal = () => {
+    setModalVisible(false);
+    setModalTitle("");
+    setModalData([]);
+  };
+
+  useEffect(() => {
+    const handleKey = (e) => e.key === "Escape" && closeModal();
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
+  const visibleActivities = showAllActivities
+    ? recentActivity
+    : recentActivity.slice(0, 10);
+
+  const goToReservationPage = () => navigate("/userdashboard/reservation");
+
+  // --- RENDER ---
   return (
     <div className="home-container">
-      <h1 className="home-title">Welcome Back, {userName || "User"}!</h1>
+      <h1 className="home-title">Welcome, {userName || "User"}!</h1>
 
+      {/* Banner */}
       <div className="home-banner">
         <div>
           <h2>Last-minute prep? No problem</h2>
-          <p>We are here to make sure every beat, word, and vibe comes alive.</p>
+          <p>
+            We’re here to make sure every beat and vibe comes alive.
+          </p>
         </div>
         <button className="schedule-btn" onClick={goToReservationPage}>
           <FiCalendar className="icon" />
@@ -163,66 +292,186 @@ const Home = () => {
         </button>
       </div>
 
+      {/* Stats */}
       <div className="stats-grid">
-        <div className="stat-card clickable" onClick={() => handleCardClick("approved")}>
+        <div
+          className="stat-card clickable"
+          onClick={() =>
+            openModal("Upcoming Events (Needs Payment)", "upcoming")
+          }
+        >
           <h3>Upcoming Events</h3>
-          <p className="stat-value">{approvedEvents.length}</p>
-          <span className="stat-note">Approved and ready</span>
+          <p className="stat-value">{upcomingEvents.length}</p>
+          <span className="stat-event">Approved, needs full payment</span>
         </div>
 
-        <div className="stat-card clickable" onClick={() => handleCardClick("pending")}>
+        <div
+          className="stat-card clickable"
+          onClick={() =>
+            openModal("Active Services (Pending Approval)", "pending")
+          }
+        >
           <h3>Active Services</h3>
           <p className="stat-value">{pendingEvents.length}</p>
-          <span className="stat-note yellow">Pending admin approval</span>
+          <span className="stat-active">Pending admin approval</span>
         </div>
 
-        <div className="stat-card clickable">
+        <div
+          className="stat-card clickable"
+          onClick={() => openModal("Payment Summary", "payments")}
+        >
           <h3>Total Payment</h3>
           <p className="stat-value money">₱ {totalPaymentFormatted}</p>
-          <span className="stat-note gold">Down payments + fully paid balances</span>
+          <span className="stat-payment">
+            Down payments + fully paid totals
+          </span>
         </div>
       </div>
 
-      {/* Filtered reservations view */}
-      {filteredReservations.length > 0 && (
-        <div className="section-card">
-          <div className="section-header">
-            <h2>{filterType === "Approved" ? "Approved Reservations" : "Pending Reservations"}</h2>
-            <button className="view-all" onClick={resetFilter}>Back →</button>
-          </div>
-
-          {filteredReservations.map((item) => (
-            <div key={item.id} className="reservation-item">
-              <div className="reservation-date">
-                {item.call_date ? new Date(item.call_date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
-              </div>
-              <div className="reservation-details">
-                <h3>{item.event_name}</h3>
-                <p>{item.service_name || item.service?.name || "Service Package"}</p>
-                <span className="reservation-time">
-                  {item.start_time || "—"} {item.end_time ? `- ${item.end_time}` : ""}
-                </span>
-              </div>
-              <div className="reservation-status">{item.status}</div>
-            </div>
-          ))}
-        </div>
-      )}
-
+      {/* Recent Activity */}
       <div className="section-card">
         <h2>Recent Activity</h2>
-        {recentActivity.length > 0 ? (
-          recentActivity.map((item, i) => (
-            <div key={i} className="activity-row">
-              <span className={`activity-icon ${item.type}`}></span>
-              <p dangerouslySetInnerHTML={{ __html: item.message }} />
-              <span className="activity-time">{item.time}</span>
-            </div>
-          ))
-        ) : (
+        {recentActivity.length === 0 ? (
           <p className="no-activity">No recent activity yet.</p>
+        ) : (
+          <>
+            {visibleActivities.map((a, i) => (
+              <div key={i} className="activity-row">
+                <span className={`activity-icon ${a.type}`}></span>
+                <p dangerouslySetInnerHTML={{ __html: a.message }} />
+                <span className="activity-time">
+                  {new Date(a.time).toLocaleString()}
+                </span>
+              </div>
+            ))}
+            {recentActivity.length > 10 && (
+              <div>
+                <button
+                  className="view-all"
+                  onClick={() => setShowAllActivities((s) => !s)}
+                >
+                  {showAllActivities
+                    ? "Show less"
+                    : `Show more (${recentActivity.length - 10} more)`}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
+
+      {/* Modal */}
+      {modalVisible && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div
+            className={`modal-content ${
+              modalTitle.includes("Upcoming")
+                ? "upcoming"
+                : modalTitle.includes("Active")
+                ? "pending"
+                : modalTitle.includes("Payment")
+                ? "payments"
+                : ""
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h3>{modalTitle}</h3>
+              <button className="close-btn" onClick={closeModal}>
+                ✖
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {modalData.length === 0 ? (
+                <p>No records.</p>
+              ) : (
+                modalData.map((item, idx) => {
+                  const payment = item.payment || item;
+                  const eventName =
+                    item.event_name ||
+                    payment.reservation?.event_name ||
+                    "Untitled Event";
+                  const status = String(
+                    payment.status || item.status || ""
+                  ).toLowerCase();
+                  const down = Number(payment.down_payment ?? 0);
+                  const total = Number(payment.total_price ?? 0);
+                  const balance = Number(payment.balance ?? 0);
+
+                  let amount = 0;
+                  let label = "";
+
+                  // ✅ Active Services: Always show downpayment only
+                  if (modalTitle.includes("Active Services")) {
+                    amount = down > 0 ? down : total * 0.5;
+                    label = "Downpayment";
+                  } else if (modalTitle.includes("Upcoming")) {
+                    amount =
+                      balance > 0 ? balance : Math.max(0, total - down);
+                    label = "Balance";
+                  } else if (modalTitle.includes("Payment Summary")) {
+                    if (["paid", "paid in full", "fully paid"].includes(status)) {
+                      amount = total;
+                      label = "Fully Paid";
+                    } else {
+                      amount = down;
+                      label = "Downpayment";
+                    }
+                  }
+
+                  return (
+                    <div key={idx} className="modal-item">
+                      <div className="modal-item-header">
+                        <strong>{eventName}</strong>
+                        <span className="modal-amount">
+                          ₱{" "}
+                          {isNaN(amount)
+                            ? "0.00"
+                            : amount.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                        </span>
+                      </div>
+
+                      <div className="modal-item-info">
+                        <span>
+                          {item.call_date && (
+                            <>
+                              Date:{" "}
+                              {new Date(
+                                item.call_date
+                              ).toLocaleDateString(undefined, {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
+                            </>
+                          )}
+                        </span>
+                        <span className="modal-label">{label}</span>
+                      </div>
+
+                      {modalTitle.includes("Active Services") &&
+                        String(item.status || "").toLowerCase() !==
+                          "cancelled" && (
+                          <button
+                            className="cancel-btn"
+                            onClick={() =>
+                              handleCancelReservation(item.id, eventName)
+                            }
+                          >
+                            Cancel Reservation
+                          </button>
+                        )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

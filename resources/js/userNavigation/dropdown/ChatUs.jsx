@@ -8,76 +8,77 @@ const ChatUs = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [defaultReplied, setDefaultReplied] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false); 
-  const [profileData, setProfileData] = useState({ avatar: defaultAvatar, name: "Admin" }); 
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [profileData, setProfileData] = useState({
+    avatar: defaultAvatar,
+    name: "Admin",
+  });
   const messagesEndRef = useRef(null);
 
-  // Scroll to bottom on open or message update
+  // Scroll to bottom when chat opens or messages update
   useEffect(() => {
     if (isOpen) messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isOpen]);
 
-  // Send user message
-  const handleSend = () => {
+  // Send user message (optimistic add, backend persist)
+  const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { text: input, sender: "You", avatar: null, type: "user" };
+    const textToSend = input.trim();
+
+    // Optimistically add user's message so it appears immediately
+    const userMessage = { text: textToSend, sender: "You", type: "user" };
     setMessages((prev) => [...prev, userMessage]);
-    const textToSend = input;
+
     setInput("");
 
-    // Persist to server
-    axios
-      .post("/api/messages", { text: textToSend })
-      .then((res) => {
-        // message saved; admin may reply later
-      })
-      .catch((e) => {
-        console.error("Failed to send message", e);
-      });
-
-    if (!defaultReplied) {
-      const instantReply = { text: "Welcome to Event Sound Pro! Thank you for visiting. If you have any questions, concerns, or need assistance, an admin will be with you shortly. We specialize in providing high-quality event sound services and support.", 
-        sender: "Admin", avatar: defaultAvatar, type: "admin" };
-      setMessages((prev) => [...prev, instantReply]);
-      setDefaultReplied(true);
+    try {
+      await axios.post("/api/messages", { text: textToSend });
+      // We rely on polling to fetch the authoritative list (including saved message)
+    } catch (e) {
+      console.error("Failed to send message", e);
+      // Optionally you could show an error or mark the message as failed
     }
   };
 
-  const handleKeyDown = (e) => { if (e.key === "Enter") handleSend(); };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSend();
+  };
 
-  // Function to append actual admin reply
+  // Optional function to programmatically append an admin reply (if you call it)
   const addAdminReply = (adminData) => {
     const adminMessage = {
       text: adminData.text,
       sender: `${adminData.firstName} ${adminData.lastName}`,
-      avatar: adminData.avatarUrl,
+      avatar: adminData.avatarUrl || defaultAvatar,
       type: "admin",
     };
     setMessages((prev) => [...prev, adminMessage]);
   };
 
-  // Poll for admin replies periodically when chat is open
+  // Poll server for messages when chat is open
   useEffect(() => {
     let timer = null;
-    const fetchMessages = () => {
-      axios
-        .get("/api/messages")
-        .then((res) => {
-          // server returns array of messages for this user
-          const serverMsgs = res.data || [];
-          // Map to local message shape and replace local messages with server messages + keep instant reply
-          const mapped = serverMsgs.map((m) => ({ text: m.text, sender: m.sender === 'admin' ? (m.sender_name || 'Admin') : 'You', avatar: m.sender === 'admin' ? defaultAvatar : null, type: m.sender }));
-          // If default instant reply was set earlier, preserve earlier admin intro
-          setMessages((prev) => {
-            const intro = prev.find((p) => p.type === 'admin' && p.text && p.text.includes('Welcome to Event Sound Pro'));
-            const combined = mapped.length ? mapped : prev;
-            if (intro && !combined.find((c) => c.text === intro.text)) combined.unshift(intro);
-            return combined;
-          });
-        })
-        .catch(() => {});
+
+    const fetchMessages = async () => {
+      try {
+        const res = await axios.get("/api/messages");
+        const serverMsgs = res.data || [];
+
+        const mapped = serverMsgs.map((m) => ({
+          text: m.text,
+          sender: m.sender === "admin" ? m.sender_name || "Admin" : "You",
+          avatar: m.sender === "admin" ? defaultAvatar : null,
+          type: m.sender,
+        }));
+
+        // Replace local messages with server authoritative messages.
+        // This keeps server order and avoids duplication.
+        setMessages(mapped);
+      } catch (err) {
+        // silently ignore fetch errors (optionally log)
+        console.error("Failed to fetch messages:", err);
+      }
     };
 
     if (isOpen) {
@@ -88,27 +89,39 @@ const ChatUs = () => {
     return () => clearInterval(timer);
   }, [isOpen]);
 
-  const lastAdmin = messages.filter((msg) => msg.type === "admin").slice(-1)[0] || { sender: "Admin", avatar: defaultAvatar };
+  // Last admin for header display
+  const lastAdmin =
+    messages.filter((msg) => msg.type === "admin").slice(-1)[0] || {
+      sender: "Admin",
+      avatar: defaultAvatar,
+    };
 
   return (
     <div className="chat-container">
-      {/* Chat toggle button */}
+      {/* Toggle button */}
       {!isOpen && (
-        <button className="chat-toggle-btn" onClick={() => setIsOpen(true)} title="Chat with Us">
+        <button
+          className="chat-toggle-btn"
+          onClick={() => setIsOpen(true)}
+          title="Chat with Us"
+        >
           <FaComments size={40} />
         </button>
       )}
 
       {isOpen && (
         <div className="chat-window">
-          {/* Chat header */}
+          {/* Header */}
           <div className="chat-header">
             <img
               src={lastAdmin.avatar}
               alt={lastAdmin.sender}
               className="chat-avatar clickable"
               onClick={() => {
-                setProfileData({ avatar: lastAdmin.avatar, name: lastAdmin.sender });
+                setProfileData({
+                  avatar: lastAdmin.avatar,
+                  name: lastAdmin.sender,
+                });
                 setIsProfileOpen(true);
               }}
             />
@@ -128,7 +141,10 @@ const ChatUs = () => {
                     alt={msg.sender}
                     className="chat-avatar clickable"
                     onClick={() => {
-                      setProfileData({ avatar: msg.avatar, name: msg.sender });
+                      setProfileData({
+                        avatar: msg.avatar,
+                        name: msg.sender,
+                      });
                       setIsProfileOpen(true);
                     }}
                   />
@@ -153,14 +169,21 @@ const ChatUs = () => {
             </button>
           </div>
 
-          {/* Admin Profile Modal */}
+          {/* Profile Modal */}
           {isProfileOpen && (
             <div className="profile-modal">
               <div className="profile-content">
-                <button className="modal-close" onClick={() => setIsProfileOpen(false)}>
+                <button
+                  className="modal-close"
+                  onClick={() => setIsProfileOpen(false)}
+                >
                   <FaTimes size={18} />
                 </button>
-                <img src={profileData.avatar} alt={`${profileData.name} Profile`} className="profile-avatar" />
+                <img
+                  src={profileData.avatar}
+                  alt={`${profileData.name} Profile`}
+                  className="profile-avatar"
+                />
               </div>
             </div>
           )}
