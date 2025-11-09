@@ -20,6 +20,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
+        'refund_bank_name',       
+        'refund_account_name',   
+        'refund_account_number',   
     ];
 
     /**
@@ -37,4 +41,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Relationships
+     */
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

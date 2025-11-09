@@ -14,6 +14,7 @@ import {
   FaCreditCard,
   FaEnvelope,
   FaChevronDown,
+  FaClipboardList,
 } from "react-icons/fa";
 import "../../css/pages/AdminDashboard.css";
 import logo from "../../img/logo.png";
@@ -23,13 +24,11 @@ import ManageUsers from "../adminNavigation/ManageUsers";
 import ManageServices from "../adminNavigation/ManageServices";
 import ManageReservations from "../adminNavigation/ManageReservations";
 import Payments from "../adminNavigation/Payments";
+import Inventory from "../adminNavigation/Inventory";
 import ViewProfile from "../adminNavigation/dropdown/ViewProfile";
 import ViewAddAdmin from "../adminNavigation/dropdown/ViewAddAdmin";
 import Message from "../adminNavigation/Message"; // ✅ Added Messages Page
 
-/* ==============================
-   ADMIN DROPDOWN COMPONENT
-============================== */
 function AdminDropdown({ user = {}, onLogout, onProfile, onAddAdmin }) {
   const [open, setOpen] = useState(false);
 
@@ -98,8 +97,8 @@ export default function AdminDashboard({ user = {} }) {
       {/* SIDEBAR */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-top">
-          <div className="logo-frame">
-            <img src={logo} alt="EventSound Logo" className="logo" />
+          <div className="logoo-frame">
+            <img src={logo} alt="EventSound Logo" className="logoo" />
           </div>
           <div className="brand">
             <span className="brand-text">Event Sound Pro</span>
@@ -118,16 +117,16 @@ export default function AdminDashboard({ user = {} }) {
           </NavLink>
 
           <NavLink
-            to="/admindashboard/users"
+            to="/admindashboard/manageusers"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            <FaUsers className="nav-icon" /> <span>Manage Users</span>
+            <FaUsers className="nav-icon" /> <span>Users</span>
           </NavLink>
 
           <NavLink
-            to="/admindashboard/services"
+            to="/admindashboard/manageservices"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -136,7 +135,7 @@ export default function AdminDashboard({ user = {} }) {
           </NavLink>
 
           <NavLink
-            to="/admindashboard/reservations"
+            to="/admindashboard/managereservations"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -151,6 +150,15 @@ export default function AdminDashboard({ user = {} }) {
             }
           >
             <FaCreditCard className="nav-icon" /> <span>Payments</span>
+          </NavLink>
+
+          <NavLink
+            to="/admindashboard/inventory"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            <FaClipboardList className="nav-icon" /> <span>Inventory</span>
           </NavLink>
 
           {/* ✅ Added Messages link */}
@@ -186,10 +194,11 @@ export default function AdminDashboard({ user = {} }) {
           <Routes>
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
-            <Route path="users" element={<ManageUsers />} />
-            <Route path="services" element={<ManageServices />} />
-            <Route path="reservations" element={<ManageReservations />} />
+            <Route path="manageusers" element={<ManageUsers />} />
+            <Route path="manageservices" element={<ManageServices />} />
+            <Route path="managereservations" element={<ManageReservations />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="inventory" element={<Inventory />} />
             <Route path="messages" element={<Message />} /> {/* ✅ Added */}
             <Route path="viewprofile" element={<ViewProfile />} />
             <Route path="viewaddadmin" element={<ViewAddAdmin />} />

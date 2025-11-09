@@ -1,187 +1,299 @@
-/* MAIN SECTION WRAPPER */
+/* 🌟 MAIN SECTION WRAPPER */
 .package-section {
   width: 100%;
   max-width: 1050px;
-  margin:0 auto; /* 15px top margin, center horizontally */
+  margin: 0 auto;
   padding: 0;
-  color: var(--text-main, #333);
-  font-family: "Poppins", sans-serif;
+  background: var(--bg-page);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
 }
 
-/* MAIN TITLE (Explore Our Packages) */
+/* 🌟 PAGE TITLE */
 .package-main-title {
-  font-size: 1.8rem;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
+  color: var(--text-color);
 }
 
-/* TOP HEADER BOX */
-.package-header-box {
-  background: white;
+/* 🌟 CATEGORY BOX */
+.package-category {
+  background: var(--bg-card);
   padding: 25px 30px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px var(--shadow);
   margin-bottom: 35px;
+  border: 1px solid var(--border-color);
+  transition: background 0.3s, border 0.3s, color 0.3s;
 }
 
-/* Subtitle: Service Packages & Pricing */
-.package-sub-title {
-  font-size: 1.35rem;
+.package-sub-title,
+.category-title {
+  font-size: 1.4rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-color);
   margin-bottom: 10px;
 }
 
-/* Description under subtitle */
-.package-description {
-  font-size: 0.95rem;
-  color: #374151;
-}
-
+/* 🌟 PACKAGE GRID */
 .package-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
-  width: 100%;
+  gap: 22px;
+  margin-top: 20px;
 }
 
-/* 🌟 INDIVIDUAL CARD */
+/* 🌟 PACKAGE CARD */
 .package-card {
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  padding: 25px 20px;
-  width: 320px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px var(--shadow);
+  color: var(--text-color);
+  padding: 18px;
+  width: 260px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
 }
 
 .package-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
-/* 🌟 HEADER (Name + Price) */
-.package-header {
-  text-align: center;
+/* 🌟 IMAGE */
+.package-img-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
-.package-header h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 12px;
-}
-
-.price-label {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 4px;
-}
-
-.package-price {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #4f46e5;
-  margin-bottom: 6px;
-}
-
-.package-price hr {
-  border: none;
-  border-top: 1px solid #e5e7eb; /* light gray line */
-  margin: 8px 0;
+.package-img {
   width: 100%;
+  max-width: 220px;
+  height: 160px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.price-caption {
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-top: 2px;
+/* 🌟 PACKAGE NAME */
+.package-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 10px 0 6px;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-.muted {
-  color: #5485d8;
-  font-style: bold;
+.package-name:hover {
+  color: var(--accent-text);
+  text-decoration: underline;
 }
 
-/* 🌟 INCLUSIONS */
-.package-features {
+/* 🌟 PRICE */
+.package-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+/* === MODAL OVERLAY === */
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 99999 !important;
+  backdrop-filter: blur(4px);
+}
+
+/* === MODAL CARD === */
+.modal-card {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 28px 30px 32px;
+  width: 90%;
+  max-width: 480px;
+  color: var(--text-color);
+  box-shadow: 0 8px 25px var(--shadow);
+  animation: zoomIn 0.25s ease;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+/* ✅ CUSTOM LIST STYLE WITH CHECK ICON */
+.service-list {
   list-style: none;
   padding: 0;
-  margin: 16px 0;
-  font-size: 0.95rem;
-  color: #374151;
-  text-align: left;
+  margin: 10px 0 15px;
 }
 
-.package-features li {
-  margin-bottom: 6px;
+.service-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.check-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.service-list li:hover .check-icon {
+  transform: scale(1.1);
+  color: var(--accent-text);
+}
+
+/* === CLOSE BUTTON === */
+.service-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--bg-navbar);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-size: 22px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px var(--shadow);
+  z-index: 10;
 }
 
-.checkmark {
-  color: #22c55e;
-  margin-right: 8px;
-  font-weight: bold;
+.service-close:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
-.package-note {
-  background: #f3f4f6;
-  padding: 12px;
-  font-size: 0.9rem;
-  color: #374151;
-  border-radius: 10px;
-  margin-top: 12px;
-  text-align: center;
-  line-height: 1.4;
-  border: 1px solid #e5e7eb;
+/* === IMAGE OVERLAY === */
+.image-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: rgba(0, 0, 0, 0.75) !important;
+  z-index: 99999 !important;
+  backdrop-filter: blur(4px) !important;
+  overflow: hidden !important;
 }
 
-.package-note .muted {
-  display: block;
-  margin-top: 5px;
-  color: #e11111;
-  font-style: normal;
-  font-size: 0.85rem;
+/* === IMAGE MODAL === */
+.image-modal {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 10px 35px var(--shadow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
+  animation: zoomIn 0.25s ease;
+  border: 1px solid var(--border-color);
 }
 
-/* 🌟 BOOK BUTTON */
-.book-btn {
-  width: 100%;
-  background: #4f46e5;
-  color: white;
-  font-weight: 600;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
+/* === IMAGE PREVIEW === */
+.image-preview {
+  max-width: 88vw;
+  max-height: 82vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* === CLOSE BUTTON FOR IMAGE MODAL === */
+.image-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--bg-navbar);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-size: 24px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  transition: 0.25s;
-  margin-top: 18px;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px var(--shadow);
 }
 
-.book-btn:hover {
-  background: #4338ca;
-  transform: scale(1.03);
+.image-close:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
-/* 🌟 RESPONSIVE */
-@media (max-width: 768px) {
-  .package-container {
-    flex-direction: column;
-    align-items: center;
+/* === TEXT & STRUCTURE === */
+.modal-card h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 18px;
+  color: var(--text-color);
+}
+
+.modal-card p,
+.modal-card li {
+  color: var(--text-color);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .modal-card {
+    padding: 22px;
+    width: 92%;
   }
 
-  .package-card {
-    width: 90%;
+  .service-close {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
   }
+}
 
-  .package-main-title {
-    font-size: 1.6rem;
-  }
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

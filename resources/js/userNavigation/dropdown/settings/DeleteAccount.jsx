@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../../../../css/usernav/dropdown/settings/DeleteAccount.css";
 
 const DeleteAccount = () => {
@@ -9,8 +10,37 @@ const DeleteAccount = () => {
 
   const handleDeleteClick = () => setStep("confirm");
   const handleCancelDelete = () => setStep("warning");
-  const handleConfirmDelete = () => setStep("success");
-  const handleSuccessOk = () => navigate("/welcome");
+  const handleConfirmDelete = async () => {
+    if (!password.trim()) return;
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.delete("http://127.0.0.1:8000/api/user", {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { password }, // axios DELETE accepts data via config.data
+      });
+
+      // Clear client-side auth and navigate to welcome/root
+      localStorage.removeItem("token");
+      try {
+        // allow App to react if it listens for auth:login with null
+        window.dispatchEvent(new CustomEvent('auth:login', { detail: null }));
+      } catch (e) {
+        const ev = document.createEvent('Event');
+        ev.initEvent('auth:login', true, true);
+        ev.detail = null;
+        window.dispatchEvent(ev);
+      }
+
+      setStep("success");
+    } catch (err) {
+      console.error("Account deletion failed:", err);
+      const msg = err?.response?.data?.error || err?.response?.data?.message || "Failed to delete account.";
+      alert(msg);
+      setStep("warning");
+    }
+  };
+
+  const handleSuccessOk = () => navigate("/");
 
   return (
     <div className="delete-container">

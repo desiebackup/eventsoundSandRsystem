@@ -16,6 +16,16 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
+
+            // Role and avatar
+            $table->string('role')->default('user');
+            $table->string('avatar')->nullable(); // stored path in storage/app/public
+
+            // Refund details (for manual transfers)
+            $table->string('refund_bank_name')->nullable();       // e.g. BPI, GCash
+            $table->string('refund_account_name')->nullable();    // account holder name
+            $table->string('refund_account_number')->nullable();  // last digits only if needed
+
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

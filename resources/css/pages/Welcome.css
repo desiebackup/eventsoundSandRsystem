@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ===============================
    Welcome.css — Full stylesheet
 =============================== */
@@ -5,6 +6,8 @@
 /* ===============================
    GLOBAL STYLES
 =============================== */
+=======
+>>>>>>> des
 * {
   margin: 0;
   padding: 0;
@@ -70,7 +73,11 @@ html, body {
 }
 
 .nav-logo {
+<<<<<<< HEAD
   width: 180px;
+=======
+  width: 170px;
+>>>>>>> des
   height: auto;
   object-fit: contain;
   display: block;

@@ -16,16 +16,22 @@ import ChatUs from "../userNavigation/dropdown/ChatUs";
 import "../../css/design/Theme.css";
 import "../../css/pages/Userdashboard.css";
 
-export default function Userdashboard() {
-  const [user, setUser] = useState({ firstname: "", lastname: "" });
+export default function Userdashboard({ user: propUser }) {
+  const [user, setUser] = useState(propUser || { firstname: "", lastname: "" });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedDropdownItem, setSelectedDropdownItem] = useState(null);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
   useEffect(() => {
+    // If the parent App passed a user prop, use it. Otherwise fall back to fetching.
     const fetchUser = async () => {
       try {
+        if (propUser) {
+          setUser(propUser);
+          return;
+        }
+
         const token = localStorage.getItem("token");
         if (!token) {
           navigate("/signin");
@@ -43,8 +49,13 @@ export default function Userdashboard() {
       }
     };
 
-  fetchUser();
+    fetchUser();
   }, [navigate]);
+
+  // Keep local user state in sync when the parent propUser changes (e.g. after profile update)
+  useEffect(() => {
+    if (propUser) setUser(propUser);
+  }, [propUser]);
 
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
@@ -83,20 +94,19 @@ export default function Userdashboard() {
         <div className="logo-frame">
         <img src={logo} alt="EventSound Logo" className="logo" />
      </div>
-       <span className="logo-text">Event Sound Pro</span>
      </div>
 
         <nav className="navbar-links">
           <NavLink to="/userdashboard/home" className="nav-item">
             Home
           </NavLink>
-          <NavLink to="/userdashboard/reservations" className="nav-item">
+          <NavLink to="/userdashboard/reservation" className="nav-item">
             Reservation
           </NavLink>
           <NavLink to="/userdashboard/servicepackage" className="nav-item">
             Service Package
           </NavLink>
-          <NavLink to="/userdashboard/payments" className="nav-item">
+          <NavLink to="/userdashboard/payment" className="nav-item">
             Payment
           </NavLink>
         </nav>
@@ -104,7 +114,12 @@ export default function Userdashboard() {
         {/* --- USER DROPDOWN --- */}
         <div className="navbar-right" ref={dropdownRef}>
           <div className={`user-info ${isDropdownOpen ? 'active' : ''}`} onClick={toggleDropdown}>
-            <img src={avatar} alt="User" className="user-avatar" />
+            {/* Show uploaded avatar when available, otherwise show default import */}
+            <img
+              src={user?.avatar ? `http://127.0.0.1:8000/storage/${user.avatar}` : avatar}
+              alt="User"
+              className="user-avatar"
+            />
             <span className="user-name">
               {user.firstname} {user.lastname}
             </span>
@@ -138,9 +153,9 @@ export default function Userdashboard() {
       <main className="dashboard-content">
         <Routes>
           <Route path="home" element={<Home />} />
-          <Route path="reservations" element={<Reservation />} />
+          <Route path="reservation" element={<Reservation />} />
           <Route path="servicepackage" element={<ServicePackage />} />
-          <Route path="payments" element={<Payments />} />
+          <Route path="payment" element={<Payments />} />
           <Route path="settings/*" element={<Settings />} />
 
           <Route path="terms" element={<Terms />} />
