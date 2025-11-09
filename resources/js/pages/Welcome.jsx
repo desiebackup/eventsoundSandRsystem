@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SignUp from "../sign/SignUp";
 import SignIn from "../sign/SignIn";
 import "../../css/pages/Welcome.css";
-import logo from "../../img/eventsoundpro-logo.png";
+import logo from "../../img/logo.png";
 import aboutImage from "../../img/about.jpg";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 

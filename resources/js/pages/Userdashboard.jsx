@@ -94,7 +94,6 @@ export default function Userdashboard({ user: propUser }) {
         <div className="logo-frame">
         <img src={logo} alt="EventSound Logo" className="logo" />
      </div>
-       <span className="logo-text">Event Sound Pro</span>
      </div>
 
         <nav className="navbar-links">

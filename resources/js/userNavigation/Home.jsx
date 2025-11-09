@@ -150,7 +150,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Welcome Back, {userName || "User"} 👋</h1>
+      <h1 className="home-title">Welcome Back, {userName || "User"}!</h1>
 
       <div className="home-banner">
         <div>
