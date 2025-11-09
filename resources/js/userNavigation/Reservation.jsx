@@ -180,8 +180,8 @@ const Reservation = () => {
             )}
           </div>
         ))}
+        
       </div>
-      <hr />
 
       {/* === STEP 1: DETAILS === */}
       {step === 1 && (

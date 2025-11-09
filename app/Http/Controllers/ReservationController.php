@@ -15,12 +15,13 @@ class ReservationController extends Controller
 
         if ($user && $user->role === 'admin') {
             return response()->json(
-                Reservation::with(['user', 'approver', 'service'])->orderByDesc('created_at')->get()
+                Reservation::with(['user', 'approver', 'service', 'payment'])->orderByDesc('created_at')->get()
             );
         }
 
+        // Include service relation for regular users as well so front-end can access service.down_payment
         return response()->json(
-            Reservation::with('user')->where('user_id', $user?->id)->orderByDesc('created_at')->get()
+            Reservation::with(['user', 'service'])->where('user_id', $user?->id)->orderByDesc('created_at')->get()
         );
     }
 

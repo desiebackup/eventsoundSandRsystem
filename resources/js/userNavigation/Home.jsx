@@ -202,10 +202,13 @@ const Home = () => {
     if (!window.confirm(`Cancel reservation for ${eventName}?`)) return;
 
     try {
-      await axios.put(`/api/reservations/${id}/cancel`);
+      // Use DELETE endpoint; server cancels for non-admin users
+      await axios.delete(`/api/reservations/${id}`);
       setReservations((prev) =>
         prev.map((r) => (r.id === id ? { ...r, status: "cancelled" } : r))
       );
+      // If a modal is open that contains this reservation, remove it so cancelled items disappear immediately
+      setModalData((prev) => prev.filter((d) => d.id !== id));
 
       setRecentActivity((prev) => [
         {
@@ -216,7 +219,13 @@ const Home = () => {
         ...prev,
       ]);
 
-      alert("Reservation cancelled successfully.");
+      // If there is a payment related to this reservation, inform the user refund will be processed
+      const relatedPayment = payments.find((p) => p.reservation_id === id || p.reservation?.id === id);
+      if (relatedPayment) {
+        alert("Reservation cancelled successfully. Please wait a moment while the admin processes your refund.");
+      } else {
+        alert("Reservation cancelled successfully.");
+      }
     } catch (err) {
       console.error("Cancel reservation failed:", err);
       alert("Failed to cancel reservation. Try again.");
@@ -295,7 +304,7 @@ const Home = () => {
       {/* Stats */}
       <div className="stats-grid">
         <div
-          className="stat-card clickable"
+          className="stat-card"
           onClick={() =>
             openModal("Upcoming Events (Needs Payment)", "upcoming")
           }
@@ -306,7 +315,7 @@ const Home = () => {
         </div>
 
         <div
-          className="stat-card clickable"
+          className="stat-card"
           onClick={() =>
             openModal("Active Services (Pending Approval)", "pending")
           }
@@ -317,7 +326,7 @@ const Home = () => {
         </div>
 
         <div
-          className="stat-card clickable"
+          className="stat-card"
           onClick={() => openModal("Payment Summary", "payments")}
         >
           <h3>Total Payment</h3>
@@ -377,7 +386,7 @@ const Home = () => {
           >
             <div className="modal-header">
               <h3>{modalTitle}</h3>
-              <button className="close-btn" onClick={closeModal}>
+              <button className="close-button" onClick={closeModal}>
                 ✖
               </button>
             </div>
@@ -395,16 +404,45 @@ const Home = () => {
                   const status = String(
                     payment.status || item.status || ""
                   ).toLowerCase();
-                  const down = Number(payment.down_payment ?? 0);
-                  const total = Number(payment.total_price ?? 0);
-                  const balance = Number(payment.balance ?? 0);
+                  const down = Number(payment?.down_payment ?? 0);
+                  const total = Number(payment?.total_price ?? 0);
+                  const balance = Number(payment?.balance ?? 0);
 
                   let amount = 0;
                   let label = "";
 
+                  const computeDownForItem = (it, pay) => {
+                    // priority: explicit payment.down_payment -> reservation.total_downpayment -> service.down_payment -> fallback 50% of total price
+                    const pd = Number(pay?.down_payment ?? 0);
+                    if (pd > 0) return pd;
+
+                    const resDown = Number(it.total_downpayment ?? 0);
+                    if (resDown > 0) return resDown;
+
+                    const svcDown = Number(it.service?.down_payment ?? 0);
+                    if (svcDown > 0) return svcDown;
+
+                    // compute from custom services if present
+                    try {
+                      const customs = Array.isArray(it.custom_services)
+                        ? it.custom_services
+                        : typeof it.custom_services === 'string'
+                        ? JSON.parse(it.custom_services)
+                        : [];
+                      const customDown = customs.reduce((acc, c) => acc + (Number(c.down_payment ?? 0) * (Number(c.quantity ?? 1))), 0);
+                      if (customDown > 0) return customDown;
+                    } catch (e) {
+                      // ignore parse errors
+                    }
+
+                    // last resort: 50% of computed total price
+                    const t = Number(pay?.total_price ?? it.total_price ?? 0);
+                    return t > 0 ? t * 0.5 : 0;
+                  };
+
                   // ✅ Active Services: Always show downpayment only
                   if (modalTitle.includes("Active Services")) {
-                    amount = down > 0 ? down : total * 0.5;
+                    amount = computeDownForItem(item, payment);
                     label = "Downpayment";
                   } else if (modalTitle.includes("Upcoming")) {
                     amount =
@@ -453,8 +491,7 @@ const Home = () => {
                       </div>
 
                       {modalTitle.includes("Active Services") &&
-                        String(item.status || "").toLowerCase() !==
-                          "cancelled" && (
+                        String(item.status || "").toLowerCase() !== "cancelled" && (
                           <button
                             className="cancel-btn"
                             onClick={() =>
@@ -463,7 +500,7 @@ const Home = () => {
                           >
                             Cancel Reservation
                           </button>
-                        )}
+                      )}
                     </div>
                   );
                 })

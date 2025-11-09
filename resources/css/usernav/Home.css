@@ -1,24 +1,19 @@
-/* ================================
-   GLOBAL HOME DASHBOARD STYLES
-================================ */
-* {
-  font-family: "Inter", "Poppins", "Roboto", sans-serif;
-  box-sizing: border-box;
-}
-
 .home-container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
+  background: var(--bg-page);
   color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
 }
 
 /* --- TITLE --- */
 .home-title {
-  font-size: 2rem;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
+  color: var(--text-color);
 }
 
 /* --- BANNER --- */
@@ -82,14 +77,6 @@
   transition: all 0.3s ease;
   color: #111; /* Default black text */
   cursor: pointer;
-}
-
-.stat-card h3 {
-  font-size: 1rem;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #111;
-  transition: 0.3s ease;
 }
 
 .stat-value {
@@ -255,11 +242,11 @@
 }
 
 /* Close button - circle */
-.close-btn {
+.close-button {
   position: absolute !important;
   top: 12px !important;
   right: 15px !important;
-  background: var(--accent-text) !important;
+  background: var(--bg-card) !important;
   border: 2px solid var(--border-color) !important;
   border-radius: 50% !important;
   width: 32px !important;
@@ -287,19 +274,14 @@
 
 /* Base modal item look (for all modals) */
 .modal-item {
-  background: #0f1115; /* darker inner cards for contrast */
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card); /* darker inner cards for contrast */
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   padding: 14px 16px;
   transition: 0.25s ease;
   box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.05);
 }
 
-.modal-item:hover {
-  background: #1b1d22;
-  transform: translateY(-2px);
-  box-shadow: 0 0 10px rgba(113, 109, 191, 0.25);
-}
 
 /* Inner text layout */
 .modal-item-header {
@@ -311,14 +293,14 @@
 }
 
 .modal-item-header strong {
-  color: #fff;
+  color:  var(--text-color);
 }
 
 .modal-item-info {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: #d1d5db;
+  color:  var(--accent-text);
   opacity: 0.9;
 }
 
@@ -331,19 +313,6 @@
 .modal-label {
   font-weight: 600;
   color: #fbbf24; /* warm amber for “Downpayment” or “Balance” */
-}
-
-/* --- BORDERS BY MODAL TYPE --- */
-.modal-content.upcoming .modal-item {
-  border-left: 5px solid #22c55e; /* green border for Upcoming */
-}
-
-.modal-content.pending .modal-item {
-  border-left: 5px solid  #d09ef4; /* yellow border for Active Services */
-}
-
-.modal-content.payments .modal-item {
-  border-left: 5px solid #38d5f8; /* green border for Payment Summary */
 }
 
 /* --- CANCEL BUTTON --- */
@@ -360,25 +329,3 @@
   font-weight: 500;
 }
 
-.cancel-btn:hover {
-  background: #64748b;
-  transform: translateY(-1px);
-}
-
-/* --- Dark mode override (ensure consistent contrast) --- */
-[data-theme="dark"] .modal-item {
-  background: #13161b;
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-[data-theme="dark"] .modal-item:hover {
-  background: #1e2127;
-}
-
-[data-theme="dark"] .modal-amount {
-  color: #4ade80;
-}
-
-[data-theme="dark"] .modal-label {
-  color: #fbbf24;
-}

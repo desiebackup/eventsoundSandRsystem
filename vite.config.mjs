@@ -22,5 +22,27 @@ export default defineConfig({
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true,
         },
+        // Proxy API calls to the Laravel backend during development so
+        // requests to /api/* are forwarded to http://127.0.0.1:8000
+        proxy: {
+            // Laravel API
+            '/api': {
+                target: 'http://127.0.0.1:8000',
+                changeOrigin: true,
+                secure: false,
+            },
+            // Sanctum CSRF endpoint
+            '/sanctum': {
+                target: 'http://127.0.0.1:8000',
+                changeOrigin: true,
+                secure: false,
+            },
+            // Storage or other backend-served paths
+            '/storage': {
+                target: 'http://127.0.0.1:8000',
+                changeOrigin: true,
+                secure: false,
+            },
+        },
     },
 });

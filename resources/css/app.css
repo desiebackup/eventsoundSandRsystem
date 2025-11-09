@@ -1,0 +1,8 @@
+@import "./usernav/Payment.css";
+
+/* Basic reset (optional) */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(135deg, #3f87a6, #ebf8e1, #f69d3c);
+}

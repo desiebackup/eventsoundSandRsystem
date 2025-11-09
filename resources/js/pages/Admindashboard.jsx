@@ -100,10 +100,6 @@ export default function AdminDashboard({ user = {} }) {
           <div className="logoo-frame">
             <img src={logo} alt="EventSound Logo" className="logoo" />
           </div>
-          <div className="brand">
-            <span className="brand-text">Event Sound Pro</span>
-            <hr />
-          </div>
         </div>
 
         <nav className="sidebar-nav">

@@ -92,11 +92,11 @@
 ================================ */
 .chat-messages {
   flex: 1 !important;
-  padding: 10px 6px 10px 6px !important; /* balanced spacing */
+  padding: 12px 10px !important; /* balanced spacing */
   overflow-y: auto !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 8px !important;
+  gap: 4px !important;
   background: var(--bg-page) !important;
 }
 
@@ -126,6 +126,7 @@
   margin: 0 !important;
   padding: 0 !important;
   gap: 4px !important;
+  width: 100%;
   word-break: break-word !important;
   flex-wrap: nowrap !important;
 }
