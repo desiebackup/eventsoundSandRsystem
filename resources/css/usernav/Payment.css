@@ -66,10 +66,10 @@
 }
 
 .section-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: var(--text-color);
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 10px !important;
+  color: var(--text-color) !important;
 }
 
 .refund-row {
@@ -341,34 +341,53 @@
 }
 
 /* Ensure header and button are visible above the table */
-.payment-history-header {
-  position: relative;
-  z-index: 10;
-  background: var(--bg-page);
-  padding: 10px 0;
-  border-radius: 8px;
-}
+
 
 .invoice-table {
   position: relative;
   z-index: 1;
 }
 
+/* Fix alignment between Payment History title and Show More button */
+.payment-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 12px;
+  width: 100%;
+  gap: 10px;
+}
+
+.payment-history-header .section-title {
+  margin: 0;
+  line-height: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Ensure the button doesn’t float or misalign vertically */
 .show-more-btn {
-  display: inline-block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 38px !important;
+  line-height: 1 !important;
   background: #7c3aed !important;
   color: #fff !important;
   border: none !important;
   border-radius: 8px !important;
-  padding: 8px 16px !important;
+  padding: 0 18px !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
   cursor: pointer !important;
   transition: all 0.25s ease !important;
   box-shadow: 0 3px 6px rgba(124, 58, 237, 0.35) !important;
-  z-index: 15 !important;
 }
 
 .show-more-btn:hover {

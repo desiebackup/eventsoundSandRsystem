@@ -167,14 +167,20 @@ export default function Payment() {
   // combine and set
   const combined = [...paymentsData, ...syntheticFromCancelled];
   setPayments(combined);
-  console.log("Payments count:", combined.length, combined);
+  console.debug("Payments count:", combined.length, combined);
 
 
-        // refund details
-        if (refundRes && refundRes.data) {
-          const rd = refundRes.data;
-          // if wrapped in data
-          setRefundDetails(rd?.data ?? rd ?? {});
+        // refund details - normalize into a safe shape so inputs never receive null
+        if (typeof refundRes !== "undefined") {
+          const rd = refundRes?.data ?? {};
+          const source = rd?.data ?? rd ?? {};
+          const normalized = {
+            refund_bank_name: "",
+            refund_account_number: "",
+            refund_account_name: "",
+            ...source,
+          };
+          setRefundDetails(normalized);
         }
       } catch (err) {
         console.error("Payments fetch error:", err);
@@ -331,10 +337,10 @@ const displayedPayments = React.useMemo(() => {
 
                 // Friendly row ID like the screenshot
                 const displayId = p.reservation?.id
-                  ? `Reservation #${p.reservation.id}`
+                  ? `${p.reservation.id}`
                   : p.synthetic && p.reservation?.id
-                  ? `Reservation #${p.reservation.id}`
-                  : `Payment #${p.id}`;
+                  ? `${p.reservation.id}`
+                  : `${p.id}`;
 
                 // Map statuses to nicer labels and classes
                 let statusClass = statusNorm;
@@ -415,7 +421,7 @@ const displayedPayments = React.useMemo(() => {
             <input
               type="text"
               placeholder="Bank Name"
-              value={refundDetails.refund_bank_name}
+              value={refundDetails.refund_bank_name ?? ""}
               onChange={(e) =>
                 setRefundDetails({ ...refundDetails, refund_bank_name: e.target.value })
               }
@@ -423,7 +429,7 @@ const displayedPayments = React.useMemo(() => {
             <input
               type="text"
               placeholder="Account Number"
-              value={refundDetails.refund_account_number}
+              value={refundDetails.refund_account_number ?? ""}
               onChange={(e) =>
                 setRefundDetails({ ...refundDetails, refund_account_number: e.target.value })
               }
@@ -431,7 +437,7 @@ const displayedPayments = React.useMemo(() => {
             <input
               type="text"
               placeholder="Account Name"
-              value={refundDetails.refund_account_name}
+              value={refundDetails.refund_account_name ?? ""}
               onChange={(e) =>
                 setRefundDetails({ ...refundDetails, refund_account_name: e.target.value })
               }

@@ -1,103 +1,320 @@
+/* ===============================
+   Admin Home Dashboard
+=============================== */
 .admin-home {
   background: #fff;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  font-family: "Poppins", sans-serif;
+  color: #1e1e1e;
 }
 
 .admin-home h2 {
-  margin-bottom: 1.5rem;
-  color: #333;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1.8rem;
+  color: #1f2937;
 }
 
+/* ===============================
+   Summary Cards Grid
+=============================== */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .stat-card {
-  background: #f5f5f5;
+  background: #f9f8ff;
   border-radius: 12px;
-  padding: 1.2rem;
+  padding: 1.5rem;
   text-align: center;
-  transition: transform 0.3s, background 0.3s;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+  border: 1px solid #ede9fe;
+  cursor: default;
 }
 
-.stat-card:hover {
-  transform: translateY(-5px);
-  background: #6c63ff;
-  color: #fff;
+/* ✅ Make Cards Clickable */
+.stat-card.clickable {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card.clickable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  transition: background 0.25s ease;
+}
+
+.stat-card.clickable:hover::after {
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.stat-card h3 {
+  font-size: 1rem;
+  color: #4b4f58;
+  margin-bottom: 6px;
+  font-weight: 500;
 }
 
 .stat-number {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  margin-top: 8px;
+  color: #6d28d9;
+  transition: color 0.25s ease;
 }
 
-.recent-section ul {
-  margin-top: 1rem;
-  padding-left: 1rem;
+/* Accent variants */
+.stat-card.income .stat-number {
+  color: #f01308;
+}
+.stat-card.pending .stat-number {
+  color: #d97706;
+}
+.stat-card.reservations .stat-number {
+  color: #10b981;
 }
 
-.recent-section li {
-  margin-bottom: 0.6rem;
-  color: #555;
+/* ✅ Hover - Add Visual Depth */
+.stat-card:hover {
+  transform: translateY(-5px);
+  background: #7c3aed;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
 }
 
-.dp-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+.stat-card:hover h3,
+.stat-card:hover .stat-number {
+  color: #fff;
 }
 
-.dp-modal {
+/* ===============================
+   Recent Activities Section
+=============================== */
+.recent-section {
   background: #fff;
-  max-width: 90%;
-  max-height: 90%;
-  padding: 16px;
-  border-radius: 8px;
-  overflow: auto;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.dp-modal-header {
+.recent-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
 }
 
-.dp-close-btn {
-  background: #e74c3c;
+.recent-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.recent-container {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.recent-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-section li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #374151;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.recent-section li:last-child {
+  border-bottom: none;
+}
+
+.activity-message {
+  flex: 1;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+/* ===============================
+   Show More / Show Less Button
+=============================== */
+.show-more-btn {
+  background: #7c3aed;
   color: #fff;
   border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.dp-modal-body {
-  margin-top: 12px;
-  text-align: center;
-}
-
-.dp-modal-img {
-  max-width: 100%;
-  max-height: 70vh;
-  border-radius: 4px;
-}
-
-.dp-filename {
-  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
   font-size: 0.9rem;
-  color: #333;
-  word-break: break-all;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.show-more-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   Modal Styles (for Details)
+=============================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(3px);
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.modal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.modal-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.modal-item strong {
+  color: #111827;
+}
+
+.modal-item .detail {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+
+.no-data {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  padding: 10px 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: none;
+  font-size: 1.2rem;
+  color: #374151;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #dc2626;
+}
+
+/* ===============================
+   Payment Status Styles
+=============================== */
+.detail.paid {
+  color: #16a34a; /* Green for fully paid */
+  font-weight: 600;
+}
+
+.detail.down {
+  color: #d97706; /* Amber for down payment */
+  font-weight: 600;
+}
+
+/* ===============================
+   Animations
+=============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===============================
+   Responsive Adjustments
+=============================== */
+@media (max-width: 768px) {
+  .admin-home {
+    padding: 1.5rem;
+  }
+
+  .stat-card {
+    padding: 1.2rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .recent-section {
+    padding: 1.2rem;
+  }
+
+  .recent-header h3 {
+    font-size: 1rem;
+  }
+
+  .show-more-btn {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+
+  .modal-card {
+    width: 90%;
+  }
 }

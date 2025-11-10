@@ -1,0 +1,96 @@
+array(2) {
+  ["reservation"]=>
+  array(5) {
+    ["id"]=>
+    int(14)
+    ["call_date"]=>
+    object(Illuminate\Support\Carbon)#484 (20) {
+      ["endOfTime":protected]=>
+      bool(false)
+      ["startOfTime":protected]=>
+      bool(false)
+      ["constructedObjectId":protected]=>
+      string(32) "00000000000001e40000000000000000"
+      ["clock":"Carbon\Carbon":private]=>
+      NULL
+      ["localMonthsOverflow":protected]=>
+      NULL
+      ["localYearsOverflow":protected]=>
+      NULL
+      ["localStrictModeEnabled":protected]=>
+      NULL
+      ["localHumanDiffOptions":protected]=>
+      NULL
+      ["localToStringFormat":protected]=>
+      NULL
+      ["localSerializer":protected]=>
+      NULL
+      ["localMacros":protected]=>
+      NULL
+      ["localGenericMacros":protected]=>
+      NULL
+      ["localFormatFunction":protected]=>
+      NULL
+      ["localTranslator":protected]=>
+      NULL
+      ["dumpProperties":protected]=>
+      array(3) {
+        [0]=>
+        string(4) "date"
+        [1]=>
+        string(13) "timezone_type"
+        [2]=>
+        string(8) "timezone"
+      }
+      ["dumpLocale":protected]=>
+      NULL
+      ["dumpDateProperties":protected]=>
+      NULL
+      ["date"]=>
+      string(26) "2025-11-10 00:00:00.000000"
+      ["timezone_type"]=>
+      int(3)
+      ["timezone"]=>
+      string(3) "UTC"
+    }
+    ["start_time"]=>
+    string(8) "23:00:00"
+    ["end_time"]=>
+    string(8) "00:00:00"
+    ["status"]=>
+    string(8) "approved"
+  }
+  ["service"]=>
+  array(4) {
+    ["id"]=>
+    int(1)
+    ["status"]=>
+    string(9) "available"
+    ["next_use_start"]=>
+    NULL
+    ["next_use_end"]=>
+    NULL
+  }
+}
+
+  [41;1m Carbon\Exceptions\InvalidFormatException [49;22m
+
+[39;1m  Could not parse '2025-11-10 00:00:00 23:00:00': Failed to parse time string (2025-11-10 00:00:00 23:00:00) at position 20 (2): Double time specification[39;22m
+
+  at [32mvendor\nesbot\carbon\src\Carbon\Traits\Creator.php[39m:[32m194[39m
+    190▕             }
+    191▕             // @codeCoverageIgnoreEnd
+    192▕ 
+    193▕             return $date
+  ➜ 194▕                 ?? throw new InvalidFormatException("Could not parse '$time': ".$exception->getMessage(), 0, $exception);
+    195▕         }
+    196▕     }
+    197▕ 
+    198▕     /**
+
+  [33m1   [39m[39;1mvendor\nesbot\carbon\src\Carbon\Traits\Creator.php[39;22m:[39;1m102[39;22m
+  [90m    Carbon\Exceptions\InvalidFormatException::("Failed to parse time string (2025-11-10 00:00:00 23:00:00) at position 20 (2): Double time specification")[39m
+
+  [33m2   [39m[39;1mvendor\nesbot\carbon\src\Carbon\Traits\Creator.php[39;22m:[39;1m100[39;22m
+  [90m    Exception::("Failed to parse time string (2025-11-10 00:00:00 23:00:00) at position 20 (2): Double time specification")[39m
+

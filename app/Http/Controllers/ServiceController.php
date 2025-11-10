@@ -86,6 +86,20 @@ class ServiceController extends Controller
         $service = Service::findOrFail($id);
 
         try {
+            // If the request is only attempting to update status or next use windows,
+            // allow a lightweight partial update so admins can toggle maintenance/available/in_use
+            if ($request->has('status') || $request->has('next_use_start') || $request->has('next_use_end')) {
+                $up = [];
+                if ($request->has('status')) $up['status'] = $request->input('status');
+                if ($request->has('next_use_start')) $up['next_use_start'] = $request->input('next_use_start');
+                if ($request->has('next_use_end')) $up['next_use_end'] = $request->input('next_use_end');
+
+                $service->update($up);
+                $service->image_url = $service->image ? asset('storage/' . $service->image) : null;
+                return response()->json($service);
+            }
+
+            // Otherwise fall back to full update (service editing)
             $request->merge([
                 'down_payment' => $request->input('downPayment', $request->input('down_payment', $service->down_payment ?? 0)),
                 'balance' => $request->input('balance', $request->input('balance', $service->balance ?? 0)),

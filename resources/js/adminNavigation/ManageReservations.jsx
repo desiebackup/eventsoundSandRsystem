@@ -32,6 +32,15 @@ const handleApprove = async (id) => {
     const res = await axios.post(`/api/admin/reservations/${id}/approve`);
     const updated = res.data.reservation || res.data;
     setReservations((r) => r.map((rs) => (rs.id === id ? updated : rs)));
+    // If API returned updated services (primary + custom), broadcast to update Inventory UI immediately
+    const updatedServices = res.data.updated_services ?? null;
+    if (Array.isArray(updatedServices) && updatedServices.length) {
+      try {
+        window.dispatchEvent(new CustomEvent('servicesUpdated', { detail: updatedServices }));
+      } catch (e) {
+        console.warn('Could not dispatch servicesUpdated event', e);
+      }
+    }
     alert("Reservation approved successfully!");
   } catch (e) {
     console.error(e);

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { FaPaperPlane, FaComments, FaTimes } from "react-icons/fa";
-import defaultAvatar from "../../../img/avatar.png";
+import userAvatar from "../../../img/avatar.png"; // user avatar
+import adminAvatar from "../../../img/admin-avatar.png"; // admin avatar
 import "../../../css/usernav/dropdown/ChatUs.css";
 
 const ChatUs = () => {
@@ -10,7 +11,7 @@ const ChatUs = () => {
   const [input, setInput] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [profileData, setProfileData] = useState({
-    avatar: defaultAvatar,
+    avatar: adminAvatar,
     name: "Admin",
   });
   const messagesEndRef = useRef(null);
@@ -20,24 +21,21 @@ const ChatUs = () => {
     if (isOpen) messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isOpen]);
 
-  // Send user message (optimistic add, backend persist)
+  // Send user message (optimistic add)
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const textToSend = input.trim();
 
-    // Optimistically add user's message so it appears immediately
+    // Add immediately to UI
     const userMessage = { text: textToSend, sender: "You", type: "user" };
     setMessages((prev) => [...prev, userMessage]);
-
     setInput("");
 
     try {
       await axios.post("/api/messages", { text: textToSend });
-      // We rely on polling to fetch the authoritative list (including saved message)
     } catch (e) {
       console.error("Failed to send message", e);
-      // Optionally you could show an error or mark the message as failed
     }
   };
 
@@ -45,18 +43,7 @@ const ChatUs = () => {
     if (e.key === "Enter") handleSend();
   };
 
-  // Optional function to programmatically append an admin reply (if you call it)
-  const addAdminReply = (adminData) => {
-    const adminMessage = {
-      text: adminData.text,
-      sender: `${adminData.firstName} ${adminData.lastName}`,
-      avatar: adminData.avatarUrl || defaultAvatar,
-      type: "admin",
-    };
-    setMessages((prev) => [...prev, adminMessage]);
-  };
-
-  // Poll server for messages when chat is open
+  // Fetch messages every 5 seconds when open
   useEffect(() => {
     let timer = null;
 
@@ -68,15 +55,12 @@ const ChatUs = () => {
         const mapped = serverMsgs.map((m) => ({
           text: m.text,
           sender: m.sender === "admin" ? m.sender_name || "Admin" : "You",
-          avatar: m.sender === "admin" ? defaultAvatar : null,
+          avatar: m.sender === "admin" ? adminAvatar : null,
           type: m.sender,
         }));
 
-        // Replace local messages with server authoritative messages.
-        // This keeps server order and avoids duplication.
         setMessages(mapped);
       } catch (err) {
-        // silently ignore fetch errors (optionally log)
         console.error("Failed to fetch messages:", err);
       }
     };
@@ -89,16 +73,16 @@ const ChatUs = () => {
     return () => clearInterval(timer);
   }, [isOpen]);
 
-  // Last admin for header display
+  // Determine last admin message for header display
   const lastAdmin =
     messages.filter((msg) => msg.type === "admin").slice(-1)[0] || {
       sender: "Admin",
-      avatar: defaultAvatar,
+      avatar: adminAvatar,
     };
 
   return (
     <div className="chat-container">
-      {/* Toggle button */}
+      {/* Floating Chat Button */}
       {!isOpen && (
         <button
           className="chat-toggle-btn"
@@ -155,7 +139,7 @@ const ChatUs = () => {
             <div ref={messagesEndRef}></div>
           </div>
 
-          {/* Input */}
+          {/* Input Area */}
           <div className="chat-input">
             <input
               type="text"
@@ -184,6 +168,7 @@ const ChatUs = () => {
                   alt={`${profileData.name} Profile`}
                   className="profile-avatar"
                 />
+                <h4>{profileData.name}</h4>
               </div>
             </div>
           )}

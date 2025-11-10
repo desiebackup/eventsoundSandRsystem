@@ -19,5 +19,9 @@ class Service extends Model
         'balance',
         'type',
         'image',
+    // inventory fields
+    'status',
+    'next_use_start',
+        'next_use_end',
     ];
 }
