@@ -4,7 +4,7 @@ import SignUp from "../sign/SignUp";
 import SignIn from "../sign/SignIn";
 import "../../css/pages/Welcome.css";
 
-import logo from "../../img/eventsoundpro-logo.png";
+import logo from "../../img/logo.png";
 import about1 from "../../img/about1.jpg";
 import about2 from "../../img/about2.jpg";
 import about3 from "../../img/about3.jpg";
@@ -160,22 +160,9 @@ export default function Welcome() {
                 to every project. Your sound is our passion.
               </p>
 
-              <ul className="about-features">
-                <li>🎵 Premium Sound Quality</li>
-                <li>💡 Creative Lighting Effects</li>
-                <li>👨‍🔧 Expert Audio Engineers</li>
-                <li>🎤 Custom Packages for Every Event</li>
-              </ul>
-
               <blockquote className="about-quote">
                 “Your event, our passion — bringing your sound to life.”
               </blockquote>
-
-              <div className="about-stats reveal-bottom">
-                <div><h3>15+</h3><p>Years Experience</p></div>
-                <div><h3>1000+</h3><p>Events Powered</p></div>
-                <div><h3>500+</h3><p>Happy Clients</p></div>
-              </div>
               
               <button className="about-btn" onClick={handleGetStarted}>
                 Start Your Project

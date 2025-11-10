@@ -17,7 +17,7 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 import "../../css/pages/AdminDashboard.css";
-import logo from "../../img/eventsoundpro-logo.png";
+import logo from "../../img/logo.png";
 import avatarDefault from "../../img/avatar.png"; // ✅ Default avatar
 import Home from "../adminNavigation/Home";
 import ManageUsers from "../adminNavigation/ManageUsers";

@@ -471,26 +471,7 @@ body {
   margin-bottom: 16px;
   color: #d6c9ff;
 }
-.about-features {
-  list-style: none;
-  margin-top: 20px;
-  color: #d6c9ff;
-  padding-left: 0;
-}
 
-.about-features li {
-  margin-bottom: 10px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: transform 0.2s ease;
-}
-
-.about-features li:hover {
-  transform: translateX(4px);
-  color: #ffb0ff;
-}
 .about-quote {
   margin-top: 30px;
   font-style: italic;

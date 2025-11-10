@@ -6,7 +6,7 @@ import Home from "../userNavigation/Home";
 import Reservation from "../userNavigation/Reservation";
 import ServicePackage from "../userNavigation/ServicePackage";
 import Payments from "../userNavigation/Payments";
-import logo from "../../img/eventsoundpro-logo.png";
+import logo from "../../img/logo.png";
 import avatar from "../../img/avatar.png";
 import Settings from "../userNavigation/dropdown/Settings";
 import Terms from "../userNavigation/dropdown/Terms";
