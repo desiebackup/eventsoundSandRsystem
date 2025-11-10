@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import SignUp from "../sign/SignUp";
 import SignIn from "../sign/SignIn";
 import "../../css/pages/Welcome.css";
+
 import logo from "../../img/eventsoundpro-logo.png";
-import aboutImage from "../../img/about.jpg";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import about1 from "../../img/about1.jpg";
+import about2 from "../../img/about2.jpg";
+import about3 from "../../img/about3.jpg";
+import about4 from "../../img/about4.jpg";
+import about5 from "../../img/about5.jpg";
+
 
 export default function Welcome() {
   const [showForm, setShowForm] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
   const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const slides = [about1, about2, about3, about4, about5];
 
   const handleGetStarted = () => {
     setShowForm(true);
@@ -47,6 +56,40 @@ export default function Welcome() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Auto-slide the about images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  useEffect(() => {
+    const reveals = document.querySelectorAll(".reveal-left, .reveal-bottom");
+
+    const handleScrollAnimation = () => {
+      for (let i = 0; i < reveals.length; i++) {
+        const windowHeight = window.innerHeight;
+        const revealTop = reveals[i].getBoundingClientRect().top;
+        const revealPoint = 150;
+
+        if (revealTop < windowHeight - revealPoint) {
+          reveals[i].classList.add("active");
+        } else {
+          reveals[i].classList.remove("active");
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollAnimation);
+    handleScrollAnimation();
+    return () => window.removeEventListener("scroll", handleScrollAnimation);
+  }, []);
+
+
+  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
   return (
     <div className="welcome-container">
@@ -103,7 +146,7 @@ export default function Welcome() {
         {/* ABOUT SECTION */}
         <section id="about" className="about-section">
           <div className="about-content">
-            <div className="about-text">
+            <div className="about-text reveal-left">
               <h2>About Event Sound Pro</h2>
               <p>
                 With over 15 years of experience in professional audio production,
@@ -116,20 +159,52 @@ export default function Welcome() {
                 to live concerts — we bring the same level of dedication and expertise
                 to every project. Your sound is our passion.
               </p>
-              <button
-                className="about-btn"
-                onClick={() => {
-                  setShowForm(true);
-                  setIsSignUp(true);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-              >
+
+              <ul className="about-features">
+                <li>🎵 Premium Sound Quality</li>
+                <li>💡 Creative Lighting Effects</li>
+                <li>👨‍🔧 Expert Audio Engineers</li>
+                <li>🎤 Custom Packages for Every Event</li>
+              </ul>
+
+              <blockquote className="about-quote">
+                “Your event, our passion — bringing your sound to life.”
+              </blockquote>
+
+              <div className="about-stats reveal-bottom">
+                <div><h3>15+</h3><p>Years Experience</p></div>
+                <div><h3>1000+</h3><p>Events Powered</p></div>
+                <div><h3>500+</h3><p>Happy Clients</p></div>
+              </div>
+              
+              <button className="about-btn" onClick={handleGetStarted}>
                 Start Your Project
               </button>
             </div>
 
-            <div className="about-image">
-              <img src={aboutImage} alt="Audio mixing console" />
+            {/* SLIDER SECTION */}
+            <div className="about-slider">
+              <div
+                className="slider-wrapper"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {slides.map((img, i) => (
+                  <img key={i} src={img} alt={`About slide ${i + 1}`} />
+                ))}
+              </div>
+
+              <button className="prev" onClick={prevSlide}>❮</button>
+              <button className="next" onClick={nextSlide}>❯</button>
+
+              <div className="dots">
+                {slides.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`dot ${i === currentIndex ? "active" : ""}`}
+                    onClick={() => setCurrentIndex(i)}
+                  ></span>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -199,7 +274,7 @@ export default function Welcome() {
         </footer>
       </div>
 
-      {/* ===================== SIGNUP / SIGNIN FORM ===================== */}
+      {/* SIGNUP / SIGNIN FORM */}
       {showForm && (
         <div className="form-overlay">
           <div className="form-wrapper">
