@@ -128,15 +128,30 @@ export default function Profile() {
       setSelectedImage(null);
       setIsEditing(false);
       setMessage("Profile updated successfully.");
+      // Build a payload that includes both the raw avatar filename and a full image_url
+      const payload = {
+        ...updatedUser,
+        image_url: updatedUser.avatar ? `${base}/storage/${updatedUser.avatar}?t=${Date.now()}` : previewImage || avatarDefault,
+      };
+
       // Notify the app that the authenticated user data changed so global UI can update
       try {
-        window.dispatchEvent(new CustomEvent('auth:login', { detail: updatedUser }));
+        window.dispatchEvent(new CustomEvent('auth:login', { detail: payload }));
       } catch (e) {
         // fallback for older browsers
         const ev = document.createEvent('Event');
         ev.initEvent('auth:login', true, true);
-        ev.detail = updatedUser;
+        ev.detail = payload;
         window.dispatchEvent(ev);
+      }
+      // Also dispatch a profileUpdated event for components that listen specifically for profile changes
+      try {
+        window.dispatchEvent(new CustomEvent('profileUpdated', { detail: payload }));
+      } catch (e) {
+        const ev2 = document.createEvent('Event');
+        ev2.initEvent('profileUpdated', true, true);
+        ev2.detail = payload;
+        window.dispatchEvent(ev2);
       }
     } catch (err) {
       console.error(err);

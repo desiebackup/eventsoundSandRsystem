@@ -5,6 +5,8 @@ import "../../css/adminnav/ManageReservations.css";
 export default function ManageReservations() {
   const [reservations, setReservations] = useState([]);
   const [selectedReservation, setSelectedReservation] = useState(null);
+  const [refundFile, setRefundFile] = useState(null);
+  const [processingRefund, setProcessingRefund] = useState(false);
 
   // === FETCH RESERVATIONS ===
   useEffect(() => {
@@ -30,6 +32,15 @@ const handleApprove = async (id) => {
     const res = await axios.post(`/api/admin/reservations/${id}/approve`);
     const updated = res.data.reservation || res.data;
     setReservations((r) => r.map((rs) => (rs.id === id ? updated : rs)));
+    // If API returned updated services (primary + custom), broadcast to update Inventory UI immediately
+    const updatedServices = res.data.updated_services ?? null;
+    if (Array.isArray(updatedServices) && updatedServices.length) {
+      try {
+        window.dispatchEvent(new CustomEvent('servicesUpdated', { detail: updatedServices }));
+      } catch (e) {
+        console.warn('Could not dispatch servicesUpdated event', e);
+      }
+    }
     alert("Reservation approved successfully!");
   } catch (e) {
     console.error(e);
@@ -140,6 +151,16 @@ const handleDecline = async (id) => {
                   >
                     View
                   </button>
+                  {resv.status === 'cancelled' && resv.payment && (resv.payment.status !== 'refunded') && (
+                    <>
+                      <button
+                        className="refund"
+                        onClick={() => setSelectedReservation(resv)}
+                      >
+                        Refund
+                      </button>
+                    </>
+                  )}
                   {resv.status === "pending" && (
                     <>
                       <button
@@ -311,6 +332,48 @@ const handleDecline = async (id) => {
                   {selectedReservation.status}
                 </span>
               </p>
+
+              {/* === ADMIN REFUND ACTION FOR CANCELLED RESERVATIONS === */}
+              {selectedReservation.status === 'cancelled' && selectedReservation.payment && (
+                <div style={{ marginTop: 12 }}>
+                  <h4>Admin: Process Refund</h4>
+                  <p>If the user cancelled and a payment exists, upload refund receipt and process refund.</p>
+                  <input type="file" accept="image/*" onChange={(e) => setRefundFile(e.target.files?.[0] ?? null)} />
+                  <div style={{ marginTop: 8 }}>
+                    <button
+                      className="refund"
+                      onClick={async () => {
+                        if (!selectedReservation.payment) return alert('No payment record found.');
+                        if (!refundFile) return alert('Please choose a refund receipt image.');
+                        if (!confirm('Upload refund receipt and mark payment as refunded?')) return;
+                        setProcessingRefund(true);
+                        try {
+                          const fd = new FormData();
+                          fd.append('refund_receipt', refundFile);
+                          const paymentId = selectedReservation.payment.id;
+                          const res = await axios.post(`/api/admin/payments/${paymentId}/refund`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+
+                          // update reservations list payment status
+                          const updatedPayment = res.data.payment || res.data;
+                          setReservations((prev) => prev.map((r) => r.id === selectedReservation.id ? { ...r, payment: updatedPayment } : r));
+                          alert('Refund processed successfully.');
+                          setRefundFile(null);
+                          setSelectedReservation(null);
+                        } catch (err) {
+                          console.error('Refund failed', err);
+                          alert('Refund failed.');
+                        } finally {
+                          setProcessingRefund(false);
+                        }
+                      }}
+                      disabled={processingRefund}
+                    >
+                      {processingRefund ? 'Processing…' : 'Confirm Refund'}
+                    </button>
+                    <button style={{ marginLeft: 8 }} className="delete" onClick={() => setRefundFile(null)}>Cancel</button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

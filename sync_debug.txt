@@ -1,0 +1,9 @@
+[32m🔄 Syncing service schedules...[39m
+[32mNow: 2025-11-10 15:15:22  → ThreeDays: 2025-11-13 15:15:22[39m
+[32m-- Service 1 (status=available) next_use_start=null next_use_end=null[39m
+[32m   ↳ Next approved reservation: id=14 call_date=2025-11-10 00:00:00 start_time=23:00:00 end_time=00:00:00[39m
+[32m-- Service 2 (status=available) next_use_start=null next_use_end=null[39m
+[32m-- Service 3 (status=available) next_use_start=null next_use_end=null[39m
+[32m-- Service 4 (status=available) next_use_start=null next_use_end=null[39m
+[32m-- Service 5 (status=available) next_use_start=null next_use_end=null[39m
+[32m✨ Service schedule sync complete.[39m

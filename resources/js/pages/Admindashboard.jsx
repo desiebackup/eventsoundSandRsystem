@@ -18,15 +18,13 @@ import {
 } from "react-icons/fa";
 import "../../css/pages/AdminDashboard.css";
 import logo from "../../img/logo.png";
-import avatarDefault from "../../img/avatar.png"; // ✅ Default avatar
+import avatarDefault from "../../img/admin-avatar.png"; // ✅ Default avatar
 import Home from "../adminNavigation/Home";
 import ManageUsers from "../adminNavigation/ManageUsers";
 import ManageServices from "../adminNavigation/ManageServices";
 import ManageReservations from "../adminNavigation/ManageReservations";
 import Payments from "../adminNavigation/Payments";
 import Inventory from "../adminNavigation/Inventory";
-import ViewProfile from "../adminNavigation/dropdown/ViewProfile";
-import ViewAddAdmin from "../adminNavigation/dropdown/ViewAddAdmin";
 import Message from "../adminNavigation/Message"; // ✅ Added Messages Page
 
 function AdminDropdown({ user = {}, onLogout, onProfile, onAddAdmin }) {
@@ -44,29 +42,22 @@ function AdminDropdown({ user = {}, onLogout, onProfile, onAddAdmin }) {
           alt="Admin Avatar"
           className="admin-avatar"
         />
-        <span className="admin-name">{user?.username || "Admin"}</span>
+        {/* Prefer first + last name, then name, then username, else fall back to 'Admin' */}
+        {(() => {
+          // Support multiple possible user field shapes returned by the API:
+          // prefer first_name / last_name, then firstname / lastname, then name, then username
+          const first = user?.first_name ?? user?.firstname ?? user?.name ?? user?.username ?? "";
+          const last = user?.last_name ?? user?.lastname ?? "";
+          const combined = [first, last].filter(Boolean).join(" ").trim();
+          const displayName = combined || user?.name || user?.username || "Admin";
+          return <span className="admin-name">{displayName}</span>;
+        })()}
         <FaChevronDown className={`dropdown-arrow ${open ? "open" : ""}`} />
       </button>
 
       {/* Dropdown Menu */}
       {open && (
         <ul className="dropdown-menu" onMouseLeave={closeDropdown}>
-          <li
-            onClick={() => {
-              onProfile();
-              closeDropdown();
-            }}
-          >
-            View Profile
-          </li>
-          <li
-            onClick={() => {
-              onAddAdmin();
-              closeDropdown();
-            }}
-          >
-            View/Add Admin
-          </li>
           <li
             className="logout"
             onClick={() => {
@@ -89,8 +80,6 @@ export default function AdminDashboard({ user = {} }) {
   const navigate = useNavigate();
 
   const handleLogout = () => navigate("/", { replace: true });
-  const handleProfile = () => navigate("/admindashboard/viewprofile");
-  const handleAddAdmin = () => navigate("/admindashboard/viewaddadmin");
 
   return (
     <div className="dashboard-wrap">
@@ -99,10 +88,6 @@ export default function AdminDashboard({ user = {} }) {
         <div className="sidebar-top">
           <div className="logoo-frame">
             <img src={logo} alt="EventSound Logo" className="logoo" />
-          </div>
-          <div className="brand">
-            <span className="brand-text">Event Sound Pro</span>
-            <hr />
           </div>
         </div>
 
@@ -117,7 +102,7 @@ export default function AdminDashboard({ user = {} }) {
           </NavLink>
 
           <NavLink
-            to="/admindashboard/manageusers"
+            to="/admindashboard/users"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -126,7 +111,7 @@ export default function AdminDashboard({ user = {} }) {
           </NavLink>
 
           <NavLink
-            to="/admindashboard/manageservices"
+            to="/admindashboard/servicepackages"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -135,7 +120,7 @@ export default function AdminDashboard({ user = {} }) {
           </NavLink>
 
           <NavLink
-            to="/admindashboard/managereservations"
+            to="/admindashboard/reservations"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -184,8 +169,6 @@ export default function AdminDashboard({ user = {} }) {
             <AdminDropdown
               user={user}
               onLogout={handleLogout}
-              onProfile={handleProfile}
-              onAddAdmin={handleAddAdmin}
             />
           </div>
         </header>
@@ -194,14 +177,12 @@ export default function AdminDashboard({ user = {} }) {
           <Routes>
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
-            <Route path="manageusers" element={<ManageUsers />} />
-            <Route path="manageservices" element={<ManageServices />} />
-            <Route path="managereservations" element={<ManageReservations />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="servicepackages" element={<ManageServices />} />
+            <Route path="reservations" element={<ManageReservations />} />
             <Route path="payments" element={<Payments />} />
             <Route path="inventory" element={<Inventory />} />
             <Route path="messages" element={<Message />} /> {/* ✅ Added */}
-            <Route path="viewprofile" element={<ViewProfile />} />
-            <Route path="viewaddadmin" element={<ViewAddAdmin />} />
             <Route path="*" element={<Navigate to="home" replace />} />
           </Routes>
         </section>

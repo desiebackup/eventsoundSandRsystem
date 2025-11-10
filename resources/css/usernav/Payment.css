@@ -1,5 +1,5 @@
 /* ================================
-   PAYMENT PAGE STYLES (THEMED)
+   PAYMENT PAGE STYLES (ENHANCED)
 ================================ */
 
 .pay-wrapper {
@@ -7,70 +7,90 @@
   max-width: 1050px;
   margin: 0 auto;
   padding: 0;
+  background: var(--bg-page);
   color: var(--text-color);
-  font-family: "Inter", "Poppins", "Roboto", sans-serif;
+  transition: background 0.3s, color 0.3s;
 }
 
 .pay-title {
   font-size: 28px;
   font-weight: 700;
-  margin: 25px 0;
+  margin-bottom: 24px;
   color: var(--text-color);
 }
 
-/* ===== Final Balance Box ===== */
+/* ================================
+   BALANCE SUMMARY BOX
+================================ */
 .balance-box {
-  background: #eab308;
-  padding: 25px;
+  background: linear-gradient(90deg, #facc15, #eab308);
+  padding: 25px 28px;
   border-radius: 14px;
   margin-bottom: 25px;
-  color: #fff;
+  color: #1f1f1f;
   transition: 0.2s ease;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  position: relative;
 }
 
 .balance-label {
   font-weight: 600;
   opacity: 0.9;
+  font-size: 0.95rem;
 }
 
 .balance-amount {
   font-size: 2.4rem;
   font-weight: 800;
+  margin: 5px 0 8px;
+  color: #111;
 }
 
 .balance-info {
   opacity: 0.95;
-  margin-bottom: 15px;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: #222;
 }
 
-.balance-box.paid {
-  background: #16a34a;
-  color: #fff;
-}
-
-/* ===== Refund Method Box ===== */
+/* ================================
+   REFUND DETAILS BOX
+================================ */
 .refund-box {
   background: var(--bg-card);
-  padding: 20px;
+  padding: 22px 25px;
   border-radius: 14px;
   border: 1px solid var(--border-color);
   margin-bottom: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 10px;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 10px !important;
+  color: var(--text-color) !important;
 }
 
 .refund-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
+  padding: 12px 14px;
   border: 1px solid var(--accent);
   border-radius: 10px;
   background: var(--bg-page);
+  gap: 10px;
+}
+
+.refund-bank {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.refund-name {
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
 
 .update-btn {
@@ -82,10 +102,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
+  white-space: nowrap;
 }
 
 .update-btn:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.15);
 }
 
 .refund-note {
@@ -93,47 +114,59 @@
   color: var(--text-color);
   opacity: 0.7;
   margin-top: 10px;
+  line-height: 1.4;
 }
 
-/* ===== Invoice Table ===== */
+/* ================================
+   INVOICE TABLE
+================================ */
+.invoice-table {
+  margin-bottom: 40px;
+  overflow-x: auto;
+}
+
 .invoice-table table {
   width: 100%;
   border-collapse: collapse;
   background: var(--bg-card);
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .invoice-table th,
 .invoice-table td {
   background: var(--bg-card);
+  text-align: left;
 }
 
 .invoice-table th {
   font-weight: 700;
-  padding: 12px;
-  text-align: left;
+  padding: 14px;
+  text-transform: uppercase;
   background: var(--navbar-hover-bg);
   color: var(--text-color);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.03em;
+  font-size: 0.83rem;
+  letter-spacing: 0.04em;
 }
 
 .invoice-table td {
-  padding: 12px;
+  padding: 14px;
   font-size: 0.95rem;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-color);
   vertical-align: middle;
 }
 
-/* === Table Row Hover === */
+/* Row Hover */
 .invoice-table tr:hover {
-  background: rgba(234, 179, 8, 0.05);
+  background: rgba(234, 179, 8, 0.08);
+  transition: background 0.2s ease;
 }
 
-/* ===== Status Badges ===== */
+/* ================================
+   STATUS BADGES
+================================ */
 .status-badge {
   display: inline-block;
   padding: 6px 12px;
@@ -142,6 +175,7 @@
   font-size: 0.8rem;
   text-transform: capitalize;
   text-align: center;
+  min-width: 90px;
 }
 
 .status-badge.paid {
@@ -160,7 +194,15 @@
   color: #b91c1c;
 }
 
-/* ===== Action / Refund Status ===== */
+/* Balance-due badge (shows when unpaid and balance > 0) */
+.status-badge.balance-due {
+  background: #fde8e8;
+  color: #9b1c1c;
+}
+
+/* ================================
+   ACTION / REFUND STATUS
+================================ */
 .action-link {
   font-weight: 700;
   display: inline-block;
@@ -169,24 +211,24 @@
 }
 
 .action-link.paid-full {
-  color: #16a34a; /* green */
+  color: #16a34a;
 }
 
 .action-link.pay-in-person {
-  color: #dc2626; /* red */
+  color: #dc2626;
 }
 
 .action-link.refund-sent {
-  color: #047857; /* emerald */
+  color: #357ee3;
 }
 
-/* ===== View Receipt Button ===== */
+/* View Receipt */
 .view-receipt {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #d1fae5;
-  color: #065f46;
+  background: #a9caf8;
+  color: #124a97;
   padding: 5px 10px;
   border-radius: 6px;
   text-decoration: none;
@@ -196,7 +238,7 @@
 }
 
 .view-receipt:hover {
-  background: #a7f3d0;
+  background: #a7daf3;
   transform: scale(1.03);
 }
 
@@ -206,7 +248,9 @@
   gap: 10px;
 }
 
-/* ===== Modal Styles ===== */
+/* ================================
+   MODAL STYLES
+================================ */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -218,6 +262,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(2px);
 }
 
 .modal-box {
@@ -226,17 +271,19 @@
   border-radius: 14px;
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  animation: fadeIn 0.25s ease-in-out;
 }
 
 .modal-box h3 {
-  margin-bottom: 15px;
-  font-size: 1.3rem;
+  margin-bottom: 10px;
+  font-size: 1.25rem;
   font-weight: 700;
   text-align: center;
+  color: var(--text-color);
 }
 
 .modal-box input {
@@ -246,13 +293,16 @@
   font-size: 0.95rem;
   outline: none;
   width: 100%;
-  box-sizing: border-box;
+  background: var(--bg-page);
+  color: var(--text-color);
 }
 
 .modal-box input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.25);
 }
 
+/* Modal buttons */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -287,5 +337,109 @@
 }
 
 .save-btn:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.15);
+}
+
+/* Ensure header and button are visible above the table */
+
+
+.invoice-table {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fix alignment between Payment History title and Show More button */
+.payment-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 12px;
+  width: 100%;
+  gap: 10px;
+}
+
+.payment-history-header .section-title {
+  margin: 0;
+  line-height: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Ensure the button doesn’t float or misalign vertically */
+.show-more-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 38px !important;
+  line-height: 1 !important;
+  background: #7c3aed !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0 18px !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 3px 6px rgba(124, 58, 237, 0.35) !important;
+}
+
+.show-more-btn:hover {
+  background: #9d6aff !important;
+  transform: translateY(-2px);
+}
+
+
+/* ================================
+   RESPONSIVE ADJUSTMENTS
+================================ */
+@media (max-width: 768px) {
+  .pay-title {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .balance-box,
+  .refund-box {
+    padding: 20px;
+  }
+
+  .refund-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .update-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .modal-box {
+    width: 90%;
+  }
+}
+
+/* Fade-in animation for modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

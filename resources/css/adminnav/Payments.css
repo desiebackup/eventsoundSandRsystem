@@ -54,6 +54,33 @@
   vertical-align: middle;
 }
 
+/* Client cell: name + event */
+.client-cell {
+  display: flex;
+  flex-direction: column;
+}
+.client-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+.event-name {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* badge for cancelled reservation rows */
+.cancelled-badge {
+  display: inline-block;
+  background: #fff7ed;
+  color: #92400e;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
 .payments-table tr:hover {
   background-color: #f3f4f6;
 }
@@ -311,4 +338,18 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* Delete button styling used in admin Payments table */
+.btn-delete {
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn-delete:hover {
+  background-color: #dc2626;
 }

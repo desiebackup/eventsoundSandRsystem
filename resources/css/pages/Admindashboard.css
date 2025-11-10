@@ -33,8 +33,8 @@
 }
 
 .logoo-frame {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 6px;
 }
 
@@ -42,13 +42,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.brand-text {
-  font-weight: 600;
-  font-size: 15px;
-  color: #1f1f1f;
-  margin-bottom: 20px;
 }
 
 /* ===============================
@@ -132,17 +125,19 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .admin-avatar {
-  width: 28px;           /* smaller circular image */
-  height: 28px;
+  width: 30px;           /* smaller circular image */
+  height: 30px;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #d1d5db;
   margin-right: 4px;
   display: block;
-  flex-shrink: 0;       /* prevents it from stretching */
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdown-toggle {
@@ -205,15 +200,10 @@
 .dropdown-menu li {
   padding: 9px 16px;
   font-size: 14px;
-  color: #374151;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 
-.dropdown-menu li:hover {
-  background: #f3f0ff;
-  color: #7c3aed;
-}
 
 .dropdown-menu .logout {
   color: #ef4444;

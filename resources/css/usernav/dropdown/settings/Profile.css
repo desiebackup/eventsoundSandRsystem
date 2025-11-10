@@ -57,7 +57,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--bg-navbar);
   margin-bottom: 10px;
 }
 

@@ -11,8 +11,9 @@ class UserController extends Controller
     // ✅ Get all users with role = 'user' (for admin)
     public function index()
     {
+        // Include avatar so admin UI (messages, user lists) can render profile pictures
         $users = User::where('role', '!=', 'admin')
-            ->select('id', 'firstname', 'lastname', 'email', 'role', 'created_at')
+            ->select('id', 'firstname', 'lastname', 'email', 'role', 'avatar', 'created_at')
             ->get();
 
         return response()->json($users);
