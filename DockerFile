@@ -1,30 +1,30 @@
-# Use official PHP image
+# ---------- Base Image ----------
 FROM php:8.2-fpm
 
-# Install system dependencies
+# ---------- System Dependencies ----------
 RUN apt-get update && apt-get install -y \
     git curl zip unzip nodejs npm libpng-dev libjpeg-dev libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql gd
 
-# Set working directory
+# ---------- Set Working Directory ----------
 WORKDIR /var/www/html
 
-# Copy project files
+# ---------- Copy Project Files ----------
 COPY . .
 
-# Install Composer
+# ---------- Install Composer ----------
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --optimize-autoloader --no-dev
 
-# Build frontend (React + Vite)
+# ---------- Build Frontend (Vite + React) ----------
 RUN npm install && npm run build
 
-# Generate Laravel key
+# ---------- Generate Laravel Key ----------
 RUN php artisan key:generate
 
-# Expose port
+# ---------- Expose Port ----------
 EXPOSE 10000
 
-# Run Laravel server
+# ---------- Start Command ----------
 CMD php artisan serve --host=0.0.0.0 --port=10000
