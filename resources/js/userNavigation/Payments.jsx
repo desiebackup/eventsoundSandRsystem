@@ -395,7 +395,7 @@ const displayedPayments = React.useMemo(() => {
       )}
     </div>
   ) : (
-    <em>No Action</em>
+    <em>Please wait for your refund.</em>
   )}
 </td>
 

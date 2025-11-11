@@ -43,13 +43,35 @@ class SyncServiceSchedule extends Command
 
     // per-service summary removed for normal runs (keep logs focused)
 
-                // Find the next approved reservation for this service
-                $nextReservation = Reservation::where('service_id', $service->id)
+                // Find the next approved reservation for this service. We need to skip
+                // reservations whose end datetime is already in the past (same-day earlier events).
+                $candidates = Reservation::where('service_id', $service->id)
                     ->where('status', 'approved')
                     ->whereDate('call_date', '>=', $now->toDateString())
                     ->orderBy('call_date')
                     ->orderBy('start_time')
-                    ->first();
+                    ->get();
+
+                $nextReservation = null;
+                foreach ($candidates as $cand) {
+                    // build candidate start/end
+                    $startTime = $cand->start_time ?: '08:00';
+                    $endTime = $cand->end_time ?: '12:00';
+                    $callDate = is_object($cand->call_date)
+                        ? $cand->call_date->format('Y-m-d')
+                        : trim((string) $cand->call_date);
+                    $cstart = Carbon::parse($callDate . ' ' . $startTime);
+                    $cend = Carbon::parse($callDate . ' ' . $endTime);
+                    if ($cend->lessThanOrEqualTo($cstart)) {
+                        $cend = $cend->addDay();
+                    }
+
+                    // accept the first candidate whose end is in the future
+                    if ($cend->greaterThan($now)) {
+                        $nextReservation = $cand;
+                        break;
+                    }
+                }
 
                 if ($nextReservation) {
                     // next reservation summary
@@ -64,8 +86,6 @@ class SyncServiceSchedule extends Command
 
                     $start = Carbon::parse($callDate . ' ' . $startTime);
                     $end = Carbon::parse($callDate . ' ' . $endTime);
-
-                    // If end is earlier or equal to start, assume end is on the following day
                     if ($end->lessThanOrEqualTo($start)) {
                         $end = $end->addDay();
                     }
@@ -142,7 +162,7 @@ class SyncServiceSchedule extends Command
         }
 
         // Additionally, handle reservations that reference services via custom_services (custom items)
-        try {
+                try {
             $reservationsWithCustoms = Reservation::where('status', 'approved')
                 ->whereNotNull('custom_services')
                 ->whereDate('call_date', '>=', $now->toDateString())
@@ -163,6 +183,21 @@ class SyncServiceSchedule extends Command
                 if ($end->lessThanOrEqualTo($start)) {
                     $end = $end->addDay();
                 }
+                
+                // Skip reservations whose computed end time is already past
+                $callDate = is_object($res->call_date) ? $res->call_date->format('Y-m-d') : trim((string) $res->call_date);
+                $startTime = $res->start_time ?: '08:00';
+                $endTime = $res->end_time ?: '12:00';
+                $start = Carbon::parse($callDate . ' ' . $startTime);
+                $end = Carbon::parse($callDate . ' ' . $endTime);
+                if ($end->lessThanOrEqualTo($start)) {
+                    $end = $end->addDay();
+                }
+
+                if ($end->lessThanOrEqualTo($now)) {
+                    // this reservation is already finished, skip it for custom service scheduling
+                    continue;
+                }
 
                 if (is_array($customs) && count($customs) > 0) {
                     foreach ($customs as $c) {
@@ -174,7 +209,27 @@ class SyncServiceSchedule extends Command
                         if (!$svc) continue;
 
                         $updated = false;
-                        if (!$svc->next_use_start || !$svc->next_use_end || !Carbon::parse($svc->next_use_start)->equalTo($start) || !Carbon::parse($svc->next_use_end)->equalTo($end)) {
+                        // Only set the custom service next use if it's not set yet, or if this
+                        // reservation's start is earlier than the currently recorded next_use.
+                        // We iterate reservations ordered by call_date ascending, but since
+                        // services may already have next_use set from prior runs we guard
+                        // against later reservations overwriting an earlier next_use.
+                        $shouldSetNext = false;
+                        if (!$svc->next_use_start || !$svc->next_use_end) {
+                            $shouldSetNext = true;
+                        } else {
+                            try {
+                                $existingStart = Carbon::parse($svc->next_use_start);
+                                if ($start->lessThan($existingStart)) {
+                                    $shouldSetNext = true;
+                                }
+                            } catch (\Exception $e) {
+                                // If parsing fails for some reason, allow overwrite to be safe
+                                $shouldSetNext = true;
+                            }
+                        }
+
+                        if ($shouldSetNext) {
                             $svc->next_use_start = $start;
                             $svc->next_use_end = $end;
                             $updated = true;

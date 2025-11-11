@@ -11,13 +11,13 @@ import about3 from "../../img/about3.jpg";
 import about4 from "../../img/about4.jpg";
 import about5 from "../../img/about5.jpg";
 
-
 export default function Welcome() {
   const [showForm, setShowForm] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
   const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
 
   const slides = [about1, about2, about3, about4, about5];
 
@@ -38,6 +38,7 @@ export default function Welcome() {
     }
   };
 
+  // Navbar scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -57,39 +58,55 @@ export default function Welcome() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Auto-slide the about images
+  // Smooth infinite auto-slide
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % slides.length);
+      setCurrentIndex((prev) => prev + 1);
+      setIsTransitioning(true);
     }, 4000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, []);
 
+  const handleTransitionEnd = () => {
+    if (currentIndex === slides.length) {
+      // Instantly reset to the first slide (without animation)
+      setIsTransitioning(false);
+      setCurrentIndex(0);
+    }
+  };
+
+  const nextSlide = () => {
+    setIsTransitioning(true);
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const prevSlide = () => {
+    setIsTransitioning(true);
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  // Reveal animations
   useEffect(() => {
     const reveals = document.querySelectorAll(".reveal-left, .reveal-bottom");
 
     const handleScrollAnimation = () => {
-      for (let i = 0; i < reveals.length; i++) {
+      reveals.forEach((el) => {
         const windowHeight = window.innerHeight;
-        const revealTop = reveals[i].getBoundingClientRect().top;
+        const revealTop = el.getBoundingClientRect().top;
         const revealPoint = 150;
 
         if (revealTop < windowHeight - revealPoint) {
-          reveals[i].classList.add("active");
+          el.classList.add("active");
         } else {
-          reveals[i].classList.remove("active");
+          el.classList.remove("active");
         }
-      }
+      });
     };
 
     window.addEventListener("scroll", handleScrollAnimation);
     handleScrollAnimation();
     return () => window.removeEventListener("scroll", handleScrollAnimation);
   }, []);
-
-
-  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
   return (
     <div className="welcome-container">
@@ -102,27 +119,16 @@ export default function Welcome() {
         </div>
 
         <div className="nav-right">
-          <a
-            href="#home"
-            className={activeSection === "home" ? "active" : ""}
-            onClick={(e) => scrollToSection(e, "home")}
-          >
-            Home
-          </a>
-          <a
-            href="#about"
-            className={activeSection === "about" ? "active" : ""}
-            onClick={(e) => scrollToSection(e, "about")}
-          >
-            About
-          </a>
-          <a
-            href="#contact"
-            className={activeSection === "contact" ? "active" : ""}
-            onClick={(e) => scrollToSection(e, "contact")}
-          >
-            Contact
-          </a>
+          {["home", "about", "contact"].map((section) => (
+            <a
+              key={section}
+              href={`#${section}`}
+              className={activeSection === section ? "active" : ""}
+              onClick={(e) => scrollToSection(e, section)}
+            >
+              {section.charAt(0).toUpperCase() + section.slice(1)}
+            </a>
+          ))}
         </div>
       </nav>
 
@@ -131,7 +137,6 @@ export default function Welcome() {
         {/* HERO SECTION */}
         <section id="home" className="hero-section">
           <div className="overlay-lights"></div>
-
           <h1>Schedule Your Perfect Sound Experience</h1>
           <p>
             Professional audio solutions for events of any size.
@@ -149,21 +154,26 @@ export default function Welcome() {
             <div className="about-text reveal-left">
               <h2>About Event Sound Pro</h2>
               <p>
-                With over 15 years of experience in professional audio production,
-                we’ve powered thousands of successful events across the globe.
-                Our team of certified audio engineers and state-of-the-art equipment
-                ensures every note, every word, and every moment is heard with crystal clarity.
+                Event Sound Pro is a complete event solutions provider specializing in professional sound, lighting, and production services.
+                Our goal is to make every event — from private celebrations to large-scale programs — seamless, powerful, and unforgettable.
               </p>
               <p>
-                From intimate weddings to massive festivals, corporate presentations
-                to live concerts — we bring the same level of dedication and expertise
-                to every project. Your sound is our passion.
+                We make planning easy with our <strong>Event Scheduling</strong> system that lets clients reserve their dates with confidence.
+                Our wide range of <strong>Equipment Rentals</strong> ensures top-quality audio and lighting setups fit for any venue, from intimate gatherings to grand festivals.
+              </p>
+              <p>
+                With reliable <strong>On-Site Support</strong>, our trained technicians and operators handle everything from setup to performance, guaranteeing flawless execution.
+                We also offer <strong>Custom Packages</strong> tailored to your budget and needs — giving you full control over your event’s experience.
+              </p>
+              <p>
+                At Event Sound Pro, we don’t just provide equipment — we provide excellence.
+                Every event we power is built on precision, passion, and performance that your audience will remember.
               </p>
 
               <blockquote className="about-quote">
                 “Your event, our passion — bringing your sound to life.”
               </blockquote>
-              
+
               <button className="about-btn" onClick={handleGetStarted}>
                 Start Your Project
               </button>
@@ -173,9 +183,13 @@ export default function Welcome() {
             <div className="about-slider">
               <div
                 className="slider-wrapper"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                style={{
+                  transform: `translateX(-${currentIndex * 100}%)`,
+                  transition: isTransitioning ? "transform 0.8s ease-in-out" : "none",
+                }}
+                onTransitionEnd={handleTransitionEnd}
               >
-                {slides.map((img, i) => (
+                {[...slides, slides[0]].map((img, i) => (
                   <img key={i} src={img} alt={`About slide ${i + 1}`} />
                 ))}
               </div>
@@ -187,7 +201,7 @@ export default function Welcome() {
                 {slides.map((_, i) => (
                   <span
                     key={i}
-                    className={`dot ${i === currentIndex ? "active" : ""}`}
+                    className={`dot ${i === (currentIndex % slides.length) ? "active" : ""}`}
                     onClick={() => setCurrentIndex(i)}
                   ></span>
                 ))}
@@ -198,7 +212,6 @@ export default function Welcome() {
 
         {/* CONTACT SECTION */}
         <section id="contact" className="contact-section">
-          <h1 className="section-title">Get In Touch</h1>
           <p className="section-subtitle">
             Ready to make your event sound amazing? Let’s discuss your needs.
           </p>
@@ -264,7 +277,6 @@ export default function Welcome() {
       {/* SIGNUP / SIGNIN FORM */}
       {showForm && (
         <div className="form-overlay">
-          <div className="form-wrapper">
             <button
               className="close-form"
               onClick={() => setShowForm(false)}
@@ -277,7 +289,6 @@ export default function Welcome() {
             ) : (
               <SignIn onSwitchToSignUp={() => setIsSignUp(true)} />
             )}
-          </div>
         </div>
       )}
     </div>

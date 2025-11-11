@@ -5,9 +5,11 @@ import axios from "axios";
 import Welcome from "./Pages/Welcome";
 import Userdashboard from "./Pages/Userdashboard";
 import Admindashboard from "./Pages/Admindashboard"; // ✅ Import admin dashboard
+import PasswordReset from "./Pages/PasswordReset";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://localhost:8000";
+// Use same-origin by default so axios calls match the host the app is served from.
+axios.defaults.baseURL = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -19,6 +21,14 @@ function App() {
       (response) => response,
       (error) => {
         if (error.response && error.response.status === 401) {
+          // If the 401 came from the login endpoint, don't force a redirect —
+          // allow the login component to handle the error and display messages so the
+          // user can correct credentials without the UI closing unexpectedly.
+          const reqUrl = (error.config && error.config.url) ? error.config.url.toString() : '';
+          if (reqUrl.includes('/api/login')) {
+            return Promise.reject(error);
+          }
+
           // clear local token and axios header to prevent repeated 401s
           localStorage.removeItem('token');
           delete axios.defaults.headers.common['Authorization'];
@@ -99,6 +109,7 @@ function App() {
         />
 
         {/* Catch-all route */}
+        <Route path="/password-reset/:token" element={<PasswordReset />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

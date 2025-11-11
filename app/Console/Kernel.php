@@ -14,6 +14,10 @@ class Kernel extends ConsoleKernel
     {
         // Run the sync every hour so services get marked in_use 3 days before the event
         $schedule->command('services:sync-schedule')->hourly();
+
+        // Reconcile service statuses frequently so services become available shortly after next_use_end
+        // and so they are marked in_use at the start-window (start - 3 days) if appropriate.
+        $schedule->command('services:reconcile-status')->everyFiveMinutes();
     }
 
     /**

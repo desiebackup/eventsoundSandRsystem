@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use App\Models\Service;
 use App\Models\Payment;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -258,6 +259,17 @@ class ReservationController extends Controller
         $reservation->status = 'declined';
         $reservation->save();
 
+        // Create a message for the user so they receive an explicit notification in conversations
+        try {
+            Message::create([
+                'user_id' => $reservation->user_id,
+                'sender' => 'admin',
+                'text' => sprintf('Your reservation #%d (%s) was declined by admin.', $reservation->id, $reservation->event_name ?? 'event'),
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to create decline message: ' . $e->getMessage());
+        }
+
         return response()->json(['message' => 'Reservation declined.', 'reservation' => $reservation]);
     }
 
@@ -276,6 +288,17 @@ class ReservationController extends Controller
         if ($user->role !== 'admin') {
             $reservation->status = 'cancelled';
             $reservation->save();
+                // Create an internal message so admins can see the user-initiated cancellation in conversations
+                try {
+                    Message::create([
+                        'user_id' => $reservation->user_id,
+                        'sender' => 'user',
+                        'text' => sprintf('Cancelled reservation #%d (%s)', $reservation->id, $reservation->event_name ?? 'event'),
+                    ]);
+                } catch (\Exception $e) {
+                    // Log but don't fail the cancellation if message creation fails
+                    \Log::error('Failed to create cancellation message: ' . $e->getMessage());
+                }
             return response()->json(['message' => 'Reservation cancelled.']);
         }
 

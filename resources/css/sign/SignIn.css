@@ -2,9 +2,9 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  /* Keeping vertical margin for centering on screen */
-  margin: 3rem auto;
-  padding: 2rem;
+  /* Reduce vertical spacing so logo and inputs are closer */
+  margin: 1.5rem auto;
+  padding: 1.25rem 1.5rem;
   background: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* New, prominent shadow */
@@ -21,14 +21,14 @@
   }
 }
 
-/* --- Header Styling (Adapted from .signin-container h2) --- */
-.signin-container h2 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  color: #1e3a8a; /* Dark blue color */
-  font-size: 1.5rem;
-  font-weight: bold;
+.signin-logo {
+  display: block;
+  margin: 0 auto 10px auto; /* smaller bottom gap */
+  width: 140px; /* slightly smaller to reduce perceived spacing */
+  height: auto;
+  object-fit: contain;
 }
+
 
 /* --- Form and Input Styling --- */
 .signin-container form {
@@ -96,7 +96,7 @@
 }
 
 .forgot-password-wrapper {
-  text-align: right;
+  text-align: left;
   margin-top: 5px;
   margin-bottom: 10px;
 }
@@ -158,40 +158,92 @@
 
 .forgot-buttons {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
 }
 
+/* Ensure all direct children can shrink and share available space equally */
+.forgot-buttons > * {
+  flex: 1 1 0%;
+  min-width: 0; /* allow flex items to be smaller than their content width */
+}
+
+/* Send Link button */
 .btn-send-link {
-  background: #7c3aed;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
+  /* main action button: allow equal flex sizing */
+  flex: 1 1 0% !important;
+  padding: 10px 0 !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-size: 0.95rem !important;
+  transition: all 0.25s ease !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #4f46e5 !important;
+  color: #fff !important;
 }
 
 .btn-send-link:hover {
-  background: #6d28d9;
+  background: #3730a3 !important;
 }
 
-.btn-cancel {
-  background: #9ca3af;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
+
+/* Cancel button */
+.button-cancel, .btn-cancel {
+  /* cancel button: alias .btn-cancel for future consistency; equal flex sizing */
+  flex: 1 1 0% !important;
+  padding: 10px 0 !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-size: 0.95rem !important;
+  transition: all 0.25s ease !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #e5e7eb !important;
+  color: #374151 !important;
 }
 
-.btn-cancel:hover {
-  background: #6b7280;
+.button-cancel:hover {
+  background: #d1d5db !important;
+  color: #111827 !important;
 }
+
 
 .forgot-message {
   margin-top: 10px;
-  color: #16a34a;
   font-weight: 500;
   font-size: 0.9rem;
+}
+
+/* Success / Error variants */
+.forgot-message.success {
+  color: #16a34a; /* green */
+}
+
+.forgot-message.error {
+  color: #dc2626; /* red */
+}
+
+/* Stack buttons vertically on narrow screens for better touch targets */
+@media (max-width: 420px) {
+  .forgot-buttons {
+    flex-direction: column;
+  }
+
+  .forgot-buttons > * {
+    width: 100%;
+  }
 }
 
 @keyframes fadeIn {

@@ -11,7 +11,7 @@ export default function ContactUs() {
         <img src={contactImg} alt="Contact illustration" className="contact-image" />
 
         <div className="contact-details">
-          <p><FaPhoneAlt className="icon" /> 09123456789</p>
+          <p><FaPhoneAlt className="icon" /> 09366811261</p>
           <p><FaEnvelope className="icon" /> grouptwo@gmail.com</p>
           <p><FaMapMarkerAlt className="icon" /> Poblacion, Trinidad, Bohol</p>
         </div>

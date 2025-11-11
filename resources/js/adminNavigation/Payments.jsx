@@ -102,6 +102,9 @@ export default function Payments() {
         return getTime(b) - getTime(a);
       });
 
+      // Set payments without mutating down_payment so refund modal can still use original value.
+      // We'll avoid zeroing down_payment here; totals should be computed consumer-side (Home)
+      // by ignoring refunded items. Keep payments as received + synthetic entries.
       setPayments(combined);
     } catch (err) {
       console.error("Error loading payments or reservations:", err);

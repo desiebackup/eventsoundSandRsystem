@@ -209,7 +209,18 @@ const Reservation = () => {
               <option value="Wedding">Wedding</option>
               <option value="Concert">Concert</option>
               <option value="Corporate">Corporate</option>
-              <option value="Other">Other</option>
+              <option value="Christening">Christening</option>
+              <option value="Conference">Conference</option>
+              <option value="Productlaunch">Product Launch</option>
+              <option value="Teambuilding">Team Building</option>
+              <option value="Reunion">Reunion</option>
+              <option value="Musicfestival">Music Festival</option>
+              <option value="Livebandperformance">Live Band Performance</option>
+              <option value="Graduation">Graduation</option>
+              <option value="Fiesta">Fiesta</option>
+              <option value="Foundationday">Foundation Day</option>
+              <option value="Acquaintanceparty">Acquaintance Party</option>
+              <option value="Christmassparty">Christmass Party</option>
             </select>
 
             <label>Venue Type</label>
@@ -221,8 +232,15 @@ const Reservation = () => {
               <option value="">Select venue type</option>
               <option value="Gym">Gym</option>
               <option value="House">House</option>
+              <option value="Hotel">Hotel</option>
               <option value="Hall">Hall</option>
-              <option value="Outdoor">Outdoor</option>
+              <option value="Beach">Beach</option>
+              <option value="Riverside">Riverside</option>
+              <option value="Restaurant">Restaurant</option>
+              <option value="Plaza">Plaza</option>
+              <option value="Campsite">Campsite</option>
+              <option value="Barangay">Barangay</option>
+              <option value="School">School</option>
             </select>
 
             <div className="date-time-grid">

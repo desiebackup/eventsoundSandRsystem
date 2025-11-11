@@ -89,6 +89,12 @@ const Home = () => {
           message: `Your event <b>${title}</b> was <b>approved</b> by admin.`,
           time: new Date(r.updated_at || Date.now()).toLocaleString(),
         });
+      } else if (status === "declined") {
+        logs.push({
+          type: "decline",
+          message: `Your event <b>${title}</b> was <b>declined</b> by admin.`,
+          time: new Date(r.updated_at || Date.now()).toLocaleString(),
+        });
       } else if (status === "cancelled" || status === "canceled") {
         logs.push({
           type: "cancel",
@@ -311,7 +317,7 @@ const Home = () => {
         >
           <h3>Upcoming Events</h3>
           <p className="stat-value">{upcomingEvents.length}</p>
-          <span className="stat-event">Approved, needs full payment</span>
+          <span className="stat-event">Scheduled and approved events</span>
         </div>
 
         <div
@@ -322,7 +328,7 @@ const Home = () => {
         >
           <h3>Active Services</h3>
           <p className="stat-value">{pendingEvents.length}</p>
-          <span className="stat-active">Pending admin approval</span>
+          <span className="stat-active">Pending admin confirmation</span>
         </div>
 
         <div
@@ -332,7 +338,7 @@ const Home = () => {
           <h3>Total Payment</h3>
           <p className="stat-value money">₱ {totalPaymentFormatted}</p>
           <span className="stat-payment">
-            Down payments + fully paid totals
+            Combined paids amounts
           </span>
         </div>
       </div>

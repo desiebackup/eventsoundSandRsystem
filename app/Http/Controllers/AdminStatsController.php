@@ -74,15 +74,22 @@ class AdminStatsController extends Controller
             ];
         }
 
-        // sort merged activities by timestamp (most recent first) and limit the combined list
+        // sort merged activities by timestamp (most recent first)
         usort($recentActivities, function ($a, $b) {
             $ta = strtotime((string)$a['time']);
             $tb = strtotime((string)$b['time']);
             return $tb <=> $ta;
         });
+        // capture total merged activities before slicing so the client can know
+        $recentTotal = count($recentActivities);
 
-        // limit to the most recent 8 activities
-        $recentActivities = array_slice($recentActivities, 0, 8);
+        // If the client requested the full list (e.g. ?full=1), return the merged list
+        // otherwise keep the compact slice for the dashboard.
+        $full = $request->query('full');
+        if (!$full) {
+            // limit to the most recent 8 activities (compact dashboard view)
+            $recentActivities = array_slice($recentActivities, 0, 8);
+        }
 
         return response()->json([
             'totals' => [
@@ -92,6 +99,8 @@ class AdminStatsController extends Controller
                 'services' => $totalServices,
             ],
             'recent' => $recentActivities,
+            // reported total before slicing so clients can decide whether to show "Show More"
+            'recent_total' => $recentTotal,
         ]);
     }
 }

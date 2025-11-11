@@ -13,6 +13,8 @@ use App\Http\Controllers\PaymentController;
 // -----------------------------
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+// Password reset (API) — allow frontend axios to call this endpoint
+Route::post('/forgot-password', [\App\Http\Controllers\Api\PasswordResetLinkController::class, 'store'])->name('api.password.email');
 
 // -----------------------------
 // 🔐 PROTECTED ROUTES (requires Sanctum token)

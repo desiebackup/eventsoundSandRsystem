@@ -2,9 +2,9 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  /* Keeping vertical margin for centering on screen */
-  margin: 3rem auto;
-  padding: 2rem;
+  /* Reduce vertical spacing so logo and inputs are closer */
+  margin: 1.5rem auto;
+  padding: 1.25rem 1.5rem;
   background: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Prominent shadow */
@@ -21,14 +21,14 @@
   }
 }
 
-/* --- Header Styling --- */
-.signup-container h2 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  color: #1e3a8a; /* Dark blue color */
-  font-size: 1.5rem;
-  font-weight: bold;
+.signup-logo {
+  display: block;
+  margin: 0 auto 10px auto; /* smaller bottom gap */
+  width: 140px; /* slightly smaller to reduce perceived spacing */
+  height: auto;
+  object-fit: contain;
 }
+
 
 /* --- Form and Input Styling --- */
 .signup-container form {

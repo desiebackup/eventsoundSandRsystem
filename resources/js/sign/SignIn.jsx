@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import logo from "../../img/logo.png";
 import { useNavigate } from "react-router-dom";
 import "../../css/sign/SignIn.css";
 
@@ -10,6 +11,7 @@ export default function SignIn({ onSwitchToSignUp }) {
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotError, setForgotError] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,7 +46,9 @@ export default function SignIn({ onSwitchToSignUp }) {
       }
     } catch (err) {
       console.error("Login failed:", err);
-      setError("Invalid credentials. Please try again.");
+      // Prefer server-provided message when available
+      const serverMsg = err?.response?.data?.message || err?.message || "Invalid credentials. Please try again.";
+      setError(serverMsg);
     }
   };
 
@@ -52,27 +56,26 @@ export default function SignIn({ onSwitchToSignUp }) {
   const handleForgotSubmit = async (e) => {
     e.preventDefault();
     setForgotMessage("");
+    setForgotError(false);
     try {
       const res = await axios.post("http://127.0.0.1:8000/api/forgot-password", {
         email: forgotEmail,
       });
-      setForgotMessage(
-        "Password reset link has been sent to your email address."
-      );
+      // Prefer server-returned message
+      setForgotMessage(res?.data?.message || "Password reset link has been sent to your email address.");
+      setForgotError(false);
       setForgotEmail("");
     } catch (err) {
       console.error("Forgot password error:", err);
-      setForgotMessage(
-        "Unable to send password reset link. Please check your email."
-      );
+      const serverMsg = err?.response?.data?.message || err?.message || "Unable to send password reset link. Please check your email.";
+      setForgotMessage(serverMsg);
+      setForgotError(true);
     }
   };
 
   return (
     <div className="signin-container">
-      <h2>Sign In</h2>
-
-      {error && <p className="error">{error}</p>}
+      <img src={logo} alt="Event Sound Pro Logo" className="signin-logo" />
 
       <form onSubmit={handleSubmit}>
         <input
@@ -104,6 +107,8 @@ export default function SignIn({ onSwitchToSignUp }) {
 
         <button type="submit">Sign In</button>
       </form>
+      {/* Show error message below the form but above the signup link so users can correct credentials */}
+      {error && <p className="error">{error}</p>}
 
       <p>
         Don’t have an account?{" "}
@@ -133,7 +138,7 @@ export default function SignIn({ onSwitchToSignUp }) {
                 </button>
                 <button
                   type="button"
-                  className="btn-cancel"
+                  className="button-cancel"
                   onClick={() => {
                     setShowForgot(false);
                     setForgotMessage("");
@@ -145,7 +150,11 @@ export default function SignIn({ onSwitchToSignUp }) {
               </div>
             </form>
 
-            {forgotMessage && <p className="forgot-message">{forgotMessage}</p>}
+            {forgotMessage && (
+              <p className={`forgot-message ${forgotError ? 'error' : 'success'}`}>
+                {forgotMessage}
+              </p>
+            )}
           </div>
         </div>
       )}

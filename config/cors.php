@@ -1,6 +1,7 @@
 <?php
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout', 'register'],
+    // Add reset-password routes so SPA form posts and preflight requests are allowed
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout', 'register', 'reset-password', 'reset-password/*'],
 
     'allowed_methods' => ['*'],
 

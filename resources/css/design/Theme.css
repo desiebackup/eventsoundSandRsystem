@@ -3,6 +3,9 @@
   --bg-page: #f4f4f6;
   --bg-navbar: #ffffff;
   --bg-card: #ffffff;
+  /* Compatibility aliases used across styles */
+  --text-main: #222;
+  --text-secondary: #6b7280;
   --navbar-hover-bg: #ededed;
   --navbar-active-bg: #e5e1ff;
   --dropdown-hover-bg: #f0f0f0;
@@ -19,6 +22,9 @@
   --bg-page: #131415;
   --bg-navbar: #232833;
   --bg-card: #232833;
+  /* Compatibility aliases used across styles */
+  --text-main: #e7e9ef;
+  --text-secondary: #9ca3af;
   --navbar-hover-bg: #3a3f4d;
   --navbar-active-bg: #2f3651;
   --dropdown-hover-bg: #3a3f4d;

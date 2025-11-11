@@ -7,7 +7,7 @@ export default function Terms() {
     <div className="terms-container">
       <h1 className="terms-title">Terms and Conditions</h1>
       <h3 className="terms-subtitle">
-        Event Sound Scheduling and Reservation System
+        Event Sound Pro
       </h3>
       <p className="last-updated">Last Updated: October 10, 2025</p>
       <hr />
@@ -15,7 +15,7 @@ export default function Terms() {
       <section>
         <h2>1. Introduction</h2>
         <p>
-          Welcome to the Event Sound Scheduling and Reservation System. By
+          Welcome to the Event Sound Pro. By
           accessing or using this platform, you agree to comply with and be
           bound by these Terms and Conditions (“Terms”). If you do not agree with
           these Terms, you may not use or access the System.
@@ -60,10 +60,8 @@ export default function Terms() {
             Users must provide accurate event information, including date, time,
             venue, and type of event.
           </li>
-          <li>
-            Cancellations must be made at least three (3) days prior to the
-            scheduled event to avoid penalties or forfeiture of deposits.
-          </li>
+          <li>Cancellations are only allowed while the reservation status is <strong>Pending</strong>. 
+          Once your booking is <strong>Approved</strong>, it can no longer be cancelled or refunded.</li>
         </ul>
       </section>
 
@@ -113,7 +111,7 @@ export default function Terms() {
             business days to process.
           </li>
           <li>
-            The Administrator reserves the right to cancel reservations due to
+            The Administrator reserves the right to decline reservations due to
             unforeseen circumstances such as equipment failure or technical
             issues.
           </li>

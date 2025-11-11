@@ -600,18 +600,6 @@ body {
   text-align: center;
 }
 
-/* heading (Get In Touch) */
-.section-title {
-  font-size: 5rem !important;
-  /* Force large size */
-  font-weight: 800;
-  color: #f09aff;
-  margin-bottom: 20px;
-  text-transform: none;
-  letter-spacing: 1px;
-  line-height: 1.1;
-}
-
 
 /* subtitle */
 .section-subtitle {
@@ -765,25 +753,10 @@ body {
   animation: fadeIn 0.22s ease;
 }
 
-.form-wrapper {
-  position: relative;
-  z-index: 2001;
-  background: rgba(255, 255, 255, 0.08); /* transparent white overlay */
-  backdrop-filter: blur(20px); /* glass blur effect */
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 40px 50px;
-  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  transition: all 0.3s ease;
-}  
-
-/* close button */
 .close-form {
   position: absolute;
-  top: -20px;
-  right: -20px;
+  top: 20px;
+  right: 20px;
   background: linear-gradient(135deg, #ff00b7, #a300ff);
   color: #fff;
   border: none;
@@ -800,6 +773,7 @@ body {
   transform: scale(1.06);
   background: linear-gradient(135deg, #ff33d1, #b300ff);
 }
+
 
 @keyframes fadeIn {
   from {

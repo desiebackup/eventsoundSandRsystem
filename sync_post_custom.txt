@@ -1,2 +1,0 @@
-[32m🔄 Syncing service schedules...[39m
-[32m✨ Service schedule sync complete.[39m

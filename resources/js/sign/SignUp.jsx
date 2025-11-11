@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import logo from "../../img/logo.png";
 import "../../css/sign/SignUp.css";
 
 export default function SignUp({ onSwitchToSignIn }) {
@@ -43,7 +44,7 @@ export default function SignUp({ onSwitchToSignIn }) {
 
   return (
     <div className="signup-container">
-      <h2>Sign Up</h2>
+      <img src={logo} alt="Event Sound Pro Logo" className="signup-logo" />
       <form onSubmit={handleSubmit}>
         <input
           type="text"
