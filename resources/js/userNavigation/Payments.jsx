@@ -255,7 +255,7 @@ const displayedPayments = React.useMemo(() => {
         </div>
       ) : (
         <div className="balance-box">
-          <p className="balance-label">No Pending Balances</p>
+          <p className="balance-label">Total Remaining Balance</p>
           <h1 className="balance-amount">₱0.00</h1>
           <p className="balance-info">No pending balances!</p>
         </div>

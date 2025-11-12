@@ -220,7 +220,7 @@ export default function Welcome() {
             <div className="contact-info">
               <h3>Contact Information</h3>
               <ul>
-                <li><FaPhone className="icon" /> +63 936 681 1261</li>
+                <li><FaPhone className="icon" /> +63 912 345 6789</li>
                 <li><FaEnvelope className="icon" /> grouptwo@gmail.com</li>
                 <li><FaMapMarkerAlt className="icon" /> Poblacion, Trinidad, Bohol</li>
               </ul>
