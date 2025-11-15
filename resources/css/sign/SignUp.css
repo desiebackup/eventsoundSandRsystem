@@ -93,3 +93,16 @@
 .link-btn:hover {
   text-decoration: underline;
 }
+
+/* Error / validation messages for signup form */
+.signup-container .error {
+  color: #dc2626; /* red */
+  margin: 6px 0 0 0;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.signup-container .error[aria-live] {
+  /* ensure visible on assistive tech */
+  display: block;
+}

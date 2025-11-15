@@ -353,3 +353,92 @@
 .btn-delete:hover {
   background-color: #dc2626;
 }
+
+/* === Status Dropdown (robust arrow) === */
+.payments-table th {
+  position: relative;
+}
+
+/* main select styling */
+.payments-table th select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 34px 6px 10px; /* extra right padding for arrow */
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111827;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px 6px;
+  /* inline SVG chevron (dark gray) as the arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236B7280' d='M0 0l5 6 5-6z'/></svg>");
+}
+
+/* hover & focus */
+.payments-table th select:hover {
+  border-color: #9ca3af;
+  background-color: #f9fafb;
+}
+.payments-table th select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.18);
+}
+
+/* small active (click) feedback */
+.payments-table th select:active {
+  transform: scale(0.98);
+}
+
+/* === STATUS Column: Label on Top, Dropdown Below === */
+.payments-table th:nth-child(6) {
+  display: flex;
+  flex-direction: column; /* stack label and dropdown vertically */
+  align-items: center;     /* center horizontally */
+  justify-content: center; /* center vertically in header cell */
+  gap: 6px;                /* space between label and dropdown */
+  text-align: center;
+}
+
+/* === Dropdown Styling (clean + consistent) === */
+.payments-table th:nth-child(6) select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 34px 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111827;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236B7280' d='M0 0l5 6 5-6z'/></svg>");
+}
+
+/* Hover & Focus States */
+.payments-table th:nth-child(6) select:hover {
+  border-color: #9ca3af;
+  background-color: #f9fafb;
+}
+
+.payments-table th:nth-child(6) select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.18);
+}
+
+/* Active (pressed) feedback */
+.payments-table th:nth-child(6) select:active {
+  transform: scale(0.98);
+}

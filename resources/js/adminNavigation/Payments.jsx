@@ -7,6 +7,7 @@ export default function Payments() {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [refundFile, setRefundFile] = useState(null);
   const [processing, setProcessing] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("all");
 
   // === FETCH PAYMENTS ===
   useEffect(() => {
@@ -61,7 +62,8 @@ export default function Payments() {
 
       reservations.forEach((r) => {
         const status = String(r.status || '').toLowerCase();
-        if ((status === 'cancelled' || status === 'canceled') && !paymentsByReservation[r.id]) {
+        // include declined reservations as well as cancelled ones
+        if ((status === 'cancelled' || status === 'canceled' || status === 'declined') && !paymentsByReservation[r.id]) {
           // compute totals similar to ManageReservations.computeTotals
           const customs = safeParse(r.custom_services);
           let totalPrice = 0;
@@ -82,24 +84,24 @@ export default function Payments() {
             total_price: totalPrice,
             down_payment: totalDown,
             balance: 0,
-            status: 'cancelled',
+            // preserve declined vs cancelled to show correct badge
+            status: status === 'declined' ? 'declined' : 'cancelled',
             created_at: r.created_at ?? r.updated_at ?? null,
           });
         }
       });
 
-      // sort combined by created_at (newest first). If created_at missing, fall back to reservation id or payment id
+      // sort combined by numeric id descending (newest/highest id first). Use reservation id when available,
+      // otherwise parse synthetic 'res-<id>' or numeric payment id.
+      const extractNumericId = (obj) => {
+        // prefer reservation id (true source of truth for synthetic rows)
+        if (obj && obj.reservation && obj.reservation.id) return Number(obj.reservation.id) || 0;
+        if (typeof obj.id === 'string' && obj.id.startsWith('res-')) return Number(obj.id.split('-')[1]) || 0;
+        return Number(obj.id) || 0;
+      };
+
       const combined = [...paymentsData, ...synthetic].sort((a, b) => {
-        const getTime = (obj) => {
-          const t = obj.created_at ?? obj.updated_at ?? (obj.reservation && (obj.reservation.created_at ?? obj.reservation.updated_at)) ?? null;
-          if (t) return new Date(t).getTime();
-          // fallback to numeric ids (reservations often have lower ids -> older). Multiply to keep scale
-          const rid = obj.reservation?.id ?? null;
-          if (rid) return Number(rid) * 1000;
-          if (typeof obj.id === 'string' && obj.id.startsWith('res-')) return Number(obj.id.split('-')[1]) * 1000;
-          return Number(obj.id) || 0;
-        };
-        return getTime(b) - getTime(a);
+        return extractNumericId(b) - extractNumericId(a);
       });
 
       // Set payments without mutating down_payment so refund modal can still use original value.
@@ -110,6 +112,19 @@ export default function Payments() {
       console.error("Error loading payments or reservations:", err);
       setPayments([]);
     }
+  };
+
+  // Compute visible payments according to the selected status filter
+  const getDisplayStatus = (p) => {
+    const reservationStatus = String(p.reservation?.status ?? '').toLowerCase();
+    const paymentStatus = String(p.status ?? '').toLowerCase();
+
+    // Give priority to payment flags so refunded/paid payments are grouped correctly
+    if (paymentStatus === 'refunded') return 'refunded';
+    if (paymentStatus === 'paid') return 'paid';
+    if (reservationStatus === 'declined') return 'declined';
+    if (reservationStatus === 'cancelled' || reservationStatus === 'canceled') return 'cancelled';
+    return 'unpaid';
   };
 
   // === MARK AS PAID ===
@@ -180,18 +195,32 @@ export default function Payments() {
       }
 
       // now upload refund receipt to the payment refund endpoint
-      await axios.post(`/api/admin/payments/${paymentId}/refund`, fd, {
+      const refundRes = await axios.post(`/api/admin/payments/${paymentId}/refund`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setPayments((prev) =>
-        prev.map((p) =>
-          // match by payment id (number) or by previous synthetic id replaced above
-          (p.id === paymentId || p.id === selectedPayment.id)
-            ? { ...p, status: "refunded", refund_receipt: "uploaded" }
-            : p
-        )
-      );
+      // Prefer using the server-returned payment object to ensure all fields (status, refund_receipt, refunded_at)
+      // are reflected in the UI. If server didn't return a payment, fall back to marking the row as refunded.
+      const returned = refundRes?.data?.payment || refundRes?.data || null;
+
+      if (returned) {
+        // Replace the matching row (by id or previous synthetic id) with the returned payment
+        setPayments((prev) => prev.map((p) => (p.id === paymentId || p.id === selectedPayment.id ? returned : p)));
+      } else {
+        setPayments((prev) =>
+          prev.map((p) =>
+            (p.id === paymentId || p.id === selectedPayment.id)
+              ? { ...p, status: "refunded", refund_receipt: "uploaded" }
+              : p
+          )
+        );
+      }
+
+      // Also notify other admin pages that reservation/payment changed
+      try { window.dispatchEvent(new CustomEvent('reservationUpdated', { detail: returned ?? { id: selectedPayment?.reservation?.id } })); } catch (e) {}
+
+      // Re-fetch payments to ensure server-side state is reflected (useful when filter is active)
+      try { await fetchPayments(); } catch (e) { /* ignore */ }
 
       alert("Refund processed successfully.");
       setSelectedPayment(null);
@@ -217,7 +246,19 @@ export default function Payments() {
               <th>Total Price</th>
               <th>Down Payment</th>
               <th>Balance</th>
-              <th>Status</th>
+              <th>
+                Status
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  style={{ marginLeft: 8 }}
+                >
+                  <option value="all">All</option>
+                  <option value="paid">Paid</option>
+                  <option value="unpaid">Unpaid</option>
+                  <option value="refunded">Refunded</option>
+                </select>
+              </th>
               <th>Proof</th>
               <th>Action</th>
             </tr>
@@ -225,33 +266,42 @@ export default function Payments() {
 
           <tbody>
             {Array.isArray(payments) && payments.length > 0 ? (
-              payments.map((p) => {
+              payments
+                .filter((p) => {
+                  if (filterStatus === 'all') return true;
+                  return getDisplayStatus(p) === filterStatus;
+                })
+                .map((p) => {
                 const total = Number(p.total_price ?? 0);
                 const down = Number(p.down_payment ?? 0);
                 const balance = Number(p.balance ?? total - down);
 
-                // Normalize status (e.g., "Paid", "PAID", "paid" → "paid")
-                const status = String(p.status || "unpaid").toLowerCase();
+                // Build a canonical display status: one of 'paid','unpaid','refunded','cancelled','declined'
+                const reservationStatus = String(p.reservation?.status ?? '').toLowerCase();
+                const paymentStatus = String(p.status ?? '').toLowerCase();
 
-                // Determine cancellation and button disabled states
-                const isCancelledReservation =
-                  p.reservation && ['cancelled','canceled'].includes(String(p.reservation.status || '').toLowerCase());
+                let displayStatus = 'unpaid';
+                // Give priority to payment flags (refunded/paid) so refunds show as 'Refunded' even when reservation was cancelled/declined
+                if (paymentStatus === 'refunded') displayStatus = 'refunded';
+                else if (paymentStatus === 'paid') displayStatus = 'paid';
+                else if (reservationStatus === 'declined') displayStatus = 'declined';
+                else if (reservationStatus === 'cancelled' || reservationStatus === 'canceled') displayStatus = 'cancelled';
+                else displayStatus = 'unpaid';
 
-                // Disable 'Paid' button if already paid/refunded OR if the reservation was cancelled
-                const paidDisabled = status === "paid" || status === "refunded" || isCancelledReservation;
+                // Determine non-payable reservation states (cancelled/canceled/declined)
+                const isNonPayableReservation = p.reservation && ['cancelled','canceled','declined'].includes(reservationStatus);
 
-                // Disable 'Refund' button for already refunded OR fully paid payments
-                // (refunds should be processed only for cancellations/refund flows)
-                const refundDisabled = status === "refunded" || status === "paid";
+                // Disable 'Paid' button if already paid/refunded OR if the reservation was cancelled/declined
+                const paidDisabled = displayStatus === 'paid' || displayStatus === 'refunded' || isNonPayableReservation;
 
-                const user =
-                  p.user || p.reservation?.user || p.reservation?.client || null;
-                const clientName = user
-                  ? `${user.firstname} ${user.lastname}`
-                  : "N/A";
+                // Disable 'Refund' button for already refunded, fully paid, or unpaid payments
+                // (no refund to issue when unpaid)
+                const refundDisabled = displayStatus === 'refunded' || displayStatus === 'paid' || displayStatus === 'unpaid';
 
-                const downProof =
-                  p.proof_image || p.reservation?.down_payment || null;
+                const user = p.user || p.reservation?.user || p.reservation?.client || null;
+                const clientName = user ? `${user.firstname} ${user.lastname}` : "N/A";
+
+                const downProof = p.proof_image || p.reservation?.down_payment || null;
                 const refundProof = p.refund_receipt || null;
 
                 return (
@@ -274,14 +324,14 @@ export default function Payments() {
                     <td>₱{down.toLocaleString()}</td>
                     <td>₱{balance.toLocaleString()}</td>
                     <td>
-                      <span className={`status-badge ${status}`}>
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      <span className={`status-badge ${displayStatus}`}>
+                        {displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
                       </span>
                     </td>
 
                     {/* === Proof column === */}
                     <td>
-                      {status === "refunded" && refundProof ? (
+                      {displayStatus === "refunded" && refundProof ? (
                         <a
                           href={`/storage/${refundProof}`}
                           target="_blank"
@@ -312,8 +362,8 @@ export default function Payments() {
                         disabled={paidDisabled}
                         title={
                           paidDisabled
-                            ? isCancelledReservation
-                              ? "Reservation cancelled — cannot mark paid"
+                            ? isNonPayableReservation
+                              ? "Reservation cancelled/declined — cannot mark paid"
                               : "Already Paid or Refunded"
                             : "Mark as Paid"
                         }
@@ -327,9 +377,13 @@ export default function Payments() {
                         disabled={refundDisabled}
                         title={
                           refundDisabled
-                            ? status === 'paid'
+                            ? displayStatus === 'paid'
                               ? 'Cannot refund a fully paid reservation from here'
-                              : 'Already Refunded'
+                              : displayStatus === 'refunded'
+                                ? 'Already Refunded'
+                                : displayStatus === 'unpaid'
+                                  ? 'No payment to refund'
+                                  : 'Cannot refund'
                             : 'Issue Refund'
                         }
                       >
@@ -337,7 +391,8 @@ export default function Payments() {
                       </button>
 
                       {/* Allow deleting the reservation once the payment has been refunded or marked paid */}
-                      {p.reservation && (status === 'refunded' || status === 'paid') && (
+                      {/* Also allow deleting cancelled/declined reservations from the table */}
+                      {p.reservation && (displayStatus === 'refunded' || displayStatus === 'paid' || isNonPayableReservation || displayStatus === 'unpaid') && (
                         <button
                           className="btn-delete"
                           onClick={async () => {

@@ -14,6 +14,9 @@ export default function SignUp({ onSwitchToSignIn }) {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  // realtime validation messages
+  const passwordTooShort = form.password && form.password.length > 0 && form.password.length < 8;
+  const passwordsMismatch = form.password_confirmation && form.password !== form.password_confirmation;
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,6 +25,16 @@ export default function SignUp({ onSwitchToSignIn }) {
     e.preventDefault();
     setError("");
     setSuccess("");
+    // Client-side validation: enforce minimum password length and matching confirmation
+    if (!form.password || form.password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    if (form.password !== form.password_confirmation) {
+      setError("Password and confirmation do not match.");
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -73,11 +86,15 @@ export default function SignUp({ onSwitchToSignIn }) {
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Password (min 8 characters)"
           value={form.password}
           onChange={handleChange}
           required
+          minLength={8}
         />
+        {passwordTooShort && (
+          <p className="error" aria-live="polite">Password should contain at least 8 characters.</p>
+        )}
         <input
           type="password"
           name="password_confirmation"
@@ -86,7 +103,12 @@ export default function SignUp({ onSwitchToSignIn }) {
           onChange={handleChange}
           required
         />
-        <button type="submit">Register</button>
+        {passwordsMismatch && (
+          <p className="error" aria-live="polite">Passwords do not match.</p>
+        )}
+        <button type="submit" disabled={form.password.length < 8 || form.password !== form.password_confirmation}>
+          Register
+        </button>
       </form>
 
       {error && <p className="error">{error}</p>}

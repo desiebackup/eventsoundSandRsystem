@@ -26,6 +26,7 @@ import ManageReservations from "../adminNavigation/ManageReservations";
 import Payments from "../adminNavigation/Payments";
 import Inventory from "../adminNavigation/Inventory";
 import Message from "../adminNavigation/Message"; // ✅ Added Messages Page
+import MessageBadge from "../adminNavigation/MessageBadge";
 
 function AdminDropdown({ user = {}, onLogout, onProfile, onAddAdmin }) {
   const [open, setOpen] = useState(false);
@@ -154,6 +155,8 @@ export default function AdminDashboard({ user = {} }) {
             }
           >
             <FaEnvelope className="nav-icon" /> <span>Messages</span>
+            {/* Message badge shows a small purple dot and a numeric count below the label when new messages exist */}
+            <MessageBadge />
           </NavLink>
         </nav>
       </aside>

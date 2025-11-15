@@ -55,6 +55,12 @@ const handleDecline = async (id) => {
     const res = await axios.post(`/api/admin/reservations/${id}/decline`);
     const updated = res.data.reservation || res.data;
     setReservations((r) => r.map((rs) => (rs.id === id ? updated : rs)));
+    // Notify other admin pages (Payments, Inventory) that a reservation changed so they can refresh
+    try {
+      window.dispatchEvent(new CustomEvent('reservationUpdated', { detail: updated }));
+    } catch (e) {
+      console.warn('Could not dispatch reservationUpdated event', e);
+    }
     alert("Reservation declined successfully!");
   } catch (e) {
     console.error(e);
